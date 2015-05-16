@@ -35,9 +35,14 @@ AppAsset::register($this);
             $menuItems = [
                 ['label' => 'Inicio', 'url' => ['/site/login']],
             ];
-            if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-            } else {
+            if (!Yii::$app->user->isGuest) {
+                $menuItems[] = ['label' => 'Configuracion',
+                            'items' => [
+                            ['label' => 'Estados', 'url' => ['/estados/index']],
+                            ['label' => 'Tipo de Vehiculos', 'url' => ['/tipovehiculo/index']],
+                            ['label' => 'Vehiculos', 'url' => ['/vehiculo/index']],
+                        ], ];
+
                 $menuItems[] = [
                     'label' => 'Salir (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
