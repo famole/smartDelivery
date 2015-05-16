@@ -8,7 +8,10 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'homeUrl'=>array('site/login'),
     'basePath' => dirname(__DIR__),
+    'language'=>'es',
+    'sourceLanguage'=>'en',
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
