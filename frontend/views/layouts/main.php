@@ -41,6 +41,9 @@ AppAsset::register($this);
                             ['label' => 'Estados', 'url' => ['/estados/index']],
                             ['label' => 'Tipo de Vehiculos', 'url' => ['/tipovehiculo/index']],
                             ['label' => 'Vehiculos', 'url' => ['/vehiculo/index']],
+                            ['label' => 'Personal', 'url' => ['/personal/index']],
+                            ['label' => 'Pedidos', 'url' => ['/pedido/index']],
+                            ['label' => 'Direcciones', 'url' => ['/direccion/index']],
                         ], ];
 
                 $menuItems[] = [
