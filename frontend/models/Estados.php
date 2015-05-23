@@ -40,8 +40,8 @@ class Estados extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'est_id' => Yii::t('app', 'Est ID'),
-            'est_nom' => Yii::t('app', 'Est Nom'),
+            'est_id' => Yii::t('app', 'Codigo'),
+            'est_nom' => Yii::t('app', 'Nombre'),
         ];
     }
 

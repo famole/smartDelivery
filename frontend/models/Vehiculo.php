@@ -46,12 +46,12 @@ class Vehiculo extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            've_id' => Yii::t('app', 'Ve ID'),
-            've_matricula' => Yii::t('app', 'Ve Matricula'),
-            've_seguro' => Yii::t('app', 'Ve Seguro'),
-            've_movil' => Yii::t('app', 'Ve Movil'),
-            'tv_id' => Yii::t('app', 'Tv ID'),
-            've_entregaslimite' => Yii::t('app', 'Ve Entregaslimite'),
+            've_id' => Yii::t('app', 'Codigo'),
+            've_matricula' => Yii::t('app', 'Matricula'),
+            've_seguro' => Yii::t('app', 'Seguro'),
+            've_movil' => Yii::t('app', 'Movil'),
+            'tv_id' => Yii::t('app', 'Codigo Tipo de Vehiculo'),
+            've_entregaslimite' => Yii::t('app', 'Entregas Limite'),
         ];
     }
 

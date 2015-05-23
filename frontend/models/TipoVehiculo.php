@@ -40,8 +40,8 @@ class TipoVehiculo extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'tv_id' => Yii::t('app', 'Tv ID'),
-            'tv_nombre' => Yii::t('app', 'Tv Nombre'),
+            'tv_id' => Yii::t('app', 'Codigo'),
+            'tv_nombre' => Yii::t('app', 'Nombre'),
         ];
     }
 
@@ -52,4 +52,5 @@ class TipoVehiculo extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Vehiculo::className(), ['tv_id' => 'tv_id']);
     }
+
 }
