@@ -118,4 +118,11 @@ class TipoVehiculoController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    public function init(){
+        if(Yii::$app->user->isGuest)
+        {
+            $this->goHome();
+        }
+    }
 }
