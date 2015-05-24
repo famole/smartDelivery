@@ -170,5 +170,12 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    
+//    public function init(){
+//        if(Yii::$app()->user->isGuest)
+//        {
+//            $this->goHome();
+//        }
+//    }
 
 }

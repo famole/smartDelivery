@@ -40,8 +40,8 @@ class Clientedireccion extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'cli_id' => Yii::t('app', 'Cli ID'),
-            'dir_id' => Yii::t('app', 'Dir ID'),
+            'cli_id' => Yii::t('app', 'Codigo Cliente'),
+            'dir_id' => Yii::t('app', 'Codigo Direccion'),
         ];
     }
 
