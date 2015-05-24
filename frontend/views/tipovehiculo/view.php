@@ -14,17 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->tv_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->tv_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -32,5 +21,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'tv_nombre',
         ],
     ]) ?>
+    
+    <p>
+        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->tv_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Eliminar'), ['delete', 'id' => $model->tv_id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => Yii::t('app', 'Esta seguro que desea eliminar el Tipo de Vehiculo?'),
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
 </div>

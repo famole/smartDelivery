@@ -37,7 +37,7 @@ function serialize(feature)
     var str = formats['out'][type].write(feature, pretty);
     // not a good idea in general, just for this demo
     str = str.replace(/,/g, ', ');
-    $("#coordenadasZona").attr('value','Codigo Zona: '+str);
+    $("#coordenadasZona").html('Codigo Zona: '+str);
     return str;
 }
 //Esta funcion es para tener unos formatos estandar de codificacion
