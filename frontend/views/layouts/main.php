@@ -34,6 +34,8 @@ AppAsset::register($this);
             ]);
             $menuItems = [
                 ['label' => 'Inicio', 'url' => ['/site/login']],
+                ['label' => 'Mapa', 'url' => ['/site/mapa']],
+                ['label' => 'Mapa2', 'url' => ['/site/mapa2']],
             ];
             if (!Yii::$app->user->isGuest) {
                 $menuItems[] = ['label' => 'Configuracion',

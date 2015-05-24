@@ -70,7 +70,18 @@ class SiteController extends Controller
         return $this->render('index');
         
     }
-
+    
+    public function actionMapa()
+    {
+        return $this->render('mapa');
+        
+    }
+    
+     public function actionMapa2()
+    {
+        return $this->render('mapa2');
+        
+    }
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
