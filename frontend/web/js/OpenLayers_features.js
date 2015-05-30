@@ -10,6 +10,14 @@ function iniciarDrawFeacture()
 	mapa.addControl(drawP);
 	editP= new OpenLayers.Control.ModifyFeature(vectors);
 	mapa.addControl(editP);
+        vectors.events.register('featureadded', this, function(obj){
+            var wktwriter=new OpenLayers.Format.WKT();
+            var wkt=wktwriter.write(obj.feature);
+            var geom = obj.feature.geometry;
+            console.log(geom);
+            console.log(wkt);
+        });
+        
 	updateFormats();
 	var options = 
 	{
