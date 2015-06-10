@@ -3,17 +3,16 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\Estados;
-use app\models\EstadosSearch;
+use frontend\models\numeradores;
+use frontend\models\NumeradoresSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use frontend\controllers\NumeradoresController;
 
 /**
- * EstadosController implements the CRUD actions for Estados model.
+ * NumeradoresController implements the CRUD actions for numeradores model.
  */
-class EstadosController extends Controller
+class NumeradoresController extends Controller
 {
     public function behaviors()
     {
@@ -28,14 +27,14 @@ class EstadosController extends Controller
     }
 
     /**
-     * Lists all Estados models.
+     * Lists all numeradores models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new EstadosSearch();
+        $searchModel = new NumeradoresSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -43,8 +42,8 @@ class EstadosController extends Controller
     }
 
     /**
-     * Displays a single Estados model.
-     * @param integer $id
+     * Displays a single numeradores model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -55,16 +54,16 @@ class EstadosController extends Controller
     }
 
     /**
-     * Creates a new Estados model.
+     * Creates a new numeradores model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Estados();
+        $model = new numeradores();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->est_id]);
+            return $this->redirect(['view', 'id' => $model->num_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -73,9 +72,9 @@ class EstadosController extends Controller
     }
 
     /**
-     * Updates an existing Estados model.
+     * Updates an existing numeradores model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -83,7 +82,7 @@ class EstadosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->est_id]);
+            return $this->redirect(['view', 'id' => $model->num_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -92,9 +91,9 @@ class EstadosController extends Controller
     }
 
     /**
-     * Deletes an existing Estados model.
+     * Deletes an existing numeradores model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -105,19 +104,38 @@ class EstadosController extends Controller
     }
 
     /**
-     * Finds the Estados model based on its primary key value.
+     * Finds the numeradores model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Estados the loaded model
+     * @param string $id
+     * @return numeradores the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Estados::findOne($id)) !== null) {
+        if (($model = numeradores::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }    
-
+    }
+    
+    function getNumerador($id){
+        $record = Numeradores::findOne($id);
+        if ($record !== null) {
+        // Retorno numerador y le sumo uno
+           $numerador = $model->num_num;
+           $record->num_num += 1;
+           $record->save();
+        } else {
+           //Creo nuevo numerador y retorno numero
+           $numerador = 1;
+           
+           $record = new \frontend\models\Numeradores();
+           $record->num_id = $id;
+           $record->num_num = $numerador;
+           $record->save();
+           
+        }
+        return $numerador;
+    }
 }

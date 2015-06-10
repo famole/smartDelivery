@@ -3,17 +3,17 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\Estados;
-use app\models\EstadosSearch;
+use frontend\models\parametros;
+use frontend\models\ParametrosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use frontend\controllers\NumeradoresController;
+
 
 /**
- * EstadosController implements the CRUD actions for Estados model.
+ * ParametrosController implements the CRUD actions for parametros model.
  */
-class EstadosController extends Controller
+class ParametrosController extends Controller
 {
     public function behaviors()
     {
@@ -28,13 +28,17 @@ class EstadosController extends Controller
     }
 
     /**
-     * Lists all Estados models.
+     * Lists all parametros models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new EstadosSearch();
+        $searchModel = new ParametrosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        Yii::info("TEST MESSAGE");
+        $helper = new \frontend\helper\UtilHelper();
+        $helper->dirToLongLat("Guayabos y Jackson, Montevideo");
         
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -43,8 +47,8 @@ class EstadosController extends Controller
     }
 
     /**
-     * Displays a single Estados model.
-     * @param integer $id
+     * Displays a single parametros model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -55,16 +59,16 @@ class EstadosController extends Controller
     }
 
     /**
-     * Creates a new Estados model.
+     * Creates a new parametros model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Estados();
+        $model = new parametros();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->est_id]);
+            return $this->redirect(['view', 'id' => $model->parm_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -73,9 +77,9 @@ class EstadosController extends Controller
     }
 
     /**
-     * Updates an existing Estados model.
+     * Updates an existing parametros model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -83,7 +87,7 @@ class EstadosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->est_id]);
+            return $this->redirect(['view', 'id' => $model->parm_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -92,9 +96,9 @@ class EstadosController extends Controller
     }
 
     /**
-     * Deletes an existing Estados model.
+     * Deletes an existing parametros model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -105,19 +109,28 @@ class EstadosController extends Controller
     }
 
     /**
-     * Finds the Estados model based on its primary key value.
+     * Finds the parametros model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Estados the loaded model
+     * @param string $id
+     * @return parametros the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Estados::findOne($id)) !== null) {
+        if (($model = parametros::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }    
-
+    }
+    
+    public function getParamNum($id){
+        $model = parametros::findOne($id);
+        return $model->parm_num;
+    }
+    
+    public function getParamText($id){
+        $model = parametros::findOne($id);
+        return $model->parm_text;
+    }
 }
