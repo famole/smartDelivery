@@ -36,9 +36,6 @@ class ParametrosController extends Controller
         $searchModel = new ParametrosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
-        Yii::info("TEST MESSAGE");
-        $helper = new \frontend\helper\UtilHelper();
-        $helper->dirToLongLat("Guayabos y Jackson, Montevideo");
         
         return $this->render('index', [
             'searchModel' => $searchModel,

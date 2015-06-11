@@ -17,19 +17,17 @@ class UtilHelper{
      * @param String $direccion
      * 
      */
-    public static function dirToLongLat($direccion){
+    public static function dirToLongLat($direccion, $lat, $long){
         header('Content-Type', 'application/json');
         $url = ParametrosController::getParamText('NOMINATIMURL');
-        //Yii::error($url);
        
         $url .= $direccion . '&format=json&polygon=0&addressdetails=0';
-        //Yii::error($url);
-        //$json = file_get_contents($url);
+    
         $json = UtilHelper::curlPostRequest($url, 'POST');
         
-        
-        Yii::error($json->place_id);
-        //Yii::error($obj);
+        $jsonDecoded = json_decode($json, true);
+        $lat = $jsonDecoded[0]['lat'];
+        $long = $jsonDecoded[0]['long'];
         
     }
     
