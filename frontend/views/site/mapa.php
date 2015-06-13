@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>OpenLayers - Jamper91</title>
+        <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
         <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
@@ -57,6 +57,9 @@ and open the template in the editor.
                         <td align="center">
                                 <input type="submit" name="editarFeature" id="editarFeature" value="Editar Zona" onclick="activarModifyFeacture()" />
                         </td>
+                        <td align="center">
+                                <input type="submit" name="mostrarFeature" id="mostrarFeature" value="Mostrar" onclick="mostrarArray()" /> 
+                                </td>
                                 </tr>
                 </table>
 

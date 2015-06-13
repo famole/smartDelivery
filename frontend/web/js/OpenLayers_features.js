@@ -1,9 +1,9 @@
-var drawP,editP,vectors,select,formats;
+var drawP,editP,vectors,select,formats,poly;
 
 //Funcion se encarga de agregar los controles para poder dibujar y editar polygonos
 function iniciarDrawFeacture()
 {
-	
+	//poly = new Array();
 	vectors = new OpenLayers.Layer.Vector("Capa Vectorial");
 	mapa.addLayer(vectors);
 	drawP=new OpenLayers.Control.DrawFeature(vectors,OpenLayers.Handler.Polygon)
@@ -14,8 +14,11 @@ function iniciarDrawFeacture()
             var wktwriter=new OpenLayers.Format.WKT();
             var wkt=wktwriter.write(obj.feature);
             var geom = obj.feature.geometry;
+          //  poly.push(wkt);
+            $('#zona-z_zona').val(geom);
             console.log(geom);
             console.log(wkt);
+          //  console.log(poly.length);
         });
         
 	updateFormats();
@@ -106,4 +109,12 @@ function activarModifyFeacture()
 	select.deactivate();
 	editP.mode = OpenLayers.Control.ModifyFeature.RESHAPE;
 	editP.createVertices = true;
+}
+
+function mostrarArray(){
+// for (var item in poly) {
+//        console.log(item);
+//    }
+//console.log(poly[1])
+alert(poly);
 }
