@@ -10,7 +10,7 @@ $this->title = Yii::t('app', 'Update {modelClass}: ', [
 ]) . ' ' . $model->ve_id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Vehiculos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->ve_id, 'url' => ['view', 'id' => $model->ve_id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app', 'Actualizar');
 ?>
 <div class="vehiculo-update">
 

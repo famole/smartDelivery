@@ -6,24 +6,13 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Estados */
 
-$this->title = $model->est_id;
+$this->title = "Estado";
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Estados'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="estados-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->est_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->est_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -32,5 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'est_nom',
         ],
     ]) ?>
+    <p>
+        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->est_id], ['class' => 'btn btn-primary btn-sm']) ?>
+        <?= Html::a(Yii::t('app', 'Eliminar'), ['delete', 'id' => $model->est_id], [
+            'class' => 'btn btn-danger btn-sm',
+            'data' => [
+                'confirm' => Yii::t('app', 'Esta seguro que desea eliminar el estado?'),
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
 </div>

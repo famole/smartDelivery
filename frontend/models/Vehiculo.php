@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use frontend\controllers\NumeradoresController;
 
 /**
  * This is the model class for table "vehiculo".
@@ -50,7 +51,7 @@ class Vehiculo extends \yii\db\ActiveRecord
             've_matricula' => Yii::t('app', 'Matricula'),
             've_seguro' => Yii::t('app', 'Seguro'),
             've_movil' => Yii::t('app', 'Movil'),
-            'tv_id' => Yii::t('app', 'Codigo Tipo de Vehiculo'),
+            'tv_id' => Yii::t('app', 'Tipo de Vehiculo'),
             've_entregaslimite' => Yii::t('app', 'Entregas Limite'),
         ];
     }
@@ -66,8 +67,30 @@ class Vehiculo extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTv()
+    public function getTipoVehiculo()
     {
         return $this->hasOne(Tipovehiculo::className(), ['tv_id' => 'tv_id']);
     }
+    
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if ($this->getIsNewRecord()) {
+            $numerador = new NumeradoresController('VEH');
+            $this->ve_id = $numerador->getNumerador();
+            $connection = static::getDb();
+            $sql="INSERT INTO `vehiculo` (`ve_id`, `ve_matricula`, `ve_seguro`, `ve_movil`, `tv_id`, `ve_entregaslimite`) VALUES ("."'".
+                    $this->ve_id."',"."'".
+                    $this->ve_matricula."','".
+                    $this->ve_seguro."','".
+                    $this->ve_movil."','".
+                    $this->tv_id."','".
+                    $this->ve_entregaslimite."')";
+            $command=$connection->createCommand($sql);
+            $command->execute();
+           
+        } else {
+            return $this->update($runValidation, $attributeNames) !== false;
+        }
+    }
+    
 }

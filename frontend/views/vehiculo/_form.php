@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 've_id')->textInput() ?>
+    <?= $form->field($model, 've_id')->textInput(['readonly' => true]) ?>
 
     <?= $form->field($model, 've_matricula')->textInput(['maxlength' => 50]) ?>
 
@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 've_entregaslimite')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Crear') : Yii::t('app', 'Actualizar'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

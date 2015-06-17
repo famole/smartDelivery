@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             've_matricula',
             've_seguro',
             've_movil',
-            'tv_id',
+            'tipoVehiculo.tv_nombre',
             // 've_entregaslimite',
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -12,8 +12,12 @@ use yii\filters\VerbFilter;
 /**
  * NumeradoresController implements the CRUD actions for numeradores model.
  */
-class NumeradoresController extends Controller
-{
+class NumeradoresController //extends Controller
+{  
+    private $numId;
+    function __construct($id) {
+        $this->numId = $id;
+    }   
     public function behaviors()
     {
         return [
@@ -119,22 +123,20 @@ class NumeradoresController extends Controller
         }
     }
     
-    function getNumerador($id){
-        $record = Numeradores::findOne($id);
+    public function getNumerador(){
+        $record = Numeradores::findOne($this->numId);
         if ($record !== null) {
         // Retorno numerador y le sumo uno
-           $numerador = $model->num_num;
+           $numerador = $record->num_num;
            $record->num_num += 1;
            $record->save();
         } else {
            //Creo nuevo numerador y retorno numero
            $numerador = 1;
-           
            $record = new \frontend\models\Numeradores();
            $record->num_id = $id;
            $record->num_num = $numerador;
-           $record->save();
-           
+           $record->save();   
         }
         return $numerador;
     }
