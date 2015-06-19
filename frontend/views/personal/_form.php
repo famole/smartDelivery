@@ -12,9 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'per_id')->textInput() ?>
-
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'per_id')->textInput(['readonly' => true]) ?>
 
     <?= $form->field($model, 'per_nom')->textInput(['maxlength' => 45]) ?>
 
@@ -24,10 +22,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'per_tel')->textInput() ?>
 
-    <?= $form->field($model, 'pc_id')->textInput() ?>
+    <?= $form->field($model, 'pc_id')->inputOptions ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Guardar') : Yii::t('app', 'Actualizar'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

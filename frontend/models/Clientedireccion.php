@@ -60,4 +60,19 @@ class Clientedireccion extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Direccion::className(), ['dir_id' => 'dir_id']);
     }
+    
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if ($this->getIsNewRecord()) {
+            $numerador = new NumeradoresController('CDI');
+            $this->dir_id = $numerador->getNumerador();
+            $connection = static::getDb();
+            $sql="INSERT INTO `clientedireccion` (`cli_id`, `dir_id`) VALUES ("."'".$this->cli_id."','".$this->dir_id."')";
+            $command=$connection->createCommand($sql);
+            $command->execute();
+           
+        } else {
+            return $this->update($runValidation, $attributeNames) !== false;
+        }
+    }
 }

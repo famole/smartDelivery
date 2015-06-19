@@ -42,7 +42,7 @@ class Direccion extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'dir_id' => Yii::t('app', 'ID'),
+            'dir_id' => Yii::t('app', 'Codigo'),
             'dir_direccion' => Yii::t('app', 'Direccion'),
             'dir_latlong' => Yii::t('app', 'Coordenadas'),
         ];
@@ -54,5 +54,20 @@ class Direccion extends \yii\db\ActiveRecord
     public function getClientedireccions()
     {
         return $this->hasMany(Clientedireccion::className(), ['dir_id' => 'dir_id']);
+    }
+    
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if ($this->getIsNewRecord()) {
+            $numerador = new NumeradoresController('DIR');
+            $this->dir_id = $numerador->getNumerador();
+            $connection = static::getDb();
+            $sql="INSERT INTO `direccion` (`dir_id`, `dir_direccion`, `dir_latlong`) VALUES ("."'".$this->dir_id."',"."'".$this->dir_direccion."','".$this->dir_latlong ."')";
+            $command=$connection->createCommand($sql);
+            $command->execute();
+           
+        } else {
+            return $this->update($runValidation, $attributeNames) !== false;
+        }
     }
 }

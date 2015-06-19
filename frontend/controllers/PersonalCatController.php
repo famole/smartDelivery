@@ -3,21 +3,17 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\numeradores;
-use frontend\models\NumeradoresSearch;
+use frontend\models\Personalcat;
+use frontend\models\PersonalcatSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * NumeradoresController implements the CRUD actions for numeradores model.
+ * PersonalCatController implements the CRUD actions for Personalcat model.
  */
-class NumeradoresController //extends Controller
-{  
-    private $numId;
-    function __construct($id) {
-        $this->numId = $id;
-    }   
+class PersonalCatController extends Controller
+{
     public function behaviors()
     {
         return [
@@ -31,12 +27,12 @@ class NumeradoresController //extends Controller
     }
 
     /**
-     * Lists all numeradores models.
+     * Lists all Personalcat models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new NumeradoresSearch();
+        $searchModel = new PersonalcatSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,8 +42,8 @@ class NumeradoresController //extends Controller
     }
 
     /**
-     * Displays a single numeradores model.
-     * @param string $id
+     * Displays a single Personalcat model.
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
@@ -58,16 +54,16 @@ class NumeradoresController //extends Controller
     }
 
     /**
-     * Creates a new numeradores model.
+     * Creates a new Personalcat model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new numeradores();
+        $model = new Personalcat();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->num_id]);
+            return $this->redirect(['view', 'id' => $model->pc_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -76,9 +72,9 @@ class NumeradoresController //extends Controller
     }
 
     /**
-     * Updates an existing numeradores model.
+     * Updates an existing Personalcat model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -86,7 +82,7 @@ class NumeradoresController //extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->num_id]);
+            return $this->redirect(['view', 'id' => $model->pc_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -95,9 +91,9 @@ class NumeradoresController //extends Controller
     }
 
     /**
-     * Deletes an existing numeradores model.
+     * Deletes an existing Personalcat model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -108,36 +104,18 @@ class NumeradoresController //extends Controller
     }
 
     /**
-     * Finds the numeradores model based on its primary key value.
+     * Finds the Personalcat model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return numeradores the loaded model
+     * @param integer $id
+     * @return Personalcat the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = numeradores::findOne($id)) !== null) {
+        if (($model = Personalcat::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('La pagina solicitada no existe.');
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-    
-    public function getNumerador(){
-        $record = Numeradores::findOne($this->numId);
-        if ($record !== null) {
-        // Retorno numerador y le sumo uno
-           $numerador = $record->num_num;
-           $record->num_num += 1;
-           $record->save();
-        } else {
-           //Creo nuevo numerador y retorno numero
-           $numerador = 1;
-           $record = new \frontend\models\Numeradores();
-           $record->num_id = $id;
-           $record->num_num = $numerador;
-           $record->save();   
-        }
-        return $numerador;
     }
 }

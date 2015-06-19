@@ -5,12 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Direccion */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Direccion',
-]) . ' ' . $model->dir_id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Direccions'), 'url' => ['index']];
+$this->title = 'Actualizar: ' . $model->dir_direccion;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Direccion'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->dir_id, 'url' => ['view', 'id' => $model->dir_id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app', 'Actualizar');
 ?>
 <div class="direccion-update">
 
