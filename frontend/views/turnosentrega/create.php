@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\parametros */
+/* @var $model frontend\models\TurnosEntrega */
 
-$this->title = Yii::t('app', 'Crear Parametro');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Parametros'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Create Turnos Entrega');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Turnos Entregas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="parametros-create">
+<div class="turnos-entrega-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

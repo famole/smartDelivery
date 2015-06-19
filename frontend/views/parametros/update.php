@@ -5,12 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\parametros */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Parametros',
-]) . ' ' . $model->parm_id;
+$this->title = 'Actualizar: ' . $model->parm_id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Parametros'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->parm_id, 'url' => ['view', 'id' => $model->parm_id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app', 'Actualizar');
 ?>
 <div class="parametros-update">
 
