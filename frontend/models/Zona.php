@@ -10,6 +10,7 @@ use Yii;
  * @property integer $z_id
  * @property string $z_nombre
  * @property string $z_zona
+ * @property string $z_wkt
  *
  * @property Entrega[] $entregas
  */
@@ -31,7 +32,7 @@ class Zona extends \yii\db\ActiveRecord
         return [
             [['z_id', 'z_nombre'], 'required'],
             [['z_id'], 'integer'],
-            [['z_zona'], 'string'],
+            [['z_zona', 'z_wkt'], 'string'],
             [['z_nombre'], 'string', 'max' => 45]
         ];
     }
@@ -45,6 +46,7 @@ class Zona extends \yii\db\ActiveRecord
             'z_id' => Yii::t('app', 'Z ID'),
             'z_nombre' => Yii::t('app', 'Z Nombre'),
             'z_zona' => Yii::t('app', 'Z Zona'),
+            'z_wkt' => Yii::t('app', 'Z Wkt'),
         ];
     }
 
@@ -63,13 +65,13 @@ class Zona extends \yii\db\ActiveRecord
 //           $password = 'root';
 //           $connection=new CDbConnection($dsn,$username,$password);
            $connection = static::getDb();
-           $sql="INSERT INTO `zona` (`z_id`, `z_nombre`, `z_zona`) VALUES ("."'".$this->z_id."',"."'".$this->z_nombre."',"."GeomFromText('".  $this->z_zona."'))";
+           $sql="INSERT INTO `zona` (`z_id`, `z_nombre`, `z_zona`,`z_wkt`) VALUES ("."'".$this->z_id."',"."'".$this->z_nombre."',"."GeomFromText('".  $this->z_zona."'),'".$this->z_zona."')";
            $command=$connection->createCommand($sql);
            $command->execute();
            
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
-        }
+}
     }
   
 }

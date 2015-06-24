@@ -16,6 +16,7 @@ function iniciarDrawFeacture()
             var geom = obj.feature.geometry;
           //  poly.push(wkt);
             $('#zona-z_zona').val(geom);
+            $('#zona-z_wkt').val(geom);
             console.log(geom);
             console.log(wkt);
           //  console.log(poly.length);
