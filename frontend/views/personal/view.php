@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Personal */
 
-$this->title = $model->per_id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Personals'), 'url' => ['index']];
+$this->title = $model->per_nom . ' ' . $model->per_priape;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Personal'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="personal-view">
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->per_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->per_id], [
-            'class' => 'btn btn-danger',
+        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->per_id], ['class' => 'btn btn-primary btn-sm']) ?>
+        <?= Html::a(Yii::t('app', 'Eliminar'), ['delete', 'id' => $model->per_id], [
+            'class' => 'btn btn-danger btn-sm',
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('app', 'Esta seguro que desea eliminar la Persona?'),
                 'method' => 'post',
             ],
         ]) ?>

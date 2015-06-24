@@ -42,4 +42,17 @@ class Numeradores extends \yii\db\ActiveRecord
             'num_num' => Yii::t('app', 'Numerador'),
         ];
     }
+    
+     public function save($runValidation = true, $attributeNames = null)
+    {
+        if ($this->getIsNewRecord()) {
+            $connection = static::getDb();
+            $sql="INSERT INTO `numeradores` (`num_id`, `num_num`) VALUES ("."'".$this->num_id."',"."'".$this->num_num."')";
+            $command=$connection->createCommand($sql);
+            $command->execute();
+           
+        } else {
+            return $this->update($runValidation, $attributeNames) !== false;
+        }
+    }
 }

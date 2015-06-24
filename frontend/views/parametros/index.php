@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel frontend\models\CliDirSearch */
+/* @var $searchModel frontend\models\ParametrosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Cliente Direccions');
+$this->title = Yii::t('app', 'Parametros');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="cliente-direccion-index">
+<div class="parametros-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Nueva Direccion'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Nuevo'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,8 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'cli_id',
-            'dir_id',
+            'parm_id',
+            'parm_num',
+            'parm_text',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

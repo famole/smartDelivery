@@ -125,4 +125,5 @@ class VehiculoController extends Controller
             $this->goHome();
         }
     }
+ 
 }

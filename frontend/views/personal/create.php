@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Personal */
 
-$this->title = Yii::t('app', 'Create Personal');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Personals'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Nueva Persona');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Nueva Persona'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="personal-create">

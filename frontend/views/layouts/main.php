@@ -38,16 +38,33 @@ AppAsset::register($this);
                 ['label' => 'Mapa2', 'url' => ['/site/mapa2']],
             ];
             if (!Yii::$app->user->isGuest) {
+                
+                //Personal
+                $menuItems[] = ['label' => 'Personal',
+                            'items' => [
+                                ['label' => 'Categorias', 'url' => ['/personalcat/index']],
+                                ['label' => 'Trabajar con Personal', 'url' => ['/personal/index']],
+                                
+                            ]];
+                
+                //Configuracion
                 $menuItems[] = ['label' => 'Configuracion',
                             'items' => [
-                            ['label' => 'Estados', 'url' => ['/estados/index']],
-                            ['label' => 'Tipo de Vehiculos', 'url' => ['/tipovehiculo/index']],
-                            ['label' => 'Vehiculos', 'url' => ['/vehiculo/index']],
-                            ['label' => 'Personal', 'url' => ['/personal/index']],
-                            ['label' => 'Pedidos', 'url' => ['/pedido/index']],
-                            ['label' => 'Direcciones', 'url' => ['/direccion/index']],
-                        ], ];
-
+                                ['label' => 'Direcciones', 'url' => ['/direccion/index']],
+                                ['label' => 'Estados', 'url' => ['/estados/index']],
+                                ['label' => 'Pedidos', 'url' => ['/pedido/index']],
+                                ['label' => 'Tipo de Vehiculos', 'url' => ['/tipovehiculo/index']],
+                                ['label' => 'Turnos de Entrega', 'url' => ['/turnosentrega/index']],
+                                ['label' => 'Vehiculos', 'url' => ['/vehiculo/index']],
+                                ['label' => 'Zona', 'url' => ['/zona/index']],
+                            ]];
+                
+                //Sistema
+                $menuItems[]= [ 'label' => 'Sistema',
+                            'items' => [
+                                ['label' => 'Parametros', 'url' => ['/parametros/index']],
+                            ]];
+                
                 $menuItems[] = [
                     'label' => 'Salir (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
