@@ -19,7 +19,7 @@ class ZonaSearch extends zona
     {
         return [
             [['z_id'], 'integer'],
-            [['z_nombre', 'z_zona'], 'safe'],
+            [['z_nombre', 'z_zona', 'z_wkt'], 'safe'],
         ];
     }
 
@@ -60,7 +60,8 @@ class ZonaSearch extends zona
         ]);
 
         $query->andFilterWhere(['like', 'z_nombre', $this->z_nombre])
-            ->andFilterWhere(['like', 'z_zona', $this->z_zona]);
+            ->andFilterWhere(['like', 'z_zona', $this->z_zona])
+            ->andFilterWhere(['like', 'z_wkt', $this->z_wkt]);
 
         return $dataProvider;
     }

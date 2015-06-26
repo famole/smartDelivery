@@ -31,26 +31,27 @@ use yii\widgets\ActiveForm;
         }
         </style>
     </head>
-    <div class="zona-form">
+<div class="zona-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'z_id')->textInput() ?>
+    <?= $form->field($model, 'z_id')->textInput() ?>
 
-        <?= $form->field($model, 'z_nombre')->textInput(['maxlength' => 45]) ?>
+    <?= $form->field($model, 'z_nombre')->textInput(['maxlength' => 45]) ?>
 
-       <?= $form->field($model, 'z_zona')->textInput() ?>
-        
-        
-        <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        </div>
+    <?= $form->field($model, 'z_zona')->textInput() ?>
 
+    <?= $form->field($model, 'z_wkt')->textarea(['rows' => 6]) ?>
 
-        <?php ActiveForm::end(); ?>
-
-
+    <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
+
+
+    <?php ActiveForm::end(); ?>
+
+
+</div>
 
 
 
