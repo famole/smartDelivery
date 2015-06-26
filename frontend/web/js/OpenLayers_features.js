@@ -1,10 +1,138 @@
+var drawP,editP,vectors,select,formats,poly;
+
+//Funcion se encarga de agregar los controles para poder dibujar y editar polygonos
+function iniciarDrawFeacture()
+{
+	//poly = new Array();
+	vectors = new OpenLayers.Layer.Vector("Capa Vectorial");
+	mapa.addLayer(vectors);
+	drawP=new OpenLayers.Control.DrawFeature(vectors,OpenLayers.Handler.Polygon)
+	mapa.addControl(drawP);
+	editP= new OpenLayers.Control.ModifyFeature(vectors);
+	mapa.addControl(editP);
+        
+        vectors.events.register('featureadded', this, function(obj){
+            var feature = obj.feature;
+            
+            console.log(feature.getGeometry());
+            var wktwriter=new OpenLayers.Format.WKT();
+            var wkt=wktwriter.write(obj.feature);
+            
+            var geom = obj.feature.geometry;
+          //  poly.push(wkt);
+            $('#zona-z_zona').val(geom);
+            $('#zona-z_wkt').val(geom);
+            console.log(geom);
+            console.log(wkt);
+          //  console.log(poly.length);
+        });
+        
+	updateFormats();
+	var options = 
+	{
+        hover: true,
+        onSelect: serialize
+    };
+    select = new OpenLayers.Control.SelectFeature(vectors, options);
+	mapa.addControl(select);
+	
+}
+//Esta funcion permite dibujar un feature()
+function activarDrawFeacture()
+{
+	editP.deactivate();
+	drawP.activate();
+	select.activate();
+
+}
+//Esta funcion permite obtener el codigo de un poligono y mostrarlo en un string
+function serialize(feature) 
+{
+    var type = "geojson";
+    // second argument for pretty printing (geojson only)
+    var pretty = 1;
+    var str = formats['out'][type].write(feature, pretty);
+    
+    // not a good idea in general, just for this demo
+    str = str.replace(/,/g, ', ');
+    $("#coordenadasZona").html('Codigo Zona: '+str);
+    return str;
+}
+//Esta funcion es para tener unos formatos estandar de codificacion
+function updateFormats() 
+{
+		var in_options = {
+                'internalProjection': mapa.baseLayer.projection,
+                'externalProjection': new OpenLayers.Projection("EPSG:4326")
+            };   
+            var out_options = {
+                'internalProjection': mapa.baseLayer.projection,
+                'externalProjection': new OpenLayers.Projection("EPSG:4326")
+            };
+            var gmlOptions = {
+                featureType: "feature",
+                featureNS: "http://example.com/feature"
+            };
+            var gmlOptionsIn = OpenLayers.Util.extend(
+                OpenLayers.Util.extend({}, gmlOptions),
+                in_options
+            );
+            var gmlOptionsOut = OpenLayers.Util.extend(
+                OpenLayers.Util.extend({}, gmlOptions),
+                out_options
+            );
+            var kmlOptionsIn = OpenLayers.Util.extend(
+                {extractStyles: true}, in_options);
+            formats = {
+              'in': {
+                wkt: new OpenLayers.Format.WKT(in_options),
+                geojson: new OpenLayers.Format.GeoJSON(in_options),
+                georss: new OpenLayers.Format.GeoRSS(in_options),
+                gml2: new OpenLayers.Format.GML.v2(gmlOptionsIn),
+                gml3: new OpenLayers.Format.GML.v3(gmlOptionsIn),
+                kml: new OpenLayers.Format.KML(kmlOptionsIn),
+                atom: new OpenLayers.Format.Atom(in_options),
+                gpx: new OpenLayers.Format.GPX(in_options),
+                encoded_polyline: new OpenLayers.Format.EncodedPolyline(in_options)
+              },
+              'out': {
+                wkt: new OpenLayers.Format.WKT(out_options),
+                geojson: new OpenLayers.Format.GeoJSON(out_options),
+                georss: new OpenLayers.Format.GeoRSS(out_options),
+                gml2: new OpenLayers.Format.GML.v2(gmlOptionsOut),
+                gml3: new OpenLayers.Format.GML.v3(gmlOptionsOut),
+                kml: new OpenLayers.Format.KML(out_options),
+                atom: new OpenLayers.Format.Atom(out_options),
+                gpx: new OpenLayers.Format.GPX(out_options),
+                encoded_polyline: new OpenLayers.Format.EncodedPolyline(out_options)
+              }
+            };
+}
+
+function activarModifyFeacture()
+{
+	editP.activate();
+	drawP.deactivate();
+	select.deactivate();
+	editP.mode = OpenLayers.Control.ModifyFeature.RESHAPE;
+	editP.createVertices = true;
+}
+
+function mostrarArray(){
+// for (var item in poly) {
+//        console.log(item);
+//    }
+//console.log(poly[1])
+alert(poly);
+}
+
 function addInteraction() {
         // reset interaction:
         if(typeof drawInteraction != 'undefined') map.removeInteraction(drawInteraction);
 	if(typeof selectInteraction != 'undefined') map.removeInteraction(selectInteraction);
 	if(typeof modifyInteraction != 'undefined') map.removeInteraction(modifyInteraction);
         // get type:
-	var type = 'Polygon';
+	var type = "Polygon";
 	// Create a draw interaction and add it to the map:
 	drawInteraction = new ol.interaction.Draw({ source:source, type:type });
 	map.addInteraction(drawInteraction);
@@ -23,7 +151,7 @@ function addInteraction() {
 		// transform cloned feature to WGS84:
 		featureClone.getGeometry().transform('EPSG:3857', 'EPSG:4326');
 		// update WKT string:
-		document.getElementById("wkt").value = wkt.writeFeature(featureClone);
+		document.getElementById("z_zona").value = wkt.writeFeature(featureClone);
 		// Create a modify interaction and add to the map:
 		modifyInteraction = new ol.interaction.Modify({
 			features: selectInteraction.getFeatures()
@@ -52,26 +180,3 @@ document.body.onmouseup = function() {
 		triggerUpdate=false;
 	}
 };
-
-var rasterLayer = new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'sat'}) });
-var source = new ol.source.Vector();
-var vectorLayer = new ol.layer.Vector({	source:source });
-var wkt = new ol.format.WKT();
-
-var map = new ol.Map({
-  target: 'map',
-  controls: ol.control.defaults().extend([ new ol.control.ScaleLine({ units:'metric' }) ]),
-  layers: [ rasterLayer, vectorLayer ],
-  view: new ol.View({
-    center: ol.proj.transform([0,10], 'EPSG:4326', 'EPSG:3857'),
-    zoom: 3
-  })
-});
-
-addInteraction();
-
-$("input[name=type]").change(function() { 
-	vectorLayer.getSource().clear();
-	document.getElementById("wkt").value = "";
-	addInteraction();
-});
