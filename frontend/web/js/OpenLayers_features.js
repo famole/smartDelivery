@@ -10,9 +10,14 @@ function iniciarDrawFeacture()
 	mapa.addControl(drawP);
 	editP= new OpenLayers.Control.ModifyFeature(vectors);
 	mapa.addControl(editP);
+        
         vectors.events.register('featureadded', this, function(obj){
+            var feature = obj.feature;
+            
+            console.log(feature.getGeometry());
             var wktwriter=new OpenLayers.Format.WKT();
             var wkt=wktwriter.write(obj.feature);
+            
             var geom = obj.feature.geometry;
           //  poly.push(wkt);
             $('#zona-z_zona').val(geom);
@@ -47,6 +52,7 @@ function serialize(feature)
     // second argument for pretty printing (geojson only)
     var pretty = 1;
     var str = formats['out'][type].write(feature, pretty);
+    
     // not a good idea in general, just for this demo
     str = str.replace(/,/g, ', ');
     $("#coordenadasZona").html('Codigo Zona: '+str);
@@ -119,3 +125,58 @@ function mostrarArray(){
 //console.log(poly[1])
 alert(poly);
 }
+
+function addInteraction() {
+        // reset interaction:
+        if(typeof drawInteraction != 'undefined') map.removeInteraction(drawInteraction);
+	if(typeof selectInteraction != 'undefined') map.removeInteraction(selectInteraction);
+	if(typeof modifyInteraction != 'undefined') map.removeInteraction(modifyInteraction);
+        // get type:
+	var type = "Polygon";
+	// Create a draw interaction and add it to the map:
+	drawInteraction = new ol.interaction.Draw({ source:source, type:type });
+	map.addInteraction(drawInteraction);
+	// Update geometry and change mode to modify after drawing is finished:
+	drawInteraction.on('drawend', function(e) {
+		var feature = e.feature; 
+		// remove draw interaction:
+		map.removeInteraction(drawInteraction);
+		// Create a select interaction and add it to the map:
+		selectInteraction = new ol.interaction.Select();
+		map.addInteraction(selectInteraction);
+		// select feature:
+		selectInteraction.getFeatures().push(feature);
+		// clone feature:
+		var featureClone = feature.clone();
+		// transform cloned feature to WGS84:
+		featureClone.getGeometry().transform('EPSG:3857', 'EPSG:4326');
+		// update WKT string:
+		document.getElementById("z_zona").value = wkt.writeFeature(featureClone);
+		// Create a modify interaction and add to the map:
+		modifyInteraction = new ol.interaction.Modify({
+			features: selectInteraction.getFeatures()
+		});
+		map.addInteraction(modifyInteraction);  
+		// set listener to update geometry when feature is changed:
+		feature.on('change', function() {
+			// clone feature: 
+		        var featureClone = feature.clone();
+		        // transform cloned feature to WGS84:
+		        featureClone.getGeometry().transform('EPSG:3857', 'EPSG:4326');			
+			// set modified WKT string:
+			modifiedWKT = wkt.writeFeature(featureClone);
+			// set update trigger flag:
+			triggerUpdate=true; 
+		}); 
+	});
+}
+
+// update WKT on mouseup when geometry was modified:
+document.body.onmouseup = function() {
+	if(typeof modifiedWKT != 'undefined' && triggerUpdate)	{
+		// update WKT string:
+		document.getElementById("wkt").value = modifiedWKT;
+		// unset update trigger flag:
+		triggerUpdate=false;
+	}
+};
