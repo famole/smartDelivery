@@ -1,14 +1,57 @@
+
+
 <?php
+use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 $this->title = 'My Yii Application';
 ?>
-<div class="site-index">
 
-    <div class="jumbotron">
-        <h2>Bienvenido</h2>
+<link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
+<style>
+  .map {
+    height: 400px;
+    width: 100%;
+  }
+</style>
+<script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
 
-        <p class="lead">Pantalla incial con login.</p>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.google.com">Ver Google</a></p>
-    </div>
+<div class="container">
+      <input type="text" class="form-control" placeholder="Text input">
+     <form class="form-inline">
+        <div class="form-group">
+          
+            <?php
+
+                echo DatePicker::widget([
+                    'name' => 'check_issue_date', 
+                    'value' => date('d-M-Y', strtotime('+2 days')),
+                    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                    'options' => ['placeholder' => 'Seleccionar Fecha'],
+                    'pluginOptions' => [
+                    'format' => 'dd-M-yyyy',
+                    'size' => 'xs',
+                    'todayHighlight' => true
+                  ]
+                ]);
+            ?>
+        </div>
+     </form>
+    <div id="map" class="map"></div>
+      
+    <script type="text/javascript">
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.MapQuest({layer: 'sat'})
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 4
+        })
+      });
+    </script>
+
 </div>

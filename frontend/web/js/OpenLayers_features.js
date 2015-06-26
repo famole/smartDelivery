@@ -14,10 +14,14 @@ function iniciarDrawFeacture()
             var wktwriter=new OpenLayers.Format.WKT();
             var wkt=wktwriter.write(obj.feature);
             var geom = obj.feature.geometry;
+            //var geom2 = wktwriter.writeGeometry(obj.feature);
+            
           //  poly.push(wkt);
-            $('#zona-z_zona').val(geom);
+            
+            $('#zona-z_zona').val("geom");
             console.log(geom);
             console.log(wkt);
+            //console.log(geom2);
           //  console.log(poly.length);
         });
         
@@ -48,6 +52,9 @@ function serialize(feature)
     var str = formats['out'][type].write(feature, pretty);
     // not a good idea in general, just for this demo
     str = str.replace(/,/g, ', ');
+    var geoJSON = new OpenLayers.Format.GeoJSON();
+    var geometry = geoJSON.read(str, 'Geometry');
+    console.log(geometry);
     $("#coordenadasZona").html('Codigo Zona: '+str);
     return str;
 }
