@@ -50,7 +50,47 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
     
-<div id="map" class="smallmap"></div>
+<div class="container-fluid">
+
+<div class="row-fluid">
+  <div class="span12">
+    <div id="map" class="map"></div>
+  </div>
+</div>
+
+</div>
+
+
+
+<script>
+var wkt = "<?php echo $model->z_wkt; ?>" ;
+var wkt2 = "'"+wkt+"'";
+document.write("VariableJS = " + wkt2);
+var raster = new ol.layer.Tile({
+  source: new ol.source.OSM()
+});
+
+var format = new ol.format.WKT();
+var feature = format.readFeature(wkt);
+feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
+var vector = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    features: [feature]
+  })
+});
+
+var map = new ol.Map({
+  layers: [raster, vector],
+  target: 'map',
+  projection: new OpenLayers.Projection("EPSG:900913"),
+  view: new ol.View({
+    center: [2952104.019976033, -3277504.823700756],
+    zoom: 4
+  })
+});
+
+</script>
     
 <script>
 var wkt3 = "<?php echo $model->z_wkt; ?>" ;

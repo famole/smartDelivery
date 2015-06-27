@@ -50,14 +50,9 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 
-
-
-
-
-
 <script type="text/javascript">
 
-    var rasterLayer = new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'sat'}) });
+    var rasterLayer = new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) });
     var source = new ol.source.Vector();
     var vectorLayer = new ol.layer.Vector({	source:source });
     var wkt = new ol.format.WKT();
@@ -71,6 +66,11 @@ use yii\widgets\ActiveForm;
         zoom: 3
       })
     });
+    
+    centerWGS84=new ol.LonLat(-56.16341,-34.90721);
+	//Transformar coordenadas anteriores
+    centerOSM = transformToSphericalMercator(centerWGS84);
+    map.setCenter(centerOSM, 50);
 
 
     addInteraction();
