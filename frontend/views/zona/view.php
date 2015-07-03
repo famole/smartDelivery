@@ -10,10 +10,16 @@ $this->title = $model->z_id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Zonas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<style>
+    #map {
+        height:10%;
+        
+        
+    }
+ </style>
 <html>
 <head>
-    <title>WKT example</title>
+    <title>Zona</title>
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.6.0/ol.css" type="text/css">
@@ -27,29 +33,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->z_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->z_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'z_id',
             'z_nombre',
-            'z_zona',
-            'z_wkt:ntext',
+            
         ],
     ]) ?>
+    
+    
 
 </div>
     
+    
+<p>    
 <div class="container-fluid">
 
 <div class="row-fluid">
@@ -59,13 +59,24 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 </div>
+</p> 
 
+<p>
+<p>
+        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->z_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Eliminar'), ['delete', 'id' => $model->z_id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => Yii::t('app', 'Esta seguro que desea eliminar la zona?'),
+                'method' => 'post',
+            ],
+        ]) ?>
+</p>
+</p>
 
 
 <script>
 var wkt = "<?php echo $model->z_wkt; ?>" ;
-var wkt2 = "'"+wkt+"'";
-document.write("VariableJS = " + wkt2);
 var raster = new ol.layer.Tile({
   source: new ol.source.OSM()
 });
@@ -80,13 +91,16 @@ var vector = new ol.layer.Vector({
   })
 });
 
+var lat = feature.getGeometry().getCoordinates()[0][0][0];
+var long = feature.getGeometry().getCoordinates()[0][0][1];
+
 var map = new ol.Map({
   layers: [raster, vector],
   target: 'map',
   projection: new OpenLayers.Projection("EPSG:900913"),
   view: new ol.View({
-    center: [2952104.019976033, -3277504.823700756],
-    zoom: 4
+    center: [lat, long],
+    zoom: 15
   })
 });
 
@@ -94,8 +108,6 @@ var map = new ol.Map({
     
 <script>
 var wkt3 = "<?php echo $model->z_wkt; ?>" ;
-var wkt2 = "'"+wkt+"'";
-document.write("VariableJS = " + wkt2);
 var map = new OpenLayers.Map({
             div: "map",
             projection: new OpenLayers.Projection("EPSG:900913"),
@@ -111,13 +123,10 @@ var map = new OpenLayers.Map({
         var vectors = new OpenLayers.Layer.Vector('My Vectors');
         map.addLayer(vectors);
         
-  
-        var wkt = new OpenLayers.Format.WKT();
-
-        var polygonFeature = wkt.read("POLYGON((-15.8203125 2.4609375, -15.8203125 -10.546875, 6.85546875 -11.25, 8.26171875 -3.33984375, -15.8203125 2.4609375))");
+        var polygonFeature = wkt.read(wkt3);
         polygonFeature.geometry.transform(map.displayProjection, map.getProjectionObject());
         vectors.addFeatures([polygonFeature]);
-
+        map.updateSize(2);
         
 
       

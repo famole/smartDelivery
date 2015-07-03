@@ -32,13 +32,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'z_id')->textInput() ?>
+    <?= $form->field($model, 'z_id')->textInput(['readonly' => true]) ?>
 
     <?= $form->field($model, 'z_nombre')->textInput(['maxlength' => 45]) ?>
 
-    <?= $form->field($model, 'z_zona')->textInput() ?>
-
-    <?= $form->field($model, 'z_wkt')->textarea(['rows' => 6]) ?>
+    
     
     <div id="map"></div>
     
@@ -62,15 +60,14 @@ use yii\widgets\ActiveForm;
       controls: ol.control.defaults().extend([ new ol.control.ScaleLine({ units:'metric' }) ]),
       layers: [ rasterLayer, vectorLayer ],
       view: new ol.View({
-        center: ol.proj.transform([0,10], 'EPSG:4326', 'EPSG:3857'),
-        zoom: 3
+        center: ol.proj.transform([-56.16341,-34.90721], 'EPSG:4326', 'EPSG:3857'),
+        zoom: 15
       })
+      
+       
     });
     
-    centerWGS84=new ol.LonLat(-56.16341,-34.90721);
-	//Transformar coordenadas anteriores
-    centerOSM = transformToSphericalMercator(centerWGS84);
-    map.setCenter(centerOSM, 50);
+    
 
 
     addInteraction();
@@ -79,6 +76,8 @@ use yii\widgets\ActiveForm;
             document.getElementById("wkt").value = "";
             addInteraction();
     });
+
+
 
 </script>
 </body>
