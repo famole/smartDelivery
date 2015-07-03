@@ -36,7 +36,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'z_nombre')->textInput(['maxlength' => 45]) ?>
 
+    <?= $form->field($model, 'z_zona')->textInput(['type'=>"hidden"])->label(false) ?>
     
+    <?= $form->field($model, 'z_wkt')->textInput(['type'=>"hidden"])->label(false) ?>
     
     <div id="map"></div>
     

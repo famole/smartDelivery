@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.6.0/ol.css" type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.6.0/ol.js"></script>
+    <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/OpenLayers.js"></script>
 
 </head>
