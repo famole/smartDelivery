@@ -30,7 +30,7 @@ class Zona extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['z_id', 'z_nombre'], 'required'],
+            [['z_nombre'], 'required'],
             [['z_id'], 'integer'],
             [['z_zona', 'z_wkt'], 'string'],
             [['z_nombre'], 'string', 'max' => 45]
@@ -43,7 +43,7 @@ class Zona extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'z_id' => Yii::t('app', 'ID'),
+            'z_id' => Yii::t('app', 'Codigo'),
             'z_nombre' => Yii::t('app', 'Nombre'),
             'z_zona' => Yii::t('app', 'Zona'),
             'z_wkt' => Yii::t('app', 'Wkt'),
@@ -60,10 +60,8 @@ class Zona extends \yii\db\ActiveRecord
      public function save($runValidation = true, $attributeNames = null)
     {
         if ($this->getIsNewRecord()) {
-//           $dsn = 'mysql:host=localhost;dbname=smartdelivery';
-//           $username = 'root';
-//           $password = 'root';
-//           $connection=new CDbConnection($dsn,$username,$password);
+           $numerador = new NumeradoresController('ZON');
+           $this->z_id = $numerador->getNumerador();
            $connection = static::getDb();
            $sql="INSERT INTO `zona` (`z_id`, `z_nombre`, `z_zona`,`z_wkt`) VALUES ("."'".$this->z_id."',"."'".$this->z_nombre."',"."GeomFromText('".  $this->z_zona."'),'".$this->z_zona."')";
            $command=$connection->createCommand($sql);
@@ -71,7 +69,7 @@ class Zona extends \yii\db\ActiveRecord
            
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
-}
+        }
     }
   
 }
