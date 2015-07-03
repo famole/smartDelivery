@@ -125,5 +125,13 @@ class VehiculoController extends Controller
             $this->goHome();
         }
     }
+    
+    public function actionListavehiculos(){
+        $vehiculos = Vehiculo::find(/*[
+            've_estado' => Vehiculo::ACTIVE,
+        ]*/)->all();
+        return $this->render('listavehiculos', ['vehiculos'=>$vehiculos]);
+                
+    }
  
 }
