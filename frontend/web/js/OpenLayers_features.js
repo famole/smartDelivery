@@ -151,7 +151,14 @@ function addInteraction() {
 		// transform cloned feature to WGS84:
 		featureClone.getGeometry().transform('EPSG:3857', 'EPSG:4326');
 		// update WKT string:
-		document.getElementById("z_zona").value = wkt.writeFeature(featureClone);
+                var wktwriter2=new ol.format.WKT();
+                var wkt3=wktwriter2.writeFeature(featureClone);
+                var geom2 = featureClone.getGeometry();
+                console.log(wkt3);
+                
+		$('#zona-z_zona').val(wkt3);
+                $('#zona-z_wkt').val(wkt3);
+                
 		// Create a modify interaction and add to the map:
 		modifyInteraction = new ol.interaction.Modify({
 			features: selectInteraction.getFeatures()

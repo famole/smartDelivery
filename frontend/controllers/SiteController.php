@@ -71,6 +71,12 @@ class SiteController extends Controller
         
     }
     
+//    public function actionDia()
+//    {
+//        return $this->render('dia');
+//        
+//    }
+    
     public function actionMapa()
     {
         return $this->render('mapa');

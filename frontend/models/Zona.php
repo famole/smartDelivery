@@ -1,6 +1,7 @@
 <?php
 
 namespace frontend\models;
+use frontend\controllers\NumeradoresController;
 
 use Yii;
 

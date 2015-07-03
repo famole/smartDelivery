@@ -27,8 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'z_id',
             'z_nombre',
-            'z_zona',
-            'z_wkt:ntext',
+            
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

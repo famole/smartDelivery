@@ -37,7 +37,7 @@ class Vehiculo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ve_id', 'tv_id'], 'required'],
+            [['tv_id'], 'required'],
             [['ve_id', 've_movil', 'tv_id', 've_entregaslimite'], 'integer'],
             [['ve_matricula'], 'string', 'max' => 50],
             [['ve_seguro'], 'string', 'max' => 200]
