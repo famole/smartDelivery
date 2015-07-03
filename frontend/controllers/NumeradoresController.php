@@ -134,8 +134,8 @@ class NumeradoresController //extends Controller
            //Creo nuevo numerador y retorno numero
            $numerador = 1;
            $record = new \frontend\models\Numeradores();
-           $record->num_id = $id;
-           $record->num_num = $numerador;
+           $record->num_id = $this->numId;
+           $record->num_num = $numerador + 1;
            $record->save();   
         }
         return $numerador;
