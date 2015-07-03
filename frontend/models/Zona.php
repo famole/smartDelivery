@@ -43,10 +43,10 @@ class Zona extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'z_id' => Yii::t('app', 'Z ID'),
-            'z_nombre' => Yii::t('app', 'Z Nombre'),
-            'z_zona' => Yii::t('app', 'Z Zona'),
-            'z_wkt' => Yii::t('app', 'Z Wkt'),
+            'z_id' => Yii::t('app', 'ID'),
+            'z_nombre' => Yii::t('app', 'Nombre'),
+            'z_zona' => Yii::t('app', 'Zona'),
+            'z_wkt' => Yii::t('app', 'Wkt'),
         ];
     }
 
