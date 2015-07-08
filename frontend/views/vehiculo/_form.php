@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use \kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Vehiculo */
@@ -20,7 +21,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 've_movil')->textInput() ?>
 
-    <?= $form->field($model, 'tv_id')->textInput() ?>
+    <?= $form->field($model, 'tv_id')->widget(Select2::className(),[
+        'data' => yii\helpers\ArrayHelper::map(app\models\TipoVehiculo::find()->all(), 'tv_id', 'tv_nombre'),
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccionar un tipo de vehiculo'],
+        'pluginOptions' =>[
+            'allowClear' => true
+        ],
+    ]); ?>
 
     <?= $form->field($model, 've_entregaslimite')->textInput() ?>
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models;
+namespace app\models;
 
 use Yii;
 
@@ -35,7 +35,7 @@ class Personal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['per_id', 'user_id', 'per_nom', 'per_priape', 'pc_id'], 'required'],
+            [['per_nom', 'per_priape', 'pc_id'], 'required'],
             [['per_id', 'user_id', 'per_tel', 'pc_id'], 'integer'],
             [['per_nom', 'per_priape', 'per_segape'], 'string', 'max' => 45]
         ];

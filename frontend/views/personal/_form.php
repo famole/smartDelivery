@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\widgets\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Personal */
@@ -22,7 +23,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'per_tel')->textInput() ?>
 
-    <?= $form->field($model, 'pc_id')->inputOptions ?>
+    <?= $form->field($model, 'pc_id')->widget(Select2::className(),[
+        'data' => yii\helpers\ArrayHelper::map(app\models\Personalcat::find()->all(), 'pc_id', 'pc_desc'),
+        'language' => 'es',
+        'options' => ['placeholder' => 'Seleccionar una categoria'],
+        'pluginOptions' =>[
+            'allowClear' => true
+        ],
+    ]); ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Guardar') : Yii::t('app', 'Actualizar'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
