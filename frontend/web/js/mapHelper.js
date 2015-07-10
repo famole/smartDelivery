@@ -126,6 +126,54 @@ function mostrarArray(){
 alert(poly);
 }
 
+function createMap(lat, long, pzoom, ptarget){
+    var raster = new ol.layer.Tile({
+        source: new ol.source.OSM()
+    });
+    
+    var map = new ol.Map({
+        layers: [raster],
+        target: ptarget,
+        projection: new OpenLayers.Projection("EPSG:900913"),
+        view: new ol.View({
+          center: [lat, long],
+          zoom: pzoom
+        })
+    });
+    
+    return map;
+}
+
+function createLayer(wkt){
+    var format = new ol.format.WKT();
+    var feature = format.readFeature(wkt);
+    feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
+    var vector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+        features: [feature]
+        })
+    });
+    
+    var lat = feature.getGeometry().getCoordinates()[0][0][0];
+    var long = feature.getGeometry().getCoordinates()[0][0][1];
+    var latlongfeature = new Array();
+    latlongfeature.lat = lat;
+    latlongfeature.long = long;
+    latlongfeature.vector = vector;
+    
+    return latlongfeature;
+}
+
+function addLayer(map,layer){
+    map.addLayer(layer);
+    
+    
+    
+}
+
+
+
 function addInteraction() {
         // reset interaction:
         if(typeof drawInteraction != 'undefined') map.removeInteraction(drawInteraction);
