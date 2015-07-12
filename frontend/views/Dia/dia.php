@@ -1,24 +1,28 @@
 <?php
     use frontend\models\zona;
     
-    
-    $model = new zona();
-    $nullId = 0;
-    $rows = Zona::find()
-    ->where('z_id > :nullId',[':nullId' => $nullId])
-    ->orderBy('z_id')
-    ->all();
-    $count = count($rows);
-    echo Yii::trace('123');
-    echo Yii::trace($count);
-        
+//    $zonas= array();
+//    $model = new zona();
+//    $nullId = 0;
+//    $rows = Zona::find()
+//    ->select('z_wkt')
+//    ->where('z_id > :nullId',[':nullId' => $nullId])
+//    ->orderBy('z_id')
+//    ->all();
+//    
+//    for ($index = 0; $index < count($rows); ++$index) {
+//        $zonas[$index] = $rows[$index]->z_wkt;
+//        
+//    }
+//    $zonasJson = json_encode($zonas);
+       
 ?>
 
-<script>
-    var countt = "<?php echo $count; ?>" ;
-    console.log(countt);
-</script>>
+
 <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
+<script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/OpenLayers.js"></script>
+<script src="js/mapHelper.js" type="text/javascript"></script>
 <style>
   .map {
     height: 400px;
@@ -29,23 +33,38 @@
 
 
 <div class="container">
-      <input type="text" class="form-control" placeholder="Text input">
+      
      
     <div id="map" class="map"></div>
       
-    <script type="text/javascript">
-      var map = new ol.Map({
-        target: 'map',
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.OSM()
-          })
-        ],
-        view: new ol.View({
-          center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
-          zoom: 4
-        })
-      });
-    </script>
+ </div>   
+    
+<script type="text/javascript">
+    
+    var indice;
+    var poligonos = eval(<?php echo $zonasJson; ?>) ;
+       
+    var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
+    
+    for (indice = 0; indice < poligonos.length; ++indice) {
+        
+        var latlongfeature= createLayer(poligonos[indice]);
+        map.addLayer(latlongfeature.vector);
 
-</div>
+//        
+//        var vector = new ol.layer.Vector({
+//          source: new ol.source.Vector({
+//            features: [feature]
+//          }),
+//          style: new ol.style.Style({
+//              stroke: new ol.style.Stroke({color: 'red', width: 2}),
+//              fill: new ol.style.Fill({color:'green'})
+//            }),
+//          opacity:0.5,
+//         
+//        });
+
+    }
+
+ </script>
+
