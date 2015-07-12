@@ -104,34 +104,10 @@ var map = new ol.Map({
   })
 });
 
-</script>
-    
-<script>
-var wkt3 = "<?php echo $model->z_wkt; ?>" ;
-var map = new OpenLayers.Map({
-            div: "map",
-            projection: new OpenLayers.Projection("EPSG:900913"),
-            displayProjection: new OpenLayers.Projection("EPSG:4326"),
-            layers: [
-                new OpenLayers.Layer.OSM()
-                ]
-        });
-        
-        var wkt = new OpenLayers.Format.WKT();
-        
-        
-        var vectors = new OpenLayers.Layer.Vector('My Vectors');
-        map.addLayer(vectors);
-        
-        var polygonFeature = wkt.read(wkt3);
-        polygonFeature.geometry.transform(map.displayProjection, map.getProjectionObject());
-        vectors.addFeatures([polygonFeature]);
-        map.updateSize(2);
-        
 
-      
 
 </script>
+ 
     
 </body>
 </html>
