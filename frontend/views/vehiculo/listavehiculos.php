@@ -63,7 +63,7 @@ $this->registerJSFile("js/mapHelper.js");
 $script = <<< JS
     $( document ).ready(function() {
         //Dibujar mapa 
-        var map = createMap('-34.9032800','-56.1881600',6,'map');
+        var map = createMap(-6252731.917154272,-4150822.2589118066,6,'map');
 
         //Filtrar Vehiculos
          $('#searchVehicle').on('input', function(e) {
