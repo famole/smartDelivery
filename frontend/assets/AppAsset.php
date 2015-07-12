@@ -21,6 +21,9 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'https://code.jquery.com/jquery-1.11.2.min.js',
+        'http://openlayers.org/en/v3.0.0/build/ol.js',
+        'js/OpenLayers.js',    
     ];
     public $depends = [
         'yii\web\YiiAsset',
