@@ -8,6 +8,7 @@ use app\models\VehiculoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 
 /**
  * VehiculoController implements the CRUD actions for Vehiculo model.
@@ -126,12 +127,34 @@ class VehiculoController extends Controller
         }
     }
     
+    public function actionGetVehiculoBy($filter){
+        $vehiculos = Vehiculo::find()->where(['like', 've_matricula', $filter.'%',false])->all();
+        echo Json::encode($vehiculos);
+    }
+    
     public function actionListavehiculos(){
         $vehiculos = Vehiculo::find(/*[
             've_estado' => Vehiculo::ACTIVE,
         ]*/)->all();
-        return $this->render('listavehiculos', ['vehiculos'=>$vehiculos]);
-                
+        
+        $items = array(array(
+                   "url" => "#",
+                   "label" => "Todos",
+                   "icon" => "map-marker",
+                   "options" => ["id" => 'Todos'],
+                ));
+        
+        foreach($vehiculos as $vehiculo){
+            
+            $item = array(
+                   "url" => "#",
+                   "label" => $vehiculo->ve_matricula . "(" . $vehiculo->ve_movil . ")",
+                   "icon" => "map-marker",
+                   "options" => ["id" => $vehiculo->ve_id],
+                );
+            array_push($items, $item);
+        }
+        return $this->render('listavehiculos', ['items'=>$items]);
     }
  
 }

@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Personal;
-use frontend\models\PersonalSearch;
+use app\models\Personal;
+use app\models\PersonalSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -1,11 +1,11 @@
 <?php
 
-namespace frontend\models;
+namespace app\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\models\Personalcat;
+use app\models\Personalcat;
 
 /**
  * PersonalcatSearch represents the model behind the search form about `frontend\models\Personalcat`.
