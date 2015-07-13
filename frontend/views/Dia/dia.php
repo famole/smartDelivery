@@ -1,23 +1,3 @@
-<?php
-    use frontend\models\zona;
-    
-//    $zonas= array();
-//    $model = new zona();
-//    $nullId = 0;
-//    $rows = Zona::find()
-//    ->select('z_wkt')
-//    ->where('z_id > :nullId',[':nullId' => $nullId])
-//    ->orderBy('z_id')
-//    ->all();
-//    
-//    for ($index = 0; $index < count($rows); ++$index) {
-//        $zonas[$index] = $rows[$index]->z_wkt;
-//        
-//    }
-//    $zonasJson = json_encode($zonas);
-       
-?>
-
 
 <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
 <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
@@ -65,6 +45,36 @@
 //        });
 
     }
+    
+    var iconFeature = new ol.Feature({
+        geometry: new ol.geom.Point([-6252731.917154272,-4150822.2589118066]),
+        name: 'Null Island',
+        population: 4000,
+        rainfall: 500
+      });
+      
+    var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+        anchor: [0.5, 10],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        opacity: 0.75,
+        src: 'images/icon.png'
+      }))
+      });
+      
+    iconFeature.setStyle(iconStyle);
+
+    var vectorSource = new ol.source.Vector({
+      features: [iconFeature]
+    });
+
+    var vectorLayer = new ol.layer.Vector({
+      source: vectorSource
+    });
+    
+    map.addLayer(vectorLayer);
+    
 
  </script>
 

@@ -168,9 +168,39 @@ function createLayer(wkt){
 function addLayer(map,layer){
     map.addLayer(layer);
     
-    
-    
-}
+  }
+  
+ function dibujarIcono(lat,long){
+     
+     var iconFeature = new ol.Feature({
+        geometry: new ol.geom.Point([lat,long]),
+        name: 'Null Island',
+        population: 4000,
+        rainfall: 500
+      });
+      
+    var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+        anchor: [0.5, 10],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        opacity: 0.75,
+        src: 'images/icon.png'
+      }))
+      });
+      
+    iconFeature.setStyle(iconStyle);
+
+    var vectorSource = new ol.source.Vector({
+      features: [iconFeature]
+    });
+
+    var vectorLayer = new ol.layer.Vector({
+      source: vectorSource
+    });
+     
+     return vectorLayer;
+ } 
 
 
 
