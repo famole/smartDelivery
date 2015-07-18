@@ -1,5 +1,6 @@
 <?php
 use kartik\tabs\TabsX;
+use kartik\sortinput\SortableInput;
 
 /* @var $this yii\web\View */
 $this->title = 'Smart Delivery';
@@ -20,10 +21,22 @@ $this->title = 'Smart Delivery';
     ];
     
     // Ajax Tabs Above
-    echo TabsX::widget([
-    'items'=>$items,
-    'position'=>TabsX::POS_ABOVE,
-    'encodeLabels'=>false
+//    echo TabsX::widget([
+//    'items'=>$items,
+//    'position'=>TabsX::POS_ABOVE,
+//    'encodeLabels'=>false
+//]);
+    
+    echo SortableInput::widget([
+    'name'=> 'sort_list_1',
+    'items' => [
+        1 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 1'],
+        2 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 2'],
+        3 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 3'],
+        4 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 4'],
+        5 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 5', 'disabled'=>true]
+    ],
+    'hideInput' => true,
 ]);
 
 ?>
