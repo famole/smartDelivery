@@ -9,13 +9,13 @@ $this->title = 'Smart Delivery';
     $items = [
         [
             'label'=>'<i class="glyphicon glyphicon-list-alt"></i> Entregas',
-            'content'=>$content1,
+            'content'=>$hojaRuta,
             'active'=>true
         ],
         [
             'label'=>'<i class="glyphicon glyphicon-road"></i> Hoja Ruta',
-            'content'=>$content2,
-            'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/vehiculo/listavehiculos'])]
+            'content'=>$hojaRuta,
+            'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/hoja-ruta'])]
         ],
     ];
     

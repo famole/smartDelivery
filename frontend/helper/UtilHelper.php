@@ -58,4 +58,25 @@ class UtilHelper{
         return $result;
     }
     
+    public static function createItemsForSideNav($vehiculos){
+        $items = array(array(
+                   "url" => "#",
+                   "label" => "Todos",
+                   "icon" => "map-marker",
+                   "options" => ["id" => 'Todos'],
+                ));
+        
+        foreach($vehiculos as $vehiculo){
+            
+            $item = array(
+                   "url" => "#",
+                   "label" => $vehiculo->ve_matricula . "(" . $vehiculo->ve_movil . ")",
+                   "icon" => "map-marker",
+                   "options" => ["id" => $vehiculo->ve_id],
+                );
+            array_push($items, $item);
+        }
+        return $items;
+    }
+    
 }

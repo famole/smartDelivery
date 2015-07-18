@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\TipoVehiculo;
-use app\models\TipoVehiculoSearch;
+use frontend\models\TipoVehiculo;
+use frontend\models\TipoVehiculoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

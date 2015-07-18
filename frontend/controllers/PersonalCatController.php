@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\Personalcat;
-use app\models\PersonalcatSearch;
+use frontend\models\Personalcat;
+use frontend\models\PersonalcatSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

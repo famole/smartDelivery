@@ -7,11 +7,14 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\Vehiculo;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use frontend\helper\UtilHelper;
+use yii\helpers\Json;
 
 /**
  * Site controller
@@ -88,6 +91,17 @@ class SiteController extends Controller
         return $this->render('mapa2');
         
     }
+    
+    public function actionHojaRuta(){
+        $vehiculos = Vehiculo::find(/*[
+            've_estado' => Vehiculo::ACTIVE,
+        ]*/)->all();
+        $items = UtilHelper::createItemsForSideNav($vehiculos);
+        
+        $hojaRuta = $this->renderPartial('../vehiculo/listavehiculos',['items' => $items]);
+        return Json::encode($hojaRuta);
+    }
+    
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {

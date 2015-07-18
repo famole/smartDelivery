@@ -3,12 +3,13 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\Vehiculo;
-use app\models\VehiculoSearch;
+use frontend\models\Vehiculo;
+use frontend\models\VehiculoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use frontend\helper\UtilHelper;
 
 /**
  * VehiculoController implements the CRUD actions for Vehiculo model.
@@ -137,23 +138,7 @@ class VehiculoController extends Controller
             've_estado' => Vehiculo::ACTIVE,
         ]*/)->all();
         
-        $items = array(array(
-                   "url" => "#",
-                   "label" => "Todos",
-                   "icon" => "map-marker",
-                   "options" => ["id" => 'Todos'],
-                ));
-        
-        foreach($vehiculos as $vehiculo){
-            
-            $item = array(
-                   "url" => "#",
-                   "label" => $vehiculo->ve_matricula . "(" . $vehiculo->ve_movil . ")",
-                   "icon" => "map-marker",
-                   "options" => ["id" => $vehiculo->ve_id],
-                );
-            array_push($items, $item);
-        }
+        $items = UtilHelper::createItemsForSideNav($vehiculos);
         return $this->render('listavehiculos', ['items'=>$items]);
     }
  

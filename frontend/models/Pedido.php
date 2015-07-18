@@ -71,4 +71,27 @@ class Pedido extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Entrega::className(), ['ped_id' => 'ped_id']);
     }
+    
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if ($this->getIsNewRecord()) {
+            $numerador = new NumeradoresController('PED');
+            $this->per_id = $numerador->getNumerador();
+            $connection = static::getDb();
+            $sql="INSERT INTO `pedido` (`ped_id`, `cli_id`, `ped_fechahora`, `ped_direccion`, `ped_observaciones`, `ped_ultproc`) "
+                    . "VALUES ("."'".$this->ped_id."',"
+                    ."'".$this->cli_id."',"
+                    ."'".$this->ped_fechahora."',"
+                    ."'".$this->ped_direccion."',"
+                    ."'".$this->ped_observaciones."',"
+                    ."'".$this->ped_ultproc."')";
+            $command=$connection->createCommand($sql);
+            $command->execute();
+           
+        } else {
+            return $this->update($runValidation, $attributeNames) !== false;
+        }
+    }
+    
+
 }
