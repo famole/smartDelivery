@@ -134,7 +134,7 @@ function createMap(lat, long, pzoom, ptarget){
     var map = new ol.Map({
         layers: [raster],
         target: ptarget,
-        projection: new OpenLayers.Projection("EPSG:900913"),
+        projection: new OpenLayers.Projection("EPSG:900913"),//EPSG:900913
         view: new ol.View({
           center: [lat, long],
           zoom: pzoom
@@ -171,26 +171,28 @@ function addLayer(map,layer){
   }
   
  function dibujarIcono(lat,long){
-     
+    
      var iconFeature = new ol.Feature({
         geometry: new ol.geom.Point([lat,long]),
+//        geometry:new ol.geom.Point(ol.proj.transform([lat, long], 'EPSG:3857',     
+//        'EPSG:4326')),
         name: 'Null Island',
         population: 4000,
         rainfall: 500
       });
       
     var iconStyle = new ol.style.Style({
-        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+        image: new ol.style.Icon( ({
         anchor: [0.5, 10],
         anchorXUnits: 'fraction',
         anchorYUnits: 'pixels',
         opacity: 0.75,
-        src: 'images/icon.png'
+        src: 'images/icon2.png'
       }))
       });
       
     iconFeature.setStyle(iconStyle);
-
+    //iconFeature.getGeometry().transform('EPSG:4326','EPSG:900913')
     var vectorSource = new ol.source.Vector({
       features: [iconFeature]
     });
