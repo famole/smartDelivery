@@ -10,6 +10,8 @@ use Yii;
  * @property integer $dir_id
  * @property string $dir_direccion
  * @property string $dir_latlong
+ * @property string $dir_latstr
+ * @property string $dir_longstr
  *
  * @property Clientedireccion[] $clientedireccions
  */
@@ -32,7 +34,9 @@ class Direccion extends \yii\db\ActiveRecord
             [['dir_id'], 'required'],
             [['dir_id'], 'integer'],
             [['dir_latlong'], 'string'],
-            [['dir_direccion'], 'string', 'max' => 500]
+            [['dir_direccion'], 'string', 'max' => 500],
+            [['dir_latstr'], 'string', 'max' => 100],
+            [['dir_longstr'], 'string', 'max' => 100]
         ];
     }
 
@@ -62,7 +66,7 @@ class Direccion extends \yii\db\ActiveRecord
             $numerador = new NumeradoresController('DIR');
             $this->dir_id = $numerador->getNumerador();
             $connection = static::getDb();
-            $sql="INSERT INTO `direccion` (`dir_id`, `dir_direccion`, `dir_latlong`) VALUES ("."'".$this->dir_id."',"."'".$this->dir_direccion."','".$this->dir_latlong ."')";
+            $sql="INSERT INTO `direccion` (`dir_id`, `dir_direccion`, `dir_latlong`, `dir_latstr`, `dir_longstr` ) VALUES ("."'".$this->dir_id."',"."'".$this->dir_direccion."','".$this->dir_latlong ."','".$this->dir_latstr ."','".$this->dir_longstr ."')";
             $command=$connection->createCommand($sql);
             $command->execute();
            

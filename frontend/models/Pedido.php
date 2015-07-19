@@ -13,6 +13,7 @@ use Yii;
  * @property string $ped_direccion
  * @property string $ped_observaciones
  * @property string $ped_ultproc
+ * @property string $ped_dep
  *
  * @property Clientedireccion $clientedireccion
  * @property Entrega[] $entregas
@@ -37,7 +38,8 @@ class Pedido extends \yii\db\ActiveRecord
             [['ped_id', 'cli_id'], 'integer'],
             [['ped_fechahora', 'ped_ultproc'], 'safe'],
             [['ped_direccion'], 'string', 'max' => 500],
-            [['ped_observaciones'], 'string', 'max' => 1000]
+            [['ped_observaciones'], 'string', 'max' => 1000],
+            [['ped_dep'], 'string', 'max' => 100]
         ];
     }
 
@@ -53,6 +55,7 @@ class Pedido extends \yii\db\ActiveRecord
             'ped_direccion' => Yii::t('app', 'Dirección'),
             'ped_observaciones' => Yii::t('app', 'Observaciones'),
             'ped_ultproc' => Yii::t('app', 'Ped Ultproc'),
+            'ped_dep' => Yii::t('app', 'Departamento'),
         ];
     }
 
@@ -84,7 +87,8 @@ class Pedido extends \yii\db\ActiveRecord
                     ."'".$this->ped_fechahora."',"
                     ."'".$this->ped_direccion."',"
                     ."'".$this->ped_observaciones."',"
-                    ."'".$this->ped_ultproc."')";
+                    ."'".$this->ped_ultproc."',"
+                    ."'".$this->ped_dep."')";
             $command=$connection->createCommand($sql);
             $command->execute();
            

@@ -16,18 +16,19 @@ class UtilHelper{
      * La siguiente funcion recibe una direccion String y retorna las coordenadas 
      * en latitud y longitud.
      * 
-     * @param String $direccion
+     * @param String $direction
      * 
      */
-    public static function dirToLongLat($direccion, $lat, $long){
+    public static function dirToLongLat($direction, $lat, $long, $results){
         header('Content-Type', 'application/json');
         $url = ParametrosController::getParamText('NOMINATIMURL');
        
-        $url .= $direccion . '&format=json&polygon=0&addressdetails=0';
+        $url .= $direction . '&format=json&polygon=0&addressdetails=0';
     
         $json = UtilHelper::curlPostRequest($url, 'POST');
         
         $jsonDecoded = json_decode($json, true);
+        $results = count($jsonDecoded);
         $lat = $jsonDecoded[0]['lat'];
         $long = $jsonDecoded[0]['long'];
         
