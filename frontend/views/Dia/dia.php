@@ -2,6 +2,12 @@
 
     use kartik\sidenav\SideNav;
     use kartik\date\DatePicker;
+    use kartik\sortinput\SortableInput;
+    
+    $fecha = date("Y-m-d");
+    
+    Yii::error($fecha);
+    
 
 ?>
 
@@ -16,7 +22,7 @@
     width: 100%;
   }
 </style>
-<script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
+            
 
 
 
@@ -46,21 +52,25 @@
           <input type="text" id="searchVehicle" placeholder="Filtrar" class="form-control">
         </div>
 
-<!--        <div class="form-group">
-          //<?php
-//              echo SideNav::widget([
-//                 'type' => SideNav::TYPE_DEFAULT,
-//                 'encodeLabels' => false,
-//                 'heading' => "Vehiculos",
-//                 'containerOptions' => ['id'=>'vhmenu'],
-//                 'items' => $items,
-//
-//              ]);
-//          ?>
-        </div>-->
+       <div class="form-group">
+          <?php
+            echo SortableInput::widget([
+                'name'=> 'sort_list_1',
+                'items' => [
+                    1 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 1'],
+                    2 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 2'],
+                    3 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 3'],
+                    4 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 4'],
+                    5 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 5', 'disabled'=>true]
+                ],
+                'hideInput' => true,
+            ]);
+          ?>
+        </div>
     </div>
-    <div id="map" class="col-md-9 guide-content">
-    </div>
+    
+<!--    <div id="map" class="col-md-9 guide-content">
+    </div>-->
 </div>
 
 
