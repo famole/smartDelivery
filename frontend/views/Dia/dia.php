@@ -7,8 +7,8 @@
     $fecha = date("Y-m-d");
     
     Yii::error($fecha);
-    
-
+    Yii::error($entregasJson)
+   
 ?>
 
 
@@ -63,14 +63,14 @@
                     4 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 4'],
                     5 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 5', 'disabled'=>true]
                 ],
-                'hideInput' => true,
+                'hideInput' => false,
             ]);
           ?>
         </div>
     </div>
     
-<!--    <div id="map" class="col-md-9 guide-content">
-    </div>-->
+    <div id="map" class="col-md-9 guide-content">
+    </div>
 </div>
 
 
@@ -85,15 +85,15 @@
     
     // The transform funcion needs lat/long instead of long/lat
     
-    var point = new OpenLayers.LonLat(-56.1220166,-34.8370893);
-    var point2 = point;
-    point2.transform('EPSG:4326','EPSG:3857');
-    
-    console.log(point);
-    console.log(point2);
+//    var point = new OpenLayers.LonLat(-56.1220166,-34.8370893);
+//    var point2 = point;
+//    point2.transform('EPSG:4326','EPSG:3857');
+//    
+//    console.log(point);
+//    console.log(point2);
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
-       
+    var entregas = eval(<?php echo $entregasJson; ?>) ;   
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     
     for (indice = 0; indice < poligonos.length; ++indice) {
@@ -102,14 +102,23 @@
         map.addLayer(latlongfeature.vector);
 
     }
+    
+    for (indice = 0; indice < entregas.length; ++indice) {
+       
+        var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
+        var point2 = point;
+        point2.transform('EPSG:4326','EPSG:3857');
+        var pointLayer = dibujarIcono(point2.lon,point2.lat);
+        map.addLayer(pointLayer);
+    }
     //-34.8906053 -56.1653319 -7591399.209045904,-3884004.4149244344
-    var pointLayer = dibujarIcono(point2.lon,point2.lat);
+    //var pointLayer = dibujarIcono(point2.lon,point2.lat);
     //var pointLayer = dibujarIcono(-6252731.917154272,-4150822.2589118066)    
   //  var Alkmaar = ol.proj.transform([-56.17, -34.9], 'EPSG:4326', 'EPSG:3857');
 
     //pointLayer.getGeometry().transform('EPSG:4326','EPSG:900913')
 
-    map.addLayer(pointLayer);
+   // map.addLayer(pointLayer);
     
 
  </script>

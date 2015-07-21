@@ -6,19 +6,19 @@ use kartik\sortinput\SortableInput;
 $this->title = 'Smart Delivery';
 ?>
 
-<?php
-    $items = [
-        [
-            'label'=>'<i class="glyphicon glyphicon-list-alt"></i> Entregas',
-            'content'=>$hojaRuta,
-            'active'=>true
-        ],
-        [
-            'label'=>'<i class="glyphicon glyphicon-road"></i> Hoja Ruta',
-            'content'=>$hojaRuta,
-            'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/hoja-ruta'])]
-        ],
-    ];
+//<?php
+//    $items = [
+//        [
+//            'label'=>'<i class="glyphicon glyphicon-list-alt"></i> Entregas',
+//            'content'=>$hojaRuta,
+//            'active'=>true
+//        ],
+//        [
+//            'label'=>'<i class="glyphicon glyphicon-road"></i> Hoja Ruta',
+//            'content'=>$hojaRuta,
+//            'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/hoja-ruta'])]
+//        ],
+//    ];
     
     // Ajax Tabs Above
 //    echo TabsX::widget([
