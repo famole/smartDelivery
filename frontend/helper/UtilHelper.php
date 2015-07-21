@@ -2,6 +2,8 @@
 namespace frontend\helper;
 
 use frontend\controllers\ParametrosController;
+use frontend\enum\EnumSideNav;
+
 use Yii;
 /**
 * Clase UtilHelper, en esta clase se definiran metodos utiles a utilizar en todo el sistema.
@@ -14,18 +16,19 @@ class UtilHelper{
      * La siguiente funcion recibe una direccion String y retorna las coordenadas 
      * en latitud y longitud.
      * 
-     * @param String $direccion
+     * @param String $direction
      * 
      */
-    public static function dirToLongLat($direccion, $lat, $long){
+    public static function dirToLongLat($direction, $lat, $long, $results){
         header('Content-Type', 'application/json');
         $url = ParametrosController::getParamText('NOMINATIMURL');
        
-        $url .= $direccion . '&format=json&polygon=0&addressdetails=0';
+        $url .= $direction . '&format=json&polygon=0&addressdetails=0';
     
         $json = UtilHelper::curlPostRequest($url, 'POST');
         
         $jsonDecoded = json_decode($json, true);
+        $results = count($jsonDecoded);
         $lat = $jsonDecoded[0]['lat'];
         $long = $jsonDecoded[0]['long'];
         
@@ -58,25 +61,40 @@ class UtilHelper{
         return $result;
     }
     
-    public static function createItemsForSideNav($vehiculos){
+    public static function createItemsForSideNav($list, $type){
         $items = array(array(
                    "url" => "#",
                    "label" => "Todos",
                    "icon" => "map-marker",
                    "options" => ["id" => 'Todos'],
                 ));
-        
-        foreach($vehiculos as $vehiculo){
+        switch ($type) {
+            case EnumSideNav::Entrega:
+//                foreach($list as $entrega){
+//                    $item = array(
+//                           "url" => "#",
+//                           "label" => $entrega->ve_ . "(" . $vehiculo->ve_movil . ")",
+//                           "icon" => "map-marker",
+//                           "options" => ["id" => $vehiculo->ve_id],
+//                        );
+//                    array_push($items, $item);
+//                }
             
-            $item = array(
-                   "url" => "#",
-                   "label" => $vehiculo->ve_matricula . "(" . $vehiculo->ve_movil . ")",
-                   "icon" => "map-marker",
-                   "options" => ["id" => $vehiculo->ve_id],
-                );
-            array_push($items, $item);
+            case EnumSideNav::Vehiculo:
+                foreach($list as $vehiculo){
+                    $item = array(
+                           "url" => "#",
+                           "label" => $vehiculo->ve_matricula . "(" . $vehiculo->ve_movil . ")",
+                           "icon" => "map-marker",
+                           "options" => ["id" => $vehiculo->ve_id],
+                        );
+                    array_push($items, $item);
+                }
         }
+        
         return $items;
     }
+    
+    
     
 }

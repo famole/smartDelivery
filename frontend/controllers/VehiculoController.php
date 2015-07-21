@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use frontend\helper\UtilHelper;
+use frontend\enum\EnumSideNav;
 
 /**
  * VehiculoController implements the CRUD actions for Vehiculo model.
@@ -138,7 +139,7 @@ class VehiculoController extends Controller
             've_estado' => Vehiculo::ACTIVE,
         ]*/)->all();
         
-        $items = UtilHelper::createItemsForSideNav($vehiculos);
+        $items = UtilHelper::createItemsForSideNav($vehiculos, EnumSideNav::Vehiculo);
         return $this->render('listavehiculos', ['items'=>$items]);
     }
  
