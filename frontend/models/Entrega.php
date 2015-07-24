@@ -90,7 +90,8 @@ class Entrega extends \yii\db\ActiveRecord
                     ."'".$this->dir_id."',"
                     .")";
             $command=$connection->createCommand($sql);
-            $command->execute();
+            $rows = $command->execute();
+            return $rows > 0;
            
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
