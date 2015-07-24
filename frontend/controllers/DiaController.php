@@ -7,7 +7,9 @@ use yii\web\Controller;
 use frontend\models\zona;
 use frontend\models\Entrega;
 use frontend\models\Direccion;
+use frontend\models\Estados;
 
+date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 /**
  * Description of DiaController
@@ -43,17 +45,33 @@ class DiaController extends Controller{
         ->orderBy('ent_id')
         ->all();
         
-//        foreach($entregas as $entrega){
-//            
-//            $direccion = Direccion::find()            
-//            ->where('dir_id = :dir',[':dir' => $entrega.dir_id])           
-//            ->one();
-//            
-//            $item = array();
-//            
-//        }
+        Yii::error($date);
+        Yii::error($entregas);
+        $items = (array) null;
+        foreach($entregas as $entrega){
+            
+            $direccion = Direccion::find()           
+            ->where('dir_id = :dir',[':dir' => $entrega->dir_id])           
+            ->one();
+            
+            $estado = Estados::find()
+            ->where('est_id = :est',[':est' => $entrega->est_id])           
+            ->one();        
+            $item = array(
+                    "entrega" => $entrega->ent_id,
+                    "direccion" => $direccion->dir_direccion,
+                    "estado" => $estado->est_nom,
+                    "lat" => $direccion->dir_lat,
+                    "lon" => $direccion->dir_lon,
+                
+            );
+            
+            array_push($items, $item);
+        }
         
-        return $this->render('dia',['zonasJson'=>$zonasJson,'entregas'=>$entregas,]);
+         $entregasJson = json_encode($items);
+        
+        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,]);
         
     }
     

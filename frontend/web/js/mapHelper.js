@@ -170,17 +170,20 @@ function addLayer(map,layer){
     
   }
   
- function dibujarIcono(lat,long){
+ function dibujarIcono(lat,long,entrega){
     
      var iconFeature = new ol.Feature({
         geometry: new ol.geom.Point([lat,long]),
 //        geometry:new ol.geom.Point(ol.proj.transform([lat, long], 'EPSG:3857',     
 //        'EPSG:4326')),
-        name: 'Null Island',
+        name: entrega.entrega,
+        
         population: 4000,
         rainfall: 500
       });
       
+      iconFeature.set("direccion",entrega.direccion);
+      iconFeature.set("estado",entrega.estado);
     var iconStyle = new ol.style.Style({
         image: new ol.style.Icon( ({
         anchor: [0.5, 10],
@@ -201,8 +204,67 @@ function addLayer(map,layer){
       source: vectorSource
     });
      
+    
+     
      return vectorLayer;
  } 
+ 
+ function popup(map) {
+     
+     var element = document.getElementById('popup');
+     var popup = new ol.Overlay({
+        element: element,
+        positioning: 'bottom-center',
+        stopEvent: false
+      });
+      
+      map.addOverlay(popup);
+      
+      // display popup on click
+      map.on('click', function(evt) {
+      
+      var feature = map.forEachFeatureAtPixel(evt.pixel,
+          function(feature, layer) {
+            return feature;
+          });
+      if (feature) {
+        var direccion = feature.get('direccion');
+        var estado = feature.get('estado');
+        var featureName =  "<b>Cliente</b>"+": "+feature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ direccion +"<br>"+ "<b>Estado</b>"+": "+"<code>"+estado + "</code>"; 
+        
+        var geometry = feature.getGeometry();
+        var coord = geometry.getCoordinates();
+        popup.setPosition(coord);
+        $(element).attr( 'data-placement', 'top' );
+        
+        $(element).attr( 'data-content', featureName);
+        
+        $(element).attr( 'data-html', true );
+        $(element).popover();
+//          'placement': 'top',
+//          'html': true,
+//          'content': featureName
+//        });
+        
+        $(element).popover('show');
+      } else {
+        $(element).popover('destroy');
+      }
+    });
+      
+      // change mouse cursor when over marker
+    map.on('pointermove', function(e) {
+      if (e.dragging) {
+        $(element).popover('destroy');
+        return;
+      }
+      var pixel = map.getEventPixel(e.originalEvent);
+      var hit = map.hasFeatureAtPixel(pixel);
+     // map.getTarget().style.cursor = hit ? 'pointer' : '';
+    });  
+     
+     
+ }
 
 
 
