@@ -6,7 +6,8 @@ use kartik\sortinput\SortableInput;
 $this->title = 'Smart Delivery';
 ?>
 
-//<?php
+<button type="button" id="process" class="btn btn-default">Procesar Pedidos</button>
+<?php
 //    $items = [
 //        [
 //            'label'=>'<i class="glyphicon glyphicon-list-alt"></i> Entregas',
@@ -27,5 +28,16 @@ $this->title = 'Smart Delivery';
 //    'encodeLabels'=>false
 //]);
    
+$script=<<<JS
+        $('#process').click(function(e) {
+             //ajax metodo que arma el menu en la busqueda
 
+             
+             $.get('index.php?r=process/process-pedidos', function(data){  
+                alert(data);
+             },"json ");
+        });
+JS;
+
+$this->registerJs($script);
 ?>

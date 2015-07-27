@@ -1,6 +1,7 @@
 <?php
 
 namespace frontend\models;
+use frontend\controllers\NumeradoresController;
 
 use Yii;
 
@@ -74,23 +75,36 @@ class Entrega extends \yii\db\ActiveRecord
     {
         if ($this->getIsNewRecord()) {
             $numerador = new NumeradoresController('ENT');
-            $this->per_id = $numerador->getNumerador();
+            $this->ent_id = $numerador->getNumerador();
             $connection = static::getDb();
-            $sql="INSERT INTO `personal` (`ent_id`, `ped_id`, `z_id`, `ent_pendefinir`, `te_id`, `est_id`, `ent_obs`, `ent_orden`, `ent_fecha`, `dir_id`) "
-                    . "VALUES ("."'".$this->per_id."',"
-                    ."'".$this->ent_id."',"
-                    ."'".$this->ped_id."',"
-                    ."'".$this->z_id."',"
-                    ."'".$this->ent_pendefinir."',"
-                    ."'".$this->te_id."',"
-                    ."'".$this->est_id."',"
-                    ."'".$this->ent_obs."'," 
-                    ."'".$this->ent_orden."',"
-                    ."'".$this->ent_fecha."',"
-                    ."'".$this->dir_id."',"
-                    .")";
+            $sql="INSERT INTO `entrega` (`ent_id`, `ped_id`,";
+            $values = "VALUES ('".$this->ent_id."','"
+                    .$this->ped_id."','";
+            
+            if ($this->z_id > 0){
+                $sql .= " `z_id`,";
+                $values .= $this->z_id."','";
+            }
+            
+            $sql .= "`ent_pendefinir`,";
+            $values .= $this->ent_pendefinir."','";
+            
+            if ($this->te_id > 0){
+                $sql .= "`te_id`,";
+                $values .= $this->te_id."','";
+            }
+            
+            $sql .= "`est_id`, `ent_obs`, `ent_orden`, `ent_fecha`, `dir_id`) ";
+            $values .= $this->est_id."','"
+                    .$this->ent_obs."','"
+                    .$this->ent_orden."','"
+                    .$this->ent_fecha."','"
+                    .$this->dir_id."')";
+            
+            $sql .= $values;
             $command=$connection->createCommand($sql);
-            $command->execute();
+            $rows = $command->execute();
+            return $rows > 0;
            
         } else {
             return $this->update($runValidation, $attributeNames) !== false;

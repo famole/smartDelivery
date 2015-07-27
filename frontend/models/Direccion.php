@@ -2,18 +2,18 @@
 
 namespace frontend\models;
 
+use frontend\controllers\NumeradoresController;
+
 use Yii;
 
 /**
- * This is the model class for table "Direccion".
+ * This is the model class for table "direccion".
  *
  * @property integer $dir_id
  * @property string $dir_direccion
  * @property string $dir_latlong
  * @property string $dir_latstr
  * @property string $dir_longstr
- *
- * @property Clientedireccion[] $clientedireccions
  */
 class Direccion extends \yii\db\ActiveRecord
 {
@@ -46,9 +46,11 @@ class Direccion extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'dir_id' => Yii::t('app', 'Codigo'),
-            'dir_direccion' => Yii::t('app', 'Direccion'),
-            'dir_latlong' => Yii::t('app', 'Coordenadas'),
+            'dir_id' => 'Codigo',
+            'dir_direccion' => 'Direccion',
+            'dir_latlong' => 'Point',
+            'dir_latstr' => 'Latitud',
+            'dir_longstr' => 'Longitud',
         ];
     }
 
@@ -68,7 +70,9 @@ class Direccion extends \yii\db\ActiveRecord
             $connection = static::getDb();
             $sql="INSERT INTO `direccion` (`dir_id`, `dir_direccion`, `dir_latlong`, `dir_latstr`, `dir_longstr` ) VALUES ("."'".$this->dir_id."',"."'".$this->dir_direccion."','".$this->dir_latlong ."','".$this->dir_latstr ."','".$this->dir_longstr ."')";
             $command=$connection->createCommand($sql);
-            $command->execute();
+            $rows = $command->execute();
+            if ($rows > 0) {return $this->dir_id;}
+            return -1;
            
         } else {
             return $this->update($runValidation, $attributeNames) !== false;

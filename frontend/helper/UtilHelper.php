@@ -19,7 +19,7 @@ class UtilHelper{
      * @param String $direction
      * 
      */
-    public static function dirToLongLat($direction, $lat, $long, $results){
+    public static function dirToLongLat($direction){
         header('Content-Type', 'application/json');
         $url = ParametrosController::getParamText('NOMINATIMURL');
        
@@ -30,8 +30,13 @@ class UtilHelper{
         $jsonDecoded = json_decode($json, true);
         $results = count($jsonDecoded);
         $lat = $jsonDecoded[0]['lat'];
-        $long = $jsonDecoded[0]['long'];
+        $long = $jsonDecoded[0]['lon'];
         
+        return $result = array(
+            "lat" => $lat,
+            "long" => $long,
+            "count" => $results
+        );
     }
     
     /**

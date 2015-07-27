@@ -13,6 +13,7 @@ use Yii;
  * @property string $ped_direccion
  * @property string $ped_observaciones
  * @property string $ped_ultproc
+ *  @property string $ped_proc
  * @property string $ped_dep
  *
  * @property Clientedireccion $clientedireccion
@@ -90,7 +91,8 @@ class Pedido extends \yii\db\ActiveRecord
                     ."'".$this->ped_ultproc."',"
                     ."'".$this->ped_dep."')";
             $command=$connection->createCommand($sql);
-            $command->execute();
+            $rows = $command->execute();
+            return $rows > 0;
            
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
