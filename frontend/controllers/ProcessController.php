@@ -11,8 +11,11 @@ use frontend\models\DireccionReplacements;
 use frontend\models\Direccion;
 use frontend\models\Clientedireccion;
 use frontend\models\Entrega;
+use frontend\models\Estados;
+use frontend\models\EstadosSearch;
 
 use frontend\enum\EnumReplacementType;
+use frontend\enum\EnumBaseStatus;
 use frontend\helper\UtilHelper;
 
 class ProcessController extends SiteController{
@@ -25,6 +28,8 @@ class ProcessController extends SiteController{
         foreach ($pedidosPendientes as $pedido){
             $direction = trim(strtolower($pedido->ped_direccion));
             $dir_id = $this->actionDirectionExists($direction);
+            $orden += 1;
+            //$fecha = $pedido->ped_fechahora->format('m/d/Y');
             
             //Seteo pedido como procesado
             $this->actionSetPedidoAsProcessed($pedido->ped_id);
@@ -60,16 +65,20 @@ class ProcessController extends SiteController{
                 
                 if($results["count"] > 1){
                     //Existe mas de un resultado para la direccion buscada
-                    
-                    return 'muchas direcciones';
+                    $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, true);
+                    $error+=1;
                 }elseif($results["count"] == 0){
                     //No se resuelve la direccion
-                    
+                    $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, true);
+                    $error+=1;
                 }else{
                     //Direccion resuelta, guarda y crea entega
-                    return $this->actionSetDirectionLatLong($pedido->ped_direccion, $lat, $long, $pedido->cli_id);                    
-                }
-                  
+                    $dir_id = $this->actionSetDirectionLatLong($pedido->ped_direccion, $lat, $long, $pedido->cli_id);
+                    if($dir_id>0){    
+                        $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, false);                        
+                    }
+                    
+                }     
             }else{
                 //Existe direccion resuelta, chequear relacion con cliente y crear Entrega
                 if (!$this->actionExistCliDir($pedido->cli_id, $dir_id)){
@@ -77,12 +86,14 @@ class ProcessController extends SiteController{
                     $this->actionSetCliDir($pedido->cli_id, $dir_id);
                 }
                 //Crear Entrega
-                //Tengo que definir como enviarle la fecha de entrega ya que el origen es un datetime.
-                //$this->actionCreateEntrega($pedido->ped_id, $dir_id, $pedido->ped_, $orden, $pdef)
+                $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, false);
             }
        
         }
-        return true;
+        return array(
+            'pedidos' => $orden,
+            'errores' => $error
+        );
     }
     
     public function actionSetDirectionLatLong($address, $lat, $long, $cli_id){
@@ -94,7 +105,9 @@ class ProcessController extends SiteController{
             $dir = $Direccion->save();
             if($dir > 0){
                 //Set Relacion Cliente Direccion
-                return $this->actionSetCliDir($cli_id, $dir);
+                $result = $this->actionSetCliDir($cli_id, $dir);
+                if($result) return $dir;
+                return false;
                 
             }else{
                 return false;
@@ -119,8 +132,8 @@ class ProcessController extends SiteController{
     
     public function actionSetPedidoAsProcessed($ped_id){
         $Pedido = Pedido::findOne($ped_id);
-        //$Pedido->ped_ultproc = time();
-        $Pedido->ped_proc = 1;
+        $Pedido->ped_ultproc = date("Y-m-d H:i:s");
+        $Pedido->ped_proc = true;
         return $Pedido->save();
     }
     
@@ -129,17 +142,21 @@ class ProcessController extends SiteController{
     }
     
     public function actionCreateEntrega($ped_id, $dir_id, $fecha, $orden, $pdef){
-        //TODO: Tenemos que resolver como obtener el estado inicial.
         
         $Entrega = new Entrega();
         $Entrega->ent_orden = $orden;
         $Entrega->ped_id = $ped_id;
         $Entrega->dir_id = $dir_id;
-        $Entrega->ent_fecha = $fecha;
+        $Entrega->ent_fecha = date('Y-m-d');
         $Entrega->ent_pendefinir = $pdef;
-        //Estado???
-        $Entrega->est_id = 30;
-        //
+        $Entrega->z_id = 'NULL';
+        $Entrega->te_id = 'NULL';
+        $Entrega->est_id = $this->actionGetFirstEstado();
+
         return $Entrega->save();
+    }
+    
+    public function actionGetFirstEstado(){
+        return EstadosSearch::getIdByName(EnumBaseStatus::PendArmar);    
     }
 }

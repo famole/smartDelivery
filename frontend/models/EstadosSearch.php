@@ -63,4 +63,9 @@ class EstadosSearch extends Estados
 
         return $dataProvider;
     }
+    
+    public function getIdByName($name){
+        $Estado = Estados::findOne(['est_nom'=>$name]);
+        return $Estado->est_id;
+    }
 }
