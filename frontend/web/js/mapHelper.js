@@ -144,9 +144,9 @@ function createMap(lat, long, pzoom, ptarget){
     return map;
 }
 
-function createLayer(wkt){
+function createLayer(zona){
     var format = new ol.format.WKT();
-    var feature = format.readFeature(wkt);
+    var feature = format.readFeature(zona.wkt);
     feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
 
     var vector = new ol.layer.Vector({
@@ -154,6 +154,8 @@ function createLayer(wkt){
         features: [feature]
         })
     });
+    vector.set("Id",zona.z_id);
+    vector.set("Nombre",zona.z_nombre);
     
     var lat = feature.getGeometry().getCoordinates()[0][0][0];
     var long = feature.getGeometry().getCoordinates()[0][0][1];
@@ -234,6 +236,9 @@ function addLayer(map,layer){
         
         var geometry = feature.getGeometry();
         var coord = geometry.getCoordinates();
+        var geomType = geometry.getType();
+        console.log(geomName);
+        console.log(coord);
         popup.setPosition(coord);
         $(element).attr( 'data-placement', 'top' );
         

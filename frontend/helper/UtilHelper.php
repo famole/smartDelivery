@@ -62,25 +62,30 @@ class UtilHelper{
     }
     
     public static function createItemsForSideNav($list, $type){
-        $items = array(array(
+       
+        switch ($type) {
+            case EnumSideNav::Entrega:
+                $items = array();
+                $counter = 0;
+                foreach($list as $entrega){
+                    $counter++;
+                    $item = array(
+                           "key" => $counter,
+                           "content" => $entrega['direccion'],
+//                           "icon" => "map-marker",
+//                           "options" => ["id" => $vehiculo->ve_id],
+                        );
+                    array_push($items, $item);
+                }
+                break;
+            
+            case EnumSideNav::Vehiculo:
+                 $items = array(array(
                    "url" => "#",
                    "label" => "Todos",
                    "icon" => "map-marker",
                    "options" => ["id" => 'Todos'],
                 ));
-        switch ($type) {
-            case EnumSideNav::Entrega:
-//                foreach($list as $entrega){
-//                    $item = array(
-//                           "url" => "#",
-//                           "label" => $entrega->ve_ . "(" . $vehiculo->ve_movil . ")",
-//                           "icon" => "map-marker",
-//                           "options" => ["id" => $vehiculo->ve_id],
-//                        );
-//                    array_push($items, $item);
-//                }
-            
-            case EnumSideNav::Vehiculo:
                 foreach($list as $vehiculo){
                     $item = array(
                            "url" => "#",
@@ -90,6 +95,7 @@ class UtilHelper{
                         );
                     array_push($items, $item);
                 }
+                break;
         }
         
         return $items;

@@ -8,6 +8,8 @@ use frontend\models\zona;
 use frontend\models\Entrega;
 use frontend\models\Direccion;
 use frontend\models\Estados;
+use frontend\helper\UtilHelper;
+use frontend\enum\EnumSideNav;
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
@@ -28,14 +30,21 @@ class DiaController extends Controller{
         
         $nullId = 0;
         $rows = Zona::find()
-        ->select('z_wkt')
+        ->select('*')
         ->where('z_id > :nullId',[':nullId' => $nullId])
         ->orderBy('z_id')
         ->all();
 
         for ($index = 0; $index < count($rows); ++$index) {
-            $zonas[$index] = $rows[$index]->z_wkt;
-
+            //$zonas[$index] = $rows[$index]->z_wkt;
+            $item = array(
+                    "wkt" => $rows[$index]->z_wkt,
+                    "z_id" => $rows[$index]->z_id,
+                    "z_nombre" => $rows[$index]->z_nombre,
+                
+            );
+            
+            array_push($zonas, $item);
         }
         $zonasJson = json_encode($zonas); 
         
@@ -71,7 +80,8 @@ class DiaController extends Controller{
         
          $entregasJson = json_encode($items);
         
-        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,]);
+         $SorteableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
+        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SorteableItems'=>$SorteableItems]);
         
     }
     

@@ -3,11 +3,17 @@
     use kartik\sidenav\SideNav;
     use kartik\date\DatePicker;
     use kartik\sortinput\SortableInput;
-    
+    use yii\helpers\Html; 
+    use yii\widgets\ActiveForm;
+
+
+
     $fecha = date("Y-m-d");
     
     Yii::error($fecha);
-    Yii::error($entregasJson)
+    Yii::error($entregasJson);
+
+
    
 ?>
 
@@ -29,6 +35,14 @@
   .popover-content {
     min-width: 230px;
   }
+   #scrolly{
+    width: 1000px;
+    height: 190px;
+    overflow: auto;
+    overflow-y: hidden;
+    margin: 0 auto;
+    white-space: nowrap
+    }
 </style>
             
 <div class="row">
@@ -61,13 +75,7 @@
           <?php
             echo SortableInput::widget([
                 'name'=> 'sort_list_1',
-                'items' => [
-                    1 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 1'],
-                    2 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 2'],
-                    3 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 3'],
-                    4 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 4'],
-                    5 => ['content' => '<i class="glyphicon glyphicon-cog"></i> Item # 5', 'disabled'=>true]
-                ],
+                'items' => $SorteableItems,
                 'hideInput' => false,
             ]);
           ?>
@@ -75,6 +83,11 @@
     </div>
     
     <div id="map" class="col-md-9 guide-content"><div id="popup" style ="with:100px"></div></div>
+    
+    <div id="scrolly">
+        
+        <p>adadasdsddsfsfdfdsfsfdsfsfsd</p>
+    </div>
 </div>
 
 
@@ -104,6 +117,7 @@
         
         var latlongfeature= createLayer(poligonos[indice]);
         map.addLayer(latlongfeature.vector);
+        console.log(latlongfeature.vector.get("Nombre"));
 
     }
     

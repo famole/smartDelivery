@@ -13,7 +13,8 @@ use yii\widgets\ActiveForm;
        <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
-        <script src="js/OpenLayers_features.js" type="text/javascript"></script>
+        <script src="js/mapHelper.js" type="text/javascript"></script>
+        <!--<script src="js/OpenLayers_features.js" type="text/javascript"></script>-->
        <meta charset="utf-8">
 
 
