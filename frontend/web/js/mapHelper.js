@@ -154,9 +154,11 @@ function createLayer(zona){
         features: [feature]
         })
     });
-    vector.set("Id",zona.z_id);
-    vector.set("Nombre",zona.z_nombre);
+    feature.set("Id",zona.z_id);
+    feature.set("Nombre",zona.z_nombre);
     
+    var content = "<b>ZonaId</b>"+": "+zona.z_id +"<br>" +"<b>Nombre</b>"+": " + zona.z_nombre;
+    feature.set("content",content);
     var lat = feature.getGeometry().getCoordinates()[0][0][0];
     var long = feature.getGeometry().getCoordinates()[0][0][1];
     var latlongfeature = new Array();
@@ -186,6 +188,19 @@ function addLayer(map,layer){
       
       iconFeature.set("direccion",entrega.direccion);
       iconFeature.set("estado",entrega.estado);
+      var estado;
+      switch (entrega.estado){
+        case "Pendiente":
+            estado = "<code><b>"+iconFeature.get('estado') + "</b></code>" ;
+            break;
+        case "Entregado":
+            estado = "<font color='green'>"+"<b>"+iconFeature.get('estado')+"</b></font>";
+            break;
+      }
+      var content = "<b>Cliente</b>"+": "+iconFeature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ iconFeature.get('direccion')
+              +"<br>"+ "<b>Estado</b>"+": "+estado;
+      iconFeature.set("content",content);
+      
     var iconStyle = new ol.style.Style({
         image: new ol.style.Icon( ({
         anchor: [0.5, 10],
@@ -232,17 +247,32 @@ function addLayer(map,layer){
       if (feature) {
         var direccion = feature.get('direccion');
         var estado = feature.get('estado');
-        var featureName =  "<b>Cliente</b>"+": "+feature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ direccion +"<br>"+ "<b>Estado</b>"+": "+"<code>"+estado + "</code>"; 
         
+        var content;
         var geometry = feature.getGeometry();
-        var coord = geometry.getCoordinates();
+        var coord; 
         var geomType = geometry.getType();
-        console.log(geomName);
+        console.log(geomType);
+        switch(geomType){
+            case "Polygon":
+                coord = geometry.getCoordinates()[0][0];
+                content =  feature.get('content');
+                console.log(content);
+                 
+                break;
+            case "Point":
+                coord = geometry.getCoordinates();
+                content =  feature.get('content');
+                console.log(content);
+                 
+                break;
+            
+        }
         console.log(coord);
         popup.setPosition(coord);
         $(element).attr( 'data-placement', 'top' );
         
-        $(element).attr( 'data-content', featureName);
+        $(element).attr( 'data-content', content);
         
         $(element).attr( 'data-html', true );
         $(element).popover();

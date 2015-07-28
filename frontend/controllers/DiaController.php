@@ -65,7 +65,8 @@ class DiaController extends Controller{
             
             $estado = Estados::find()
             ->where('est_id = :est',[':est' => $entrega->est_id])           
-            ->one();        
+            ->one(); 
+            Yii::error($estado);    
             $item = array(
                     "entrega" => $entrega->ent_id,
                     "direccion" => $direccion->dir_direccion,
