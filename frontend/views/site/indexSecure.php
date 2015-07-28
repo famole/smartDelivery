@@ -5,7 +5,7 @@ use kartik\sortinput\SortableInput;
 /* @var $this yii\web\View */
 $this->title = 'Smart Delivery';
 ?>
-
+<div id="alert"></div>
 <button type="button" id="process" class="btn btn-default">Procesar Pedidos</button>
 <?php
 //    $items = [
@@ -34,7 +34,8 @@ $script=<<<JS
 
              
              $.get('index.php?r=process/process-pedidos', function(data){  
-                alert(data);
+                var msg = '<div class="alert alert-info alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Se proceso(aron) '+ data.pedidos + ' pedido(s) y se encontro ' + data.errores +' error(es).</div>';
+                $('#alert').append(msg);
              },"json ");
         });
 JS;

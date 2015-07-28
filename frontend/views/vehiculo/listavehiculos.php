@@ -64,8 +64,6 @@ $script = <<< JS
    // $( document ).ready(function() {
         //Dibujar mapa 
         var map = createMap(-6252731.917154272,-4150822.2589118066,13,'map');
-        var layer = dibujarIcono(-34.8906053,-56.1653319);
-        addLayer(map, layer);
         
         //Filtrar Vehiculos
          $('#searchVehicle').on('input', function(e) {

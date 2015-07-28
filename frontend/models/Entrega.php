@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 use frontend\controllers\NumeradoresController;
+use yii\console\Exception;
 
 use Yii;
 
@@ -18,6 +19,7 @@ use Yii;
  * @property integer $ent_orden
  * @property string $ent_fecha
  * @property integer $dir_id
+ * @property string ent_errorDesc
  */
 class Entrega extends \yii\db\ActiveRecord
 {
@@ -39,7 +41,8 @@ class Entrega extends \yii\db\ActiveRecord
             [['ent_id', 'ped_id', 'z_id', 'te_id', 'est_id', 'ent_orden', 'dir_id'], 'integer'],
             [['ent_pendefinir'], 'boolean'],
             [['ent_fecha'], 'safe'],
-            [['ent_obs'], 'string', 'max' => 1000]
+            [['ent_obs'], 'string', 'max' => 1000],
+            [['ent_errorDesc'], 'string', 'max' => 200]
         ];
     }
 
@@ -59,6 +62,7 @@ class Entrega extends \yii\db\ActiveRecord
             'ent_orden' => Yii::t('app', 'Orden'),
             'ent_fecha' => Yii::t('app', 'Fecha'),
             'dir_id' => Yii::t('app', 'Direccion'),
+            'ent_errorDesc' => Yii::t('app', 'Error'),
         ];
     }
 
@@ -74,38 +78,42 @@ class Entrega extends \yii\db\ActiveRecord
     public function save($runValidation = true, $attributeNames = null)
     {
         if ($this->getIsNewRecord()) {
-            $numerador = new NumeradoresController('ENT');
-            $this->ent_id = $numerador->getNumerador();
-            $connection = static::getDb();
-            $sql="INSERT INTO `entrega` (`ent_id`, `ped_id`,";
-            $values = "VALUES ('".$this->ent_id."','"
-                    .$this->ped_id."','";
-            
-            if ($this->z_id > 0){
-                $sql .= " `z_id`,";
-                $values .= $this->z_id."','";
+            try{
+                $numerador = new NumeradoresController('ENT');
+                $this->ent_id = $numerador->getNumerador();
+                $connection = static::getDb();
+                $sql="INSERT INTO `entrega` (`ent_id`, `ped_id`,";
+                $values = "VALUES ('".$this->ent_id."','"
+                        .$this->ped_id."','";
+
+                if ($this->z_id > 0){
+                    $sql .= " `z_id`,";
+                    $values .= $this->z_id."','";
+                }
+
+                $sql .= "`ent_pendefinir`,";
+                $values .= $this->ent_pendefinir."','";
+
+                if ($this->te_id > 0){
+                    $sql .= "`te_id`,";
+                    $values .= $this->te_id."','";
+                }
+
+                $sql .= "`est_id`, `ent_obs`, `ent_orden`, `ent_fecha`, `dir_id`, `ent_errorDesc`) ";
+                $values .= $this->est_id."','"
+                        .$this->ent_obs."','"
+                        .$this->ent_orden."','"
+                        .$this->ent_fecha."','"
+                        .$this->dir_id."','"
+                        .$this->ent_errorDesc."')";
+
+                $sql .= $values;
+                $command=$connection->createCommand($sql);
+                $rows = $command->execute();
+                return $rows > 0;
+            }catch(Exception $e){
+                return -1;
             }
-            
-            $sql .= "`ent_pendefinir`,";
-            $values .= $this->ent_pendefinir."','";
-            
-            if ($this->te_id > 0){
-                $sql .= "`te_id`,";
-                $values .= $this->te_id."','";
-            }
-            
-            $sql .= "`est_id`, `ent_obs`, `ent_orden`, `ent_fecha`, `dir_id`) ";
-            $values .= $this->est_id."','"
-                    .$this->ent_obs."','"
-                    .$this->ent_orden."','"
-                    .$this->ent_fecha."','"
-                    .$this->dir_id."')";
-            
-            $sql .= $values;
-            $command=$connection->createCommand($sql);
-            $rows = $command->execute();
-            return $rows > 0;
-           
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
         }

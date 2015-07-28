@@ -13,9 +13,9 @@ use Yii;
  * @property string $ped_direccion
  * @property string $ped_observaciones
  * @property string $ped_ultproc
- *  @property string $ped_proc
+ * @property string $ped_proc
  * @property string $ped_dep
- *
+ * @property integer ped_error
  * @property Clientedireccion $clientedireccion
  * @property Entrega[] $entregas
  */
@@ -57,6 +57,7 @@ class Pedido extends \yii\db\ActiveRecord
             'ped_observaciones' => Yii::t('app', 'Observaciones'),
             'ped_ultproc' => Yii::t('app', 'Ped Ultproc'),
             'ped_dep' => Yii::t('app', 'Departamento'),
+            'ped_error' => Yii::t('app', 'Error en Pedido')
         ];
     }
 
@@ -82,14 +83,15 @@ class Pedido extends \yii\db\ActiveRecord
             $numerador = new NumeradoresController('PED');
             $this->per_id = $numerador->getNumerador();
             $connection = static::getDb();
-            $sql="INSERT INTO `pedido` (`ped_id`, `cli_id`, `ped_fechahora`, `ped_direccion`, `ped_observaciones`, `ped_ultproc`) "
+            $sql="INSERT INTO `pedido` (`ped_id`, `cli_id`, `ped_fechahora`, `ped_direccion`, `ped_observaciones`, `ped_ultproc`, `ped_error`) "
                     . "VALUES ("."'".$this->ped_id."',"
                     ."'".$this->cli_id."',"
                     ."'".$this->ped_fechahora."',"
                     ."'".$this->ped_direccion."',"
                     ."'".$this->ped_observaciones."',"
                     ."'".$this->ped_ultproc."',"
-                    ."'".$this->ped_dep."')";
+                    ."'".$this->ped_dep."',"
+                    ."'".$this->ped_error."')";
             $command=$connection->createCommand($sql);
             $rows = $command->execute();
             return $rows > 0;

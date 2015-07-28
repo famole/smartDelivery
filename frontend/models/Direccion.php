@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use frontend\controllers\NumeradoresController;
+use yii\console\Exception;
 
 use Yii;
 
@@ -65,15 +66,18 @@ class Direccion extends \yii\db\ActiveRecord
     public function save($runValidation = true, $attributeNames = null)
     {
         if ($this->getIsNewRecord()) {
-            $numerador = new NumeradoresController('DIR');
-            $this->dir_id = $numerador->getNumerador();
-            $connection = static::getDb();
-            $sql="INSERT INTO `direccion` (`dir_id`, `dir_direccion`, `dir_latlong`, `dir_latstr`, `dir_longstr` ) VALUES ("."'".$this->dir_id."',"."'".$this->dir_direccion."','".$this->dir_latlong ."','".$this->dir_latstr ."','".$this->dir_longstr ."')";
-            $command=$connection->createCommand($sql);
-            $rows = $command->execute();
-            if ($rows > 0) {return $this->dir_id;}
-            return -1;
-           
+            try{
+                $numerador = new NumeradoresController('DIR');
+                $this->dir_id = $numerador->getNumerador();
+                $connection = static::getDb();
+                $sql="INSERT INTO `direccion` (`dir_id`, `dir_direccion`, `dir_latlong`, `dir_latstr`, `dir_longstr` ) VALUES ("."'".$this->dir_id."',"."'".$this->dir_direccion."','".$this->dir_latlong ."','".$this->dir_latstr ."','".$this->dir_longstr ."')";
+                $command=$connection->createCommand($sql);
+                $rows = $command->execute();
+                if ($rows > 0) return $this->dir_id;
+                return -1;
+            }catch(Exception $e){
+                return -1;
+            }
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
         }

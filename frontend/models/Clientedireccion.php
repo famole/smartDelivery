@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use frontend\controllers\NumeradoresController;
+use yii\console\Exception;
+
 use Yii;
 
 /**
@@ -65,13 +67,15 @@ class Clientedireccion extends \yii\db\ActiveRecord
     public function save($runValidation = true, $attributeNames = null)
     {
         if ($this->getIsNewRecord()) {
-            
-            $connection = static::getDb();
-            $sql="INSERT INTO `clientedireccion` (`cli_id`, `dir_id`) VALUES ("."'".$this->cli_id."','".$this->dir_id."')";
-            $command=$connection->createCommand($sql);
-            $rows = $command->execute();
-            return $rows > 0;
-           
+            try{
+                $connection = static::getDb();
+                $sql="INSERT INTO `clientedireccion` (`cli_id`, `dir_id`) VALUES ("."'".$this->cli_id."','".$this->dir_id."')";
+                $command=$connection->createCommand($sql);
+                $rows = $command->execute();
+                return $rows > 0;
+            }catch(Exception $e){
+                return -1;
+            }
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
         }
