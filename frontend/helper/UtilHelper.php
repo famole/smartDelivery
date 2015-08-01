@@ -94,7 +94,7 @@ class UtilHelper{
                 foreach($list as $vehiculo){
                     $item = array(
                            "url" => "#",
-                           "label" => $vehiculo->ve_matricula . "(" . $vehiculo->ve_movil . ")",
+                           "label" => $vehiculo->ve_matricula . " (Movil " . $vehiculo->ve_movil . ")",
                            "icon" => "map-marker",
                            "options" => ["id" => $vehiculo->ve_id],
                         );

@@ -13,11 +13,10 @@ use Yii;
  * @property string $ped_direccion
  * @property string $ped_observaciones
  * @property string $ped_ultproc
- * @property string $ped_proc
+ * @property integer $ped_proc
  * @property string $ped_dep
- * @property integer ped_error
- * @property Clientedireccion $clientedireccion
- * @property Entrega[] $entregas
+ * @property integer $ped_error
+ * @property string $ped_errordesc
  */
 class Pedido extends \yii\db\ActiveRecord
 {
@@ -40,7 +39,8 @@ class Pedido extends \yii\db\ActiveRecord
             [['ped_fechahora', 'ped_ultproc'], 'safe'],
             [['ped_direccion'], 'string', 'max' => 500],
             [['ped_observaciones'], 'string', 'max' => 1000],
-            [['ped_dep'], 'string', 'max' => 100]
+            [['ped_dep'], 'string', 'max' => 100],
+            [['ped_errordesc'], 'string', 'max' => 200]
         ];
     }
 
@@ -57,7 +57,8 @@ class Pedido extends \yii\db\ActiveRecord
             'ped_observaciones' => Yii::t('app', 'Observaciones'),
             'ped_ultproc' => Yii::t('app', 'Ped Ultproc'),
             'ped_dep' => Yii::t('app', 'Departamento'),
-            'ped_error' => Yii::t('app', 'Error en Pedido')
+            'ped_error' => Yii::t('app', 'Error en Pedido'),
+            'ped_errordesc' => Yii::t('app', 'Descripcion Error')
         ];
     }
 
@@ -83,7 +84,7 @@ class Pedido extends \yii\db\ActiveRecord
             $numerador = new NumeradoresController('PED');
             $this->per_id = $numerador->getNumerador();
             $connection = static::getDb();
-            $sql="INSERT INTO `pedido` (`ped_id`, `cli_id`, `ped_fechahora`, `ped_direccion`, `ped_observaciones`, `ped_ultproc`, `ped_error`) "
+            $sql="INSERT INTO `pedido` (`ped_id`, `cli_id`, `ped_fechahora`, `ped_direccion`, `ped_observaciones`, `ped_ultproc`, `ped_error`, `ped_errordesc`) "
                     . "VALUES ("."'".$this->ped_id."',"
                     ."'".$this->cli_id."',"
                     ."'".$this->ped_fechahora."',"
@@ -91,7 +92,8 @@ class Pedido extends \yii\db\ActiveRecord
                     ."'".$this->ped_observaciones."',"
                     ."'".$this->ped_ultproc."',"
                     ."'".$this->ped_dep."',"
-                    ."'".$this->ped_error."')";
+                    ."'".$this->ped_error."',"
+                    ."'".$this->ped_errordesc."')";
             $command=$connection->createCommand($sql);
             $rows = $command->execute();
             return $rows > 0;

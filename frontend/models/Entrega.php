@@ -7,7 +7,7 @@ use yii\console\Exception;
 use Yii;
 
 /**
- * This is the model class for table "Entrega".
+ * This is the model class for table "entrega".
  *
  * @property integer $ent_id
  * @property integer $ped_id
@@ -19,7 +19,7 @@ use Yii;
  * @property integer $ent_orden
  * @property string $ent_fecha
  * @property integer $dir_id
- * @property string ent_errorDesc
+ * @property string $ent_errorDesc
  */
 class Entrega extends \yii\db\ActiveRecord
 {
@@ -99,13 +99,19 @@ class Entrega extends \yii\db\ActiveRecord
                     $values .= $this->te_id."','";
                 }
 
-                $sql .= "`est_id`, `ent_obs`, `ent_orden`, `ent_fecha`, `dir_id`, `ent_errorDesc`) ";
+                $sql .= "`est_id`, `ent_obs`, `ent_orden`, `ent_fecha`,"; 
                 $values .= $this->est_id."','"
                         .$this->ent_obs."','"
                         .$this->ent_orden."','"
-                        .$this->ent_fecha."','"
-                        .$this->dir_id."','"
-                        .$this->ent_errorDesc."')";
+                        .$this->ent_fecha."','";
+                        
+                if($this->dir_id > 0){
+                    $sql .= "`dir_id`,";
+                    $values .= $this->dir_id."','";
+                }        
+                        
+                $sql .= "`ent_errorDesc`) ";
+                $values .= $this->ent_errorDesc."')";
 
                 $sql .= $values;
                 $command=$connection->createCommand($sql);

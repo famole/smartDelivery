@@ -65,10 +65,14 @@ class ProcessController extends SiteController{
                     if($results["count"] > 1){
                         //Existe mas de un resultado para la direccion buscada
                         $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, true, EnumProcessError::manyDir);
+                        //Seteo pedido como procesado
+                        $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
                     }elseif($results["count"] == 0){
                         //No se resuelve la direccion
                         $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, true, EnumProcessError::noDir);
+                        //Seteo pedido como procesado
+                        $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
                     }else{
                         //Direccion resuelta, guarda y crea entega
@@ -156,7 +160,7 @@ class ProcessController extends SiteController{
         $Entrega->ped_id = $ped_id;
         $Entrega->dir_id = $dir_id;
         $Entrega->ent_fecha = $fecha;
-        $Entrega->ent_pendefinir = $pdef;
+        $Entrega->ent_pendefinir = 1;
         $Entrega->est_id = $this->actionGetFirstEstado();
         $Entrega->ent_errorDesc = $errtype;
 
@@ -170,11 +174,19 @@ class ProcessController extends SiteController{
     private function checknull($pedido){
         if($pedido->ped_direccion == ''){
             //Set Pedido Error dir null
+            $pedToSave = Pedido::findOne($pedido->ped_id);
+            $pedToSave->ped_error = true;
+            $pedToSave->ped_errordesc = EnumProcessError::dirEmpty;
+            $pedToSave->save();
             return false;
         }
         
-        if($pedido->ped_fechahora = ''){
+        if($pedido->ped_fechahora == ''){
             //Set Pedido Error fecha hora null
+            $pedToSave = Pedido::findOne($pedido->ped_id);
+            $pedToSave->ped_error = true;
+            $pedToSave->ped_errordesc = EnumProcessError::dateEmpty;
+            $pedToSave->save();
             return false;
         }
         return true;
