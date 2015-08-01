@@ -10,6 +10,7 @@ use frontend\models\Direccion;
 use frontend\models\Estados;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
+use frontend\controllers\ProcessController;
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
@@ -82,6 +83,8 @@ class DiaController extends Controller{
          $entregasJson = json_encode($items);
         
          $SorteableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
+         
+        // ProcessController::actionPointInZone();
         return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SorteableItems'=>$SorteableItems]);
         
     }

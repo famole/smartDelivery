@@ -228,6 +228,26 @@ function addLayer(map,layer){
  
  function popup(map) {
      
+     //********Resaltar zona que se selecciona*****************************************
+     
+     var selectAltClick = new ol.interaction.Select({
+        condition: function(mapBrowserEvent) {
+          return ol.events.condition.click(mapBrowserEvent) &&
+              ol.events.condition.altKeyOnly(mapBrowserEvent);
+        }
+    });
+    
+    var changeInteraction = function() {
+        var select = selectAltClick;
+        if (select !== null) {
+            map.addInteraction(select);
+            }
+    };
+
+    changeInteraction();
+    //***********************************************************************************
+    
+    //******************* Crear Popup con info ******************************************
      var element = document.getElementById('popup');
      var popup = new ol.Overlay({
         element: element,
@@ -276,10 +296,6 @@ function addLayer(map,layer){
         
         $(element).attr( 'data-html', true );
         $(element).popover();
-//          'placement': 'top',
-//          'html': true,
-//          'content': featureName
-//        });
         
         $(element).popover('show');
       } else {

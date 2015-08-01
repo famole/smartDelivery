@@ -112,25 +112,40 @@
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
     var entregas = eval(<?php echo $entregasJson; ?>) ;   
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
+    var vectors = new Array();
     
     for (indice = 0; indice < poligonos.length; ++indice) {
         
         var latlongfeature= createLayer(poligonos[indice]);
         map.addLayer(latlongfeature.vector);
-        console.log(latlongfeature.vector.get("Nombre"));
-
+        vectors.push(latlongfeature.vector);
+        
+        
     }
     
+    //console.log(vectors[0].getSource().getFeatures()[0].getGeometry().getCoordinates());
     for (indice = 0; indice < entregas.length; ++indice) {
        
         var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
         var point2 = point;
         point2.transform('EPSG:4326','EPSG:3857');
         var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice]);
+        for (index = 0; index < vectors.length; ++index){
+          var inside =vectors[index].getSource().getFeaturesAtCoordinate( pointLayer.getSource().getFeatures()[0].getGeometry().getCoordinates());
+          if (inside.length >0){
+            console.log("Zona: "+vectors[index].getSource().getFeatures()[0].get("Nombre") + " - PointId:"+ pointLayer.getSource().getFeatures()[0].get('name') + " - Direccion:"+pointLayer.getSource().getFeatures()[0].get('direccion'));
+              
+          }
+            
+        } 
         map.addLayer(pointLayer);
     }
     
+    
+    
     popup(map);
+
+    
 
     
 
