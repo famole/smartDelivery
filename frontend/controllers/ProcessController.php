@@ -21,11 +21,13 @@ class ProcessController extends SiteController{
     public function actionProcessPedidos(){
         $orden = 0;
         $error = 0;
+        $pedidos = 0;
         $pedidosPendientes = Pedido::find()->where(['ped_proc' => 0])->all();
         $replacements = DireccionReplacements::find()->all();
         
         //Recorre Pedidos Pendientes
         foreach ($pedidosPendientes as $pedido){
+            $pedidos += 1;
             if ($this->checknull($pedido)){
                 
                 $direction = trim(strtolower($pedido->ped_direccion));
@@ -105,7 +107,7 @@ class ProcessController extends SiteController{
        
         }
         return json_encode(array(
-            'pedidos' => $orden,
+            'pedidos' => $pedidos,
             'errores' => $error
         ));
     }

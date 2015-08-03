@@ -89,3 +89,14 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+ .msg-top{
+    position: fixed;
+    top: 5em;
+    right: 3em;
+    width: 35%;
+  }
+  
+  #process{
+      margin: 0 auto;
+  }
