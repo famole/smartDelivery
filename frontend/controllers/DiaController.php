@@ -11,6 +11,7 @@ use frontend\models\Estados;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
 use frontend\controllers\ProcessController;
+use yii\helpers\Json;
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
@@ -86,6 +87,14 @@ class DiaController extends Controller{
          
         // ProcessController::actionPointInZone();
         return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SorteableItems'=>$SorteableItems]);
+        
+    }
+    
+    public function actionCreateDiaReparto($parms){
+        $test = 'Anda el ajax';
+        echo Json::encode($test);
+        
+        
         
     }
     

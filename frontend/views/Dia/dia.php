@@ -84,11 +84,9 @@
     
     <div id="map" class="col-md-9 guide-content"><div id="popup" style ="with:100px"></div></div>
     
-    <div id="scrolly">
-        
-        <p>adadasdsddsfsfdfdsfsfdsfsfsd</p>
-    </div>
 </div>
+
+<button type="button" class="btn btn-success" onclick="Update()">Success</button>
 
 
 <!--<div class="container">
@@ -102,25 +100,18 @@
     
     // The transform funcion needs lat/long instead of long/lat
     
-//    var point = new OpenLayers.LonLat(-56.1220166,-34.8370893);
-//    var point2 = point;
-//    point2.transform('EPSG:4326','EPSG:3857');
-//    
-//    console.log(point);
-//    console.log(point2);
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
     var entregas = eval(<?php echo $entregasJson; ?>) ;   
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     var vectors = new Array();
+    var zpoints;
     
     for (indice = 0; indice < poligonos.length; ++indice) {
         
         var latlongfeature= createLayer(poligonos[indice]);
         map.addLayer(latlongfeature.vector);
         vectors.push(latlongfeature.vector);
-        
-        
     }
     
     //console.log(vectors[0].getSource().getFeatures()[0].getGeometry().getCoordinates());
@@ -130,23 +121,32 @@
         var point2 = point;
         point2.transform('EPSG:4326','EPSG:3857');
         var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice]);
-        for (index = 0; index < vectors.length; ++index){
-          var inside =vectors[index].getSource().getFeaturesAtCoordinate( pointLayer.getSource().getFeatures()[0].getGeometry().getCoordinates());
-          if (inside.length >0){
-            console.log("Zona: "+vectors[index].getSource().getFeatures()[0].get("Nombre") + " - PointId:"+ pointLayer.getSource().getFeatures()[0].get('name') + " - Direccion:"+pointLayer.getSource().getFeatures()[0].get('direccion'));
-              
-          }
-            
-        } 
         map.addLayer(pointLayer);
-    }
     
+    } 
     
+    map.on('click', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+              function(feature, layer) {
+                return feature;
+              });
+         if (feature) {
+            zpoints = PointsInZone(entregas,vectors,map,feature);
+            console.log(zpoints);
+            UpdateEntrega()
+        }
+    });
     
     popup(map);
-
     
 
+    function UpdateEntrega(){
+      var parms = 0;  
+      $.get('index.php?r=dia/create-dia-reparto', {parms : parms}, function(data){  
+        console.log(data); 
+  });
+        
+    }
     
 
  </script>
