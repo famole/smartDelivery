@@ -11,9 +11,11 @@ use frontend\models\Estados;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
 use frontend\controllers\ProcessController;
+use yii\helpers\Json;
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
-
+error_reporting(E_ALL); 
+ini_set("display_errors",1);
 /**
  * Description of DiaController
  *
@@ -86,6 +88,25 @@ class DiaController extends Controller{
          
         // ProcessController::actionPointInZone();
         return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SorteableItems'=>$SorteableItems]);
+        
+    }
+    
+    public function actionCreateDiaReparto($parms){
+        $Entrega = new Entrega();
+        $test = 'Anda el ajax';
+        
+        $zpoints = json_decode($parms);
+        //$ent = $zpoints[0]->z_id;
+        
+        $logfile = fopen('test.txt', 'w');
+        fwrite($logfile, "\nPedido - Direction> ");//.$ent);// . $zpoints[0]->ent_id);
+        fclose($logfile);
+        
+     //   $Entrega->updateEntregaZona($zpoints);
+       // Yii::error($decode);
+        echo Json::encode($test);
+        
+        
         
     }
     

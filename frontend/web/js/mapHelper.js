@@ -272,13 +272,12 @@ function addLayer(map,layer){
         var geometry = feature.getGeometry();
         var coord; 
         var geomType = geometry.getType();
-        console.log(geomType);
+        
         switch(geomType){
             case "Polygon":
                 coord = geometry.getCoordinates()[0][0];
                 content =  feature.get('content');
-                console.log(content);
-                 
+                             
                 break;
             case "Point":
                 coord = geometry.getCoordinates();
@@ -288,7 +287,7 @@ function addLayer(map,layer){
                 break;
             
         }
-        console.log(coord);
+        //console.log(coord);
         popup.setPosition(coord);
         $(element).attr( 'data-placement', 'top' );
         
@@ -317,6 +316,42 @@ function addLayer(map,layer){
      
  }
 
+function PointsInZone(entregas,vectors,map,feature){
+    
+    var ret = new Array();
+    if (feature){
+        for (index = 0; index < vectors.length; index++){
+
+            if(vectors[index].getSource().getFeatures()[0].get("Id") == feature.get("Id")){
+                for (indice = 0; indice < entregas.length; indice++) {
+                    var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
+                    var point2 = point;
+                    point2.transform('EPSG:4326','EPSG:3857');
+                    var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice]);
+                    var inside2 =vectors[index].getSource().getFeaturesAtCoordinate(pointLayer.getSource().getFeatures()[0].getGeometry().getCoordinates()); 
+                    if (inside2.length >0){
+                        console.log("Zona: "+vectors[index].getSource().getFeatures()[0].get("Nombre") + " - PointId:"+ pointLayer.getSource().getFeatures()[0].get('name') + " - Direccion:"+pointLayer.getSource().getFeatures()[0].get('direccion'));
+                        var zp = new Array();
+                        zp.z_id =  vectors[index].getSource().getFeatures()[0].get("Id");
+                        zp.ent_id = pointLayer.getSource().getFeatures()[0].get('name');
+                        zp.ent_dir = pointLayer.getSource().getFeatures()[0].get('direccion')
+                        
+                        ret.push(zp);
+
+                    }
+                }
+            }  
+        }
+    }
+    console.log(ret)      
+    return ret;
+}      
+      //});
+       
+     
+    
+    
+    
 
 
 function addInteraction() {

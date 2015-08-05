@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 Pedido> 1
 Pedido - Direction> guayabo 1942
 Pedido - Existe dir y crea entrega.
@@ -8,3 +9,6 @@ Pedido - Direction> peteco 123
 Pedido - Direction to Nominatim> peteco,123&state=Montevideo&countrycodes=UY
 Pedido - Result Nominatim> peteco,123&state=Montevideo&countrycodes=UY
 Pedido - No fue posible resolver la direccion> peteco,123&state=Montevideo&countrycodes=UY
+=======
+Pedido - Direction> 
+>>>>>>> a86f4206c32e28f92aeadb8b1cd8a496481b367a

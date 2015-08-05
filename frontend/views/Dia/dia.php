@@ -5,13 +5,15 @@
     use kartik\sortinput\SortableInput;
     use yii\helpers\Html; 
     use yii\widgets\ActiveForm;
-
+    use yii\helpers\Json;
+    use yii\bootstrap\Modal;
+    use yii\widgets\DetailView; 
+    use frontend\models\Direccion;
+    use frontend\views\vehiculo\listavehiculos;
 
 
     $fecha = date("Y-m-d");
-    
-    Yii::error($fecha);
-    Yii::error($entregasJson);
+   
 
 
    
@@ -71,12 +73,13 @@
           <input type="text" id="searchVehicle" placeholder="Filtrar" class="form-control">
         </div>
 
-       <div class="form-group">
+       <div id= "MenuContainer" class="form-group">
           <?php
             echo SortableInput::widget([
-                'name'=> 'sort_list_1',
+                'name'=> 'pointsMenu',
                 'items' => $SorteableItems,
-                'hideInput' => false,
+                'hideInput' => true,
+                'options' => ['id' => 'pointsMenu'],
             ]);
           ?>
         </div>
@@ -84,11 +87,23 @@
     
     <div id="map" class="col-md-9 guide-content"><div id="popup" style ="with:100px"></div></div>
     
-    <div id="scrolly">
-        
-        <p>adadasdsddsfsfdfdsfsfdsfsfsd</p>
-    </div>
 </div>
+
+<button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Success</button>
+<?php
+
+Modal::begin([
+    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
+    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
+]);
+$items = array();
+echo $this->render('..\vehiculo\listavehiculos', ['items'=>$items]);
+//echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
+Modal::end();
+
+
+?>
+
 
 
 <!--<div class="container">
@@ -102,25 +117,19 @@
     
     // The transform funcion needs lat/long instead of long/lat
     
-//    var point = new OpenLayers.LonLat(-56.1220166,-34.8370893);
-//    var point2 = point;
-//    point2.transform('EPSG:4326','EPSG:3857');
-//    
-//    console.log(point);
-//    console.log(point2);
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
     var entregas = eval(<?php echo $entregasJson; ?>) ;   
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     var vectors = new Array();
+    var zpoints;
+    var entregasZona;
     
     for (indice = 0; indice < poligonos.length; ++indice) {
         
         var latlongfeature= createLayer(poligonos[indice]);
         map.addLayer(latlongfeature.vector);
         vectors.push(latlongfeature.vector);
-        
-        
     }
     
     //console.log(vectors[0].getSource().getFeatures()[0].getGeometry().getCoordinates());
@@ -130,23 +139,61 @@
         var point2 = point;
         point2.transform('EPSG:4326','EPSG:3857');
         var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice]);
-        for (index = 0; index < vectors.length; ++index){
-          var inside =vectors[index].getSource().getFeaturesAtCoordinate( pointLayer.getSource().getFeatures()[0].getGeometry().getCoordinates());
-          if (inside.length >0){
-            console.log("Zona: "+vectors[index].getSource().getFeatures()[0].get("Nombre") + " - PointId:"+ pointLayer.getSource().getFeatures()[0].get('name') + " - Direccion:"+pointLayer.getSource().getFeatures()[0].get('direccion'));
-              
-          }
-            
-        } 
         map.addLayer(pointLayer);
-    }
     
-    
+    } 
+    var entregasZona;
+    map.on('click', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+              function(feature, layer) {
+                return feature;
+              });
+         if (feature) {
+            zpoints = PointsInZone(entregas,vectors,map,feature);
+            entregasZona = zpoints;
+            console.log(zpoints);
+            
+            UpdateEntrega(zpoints)
+        }
+    });
     
     popup(map);
-
     
 
+    function UpdateEntrega(entregasZona){
+      var parms =JSON.stringify(entregasZona);  
+      $.get('index.php?r=dia/create-dia-reparto', {parms : parms}, function(data){  
+        console.log(data); 
+        },"json ");
+       console.log(entregasZona.length);  
+        $('#MenuContainer').each(function(){
+            $(this).find('li').each(function(){
+//                if (this.id != 'Todos'){
+                    $(this).closest('li').remove();                        
+//                }
+            });
+            
+            $(this).find('ul').each(function(){
+                for(var i=0;i<entregasZona.length;i++){
+                    console.log(entregasZona[i].ent_id);
+                    var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>'
+                    //var row = '<li id="' + entregasZona[i].ent_id + '">'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
+                
+                    $(this).append(row);
+                }
+        });
+            
+        });
+        
+//        $(this).find('ul').each(function(){
+//        
+//            for(var i=0;i<entregasZona.length;i++){
+//                var row = '<li id="' + entregasZona[i].ent_id + '>'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
+//                $(this).append(row);
+//            }
+//        });
+        
+    }
     
 
  </script>

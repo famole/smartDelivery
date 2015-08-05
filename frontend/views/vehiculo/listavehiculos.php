@@ -53,7 +53,7 @@ $this->registerJSFile("js/mapHelper.js");
           ?>
         </div>
     </div>
-    <div id="map" class="col-md-9 guide-content">
+    <div id="mapV" class="col-md-9 guide-content">
     </div>
 </div>
 
@@ -63,7 +63,7 @@ $this->registerJSFile("js/mapHelper.js");
 $script = <<< JS
    // $( document ).ready(function() {
         //Dibujar mapa 
-        var map = createMap(-6252731.917154272,-4150822.2589118066,13,'map');
+        var map = createMap(-6252731.917154272,-4150822.2589118066,13,'mapV');
         
         //Filtrar Vehiculos
          $('#searchVehicle').on('input', function(e) {
