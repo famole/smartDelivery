@@ -23,12 +23,17 @@ class ProcessController extends SiteController{
         $pedidosPendientes = Pedido::find()->where(['ped_proc' => 0])->all();
         $replacements = DireccionReplacements::find()->all();
         
+        $logfile = fopen('test.txt', 'w');
+        
         //Recorre Pedidos Pendientes
         foreach ($pedidosPendientes as $pedido){
             $pedidos += 1;
+            
+            fwrite($logfile, "\nPedido> " . $pedido->ped_id);
             if ($this->checknull($pedido)){
                 
                 $direction = trim(strtolower($pedido->ped_direccion));
+                fwrite($logfile, "\nPedido - Direction> " . $direction);
                 $dir_id = $this->actionDirectionExists($direction);
                 $orden += 1;
                 $date = date_create($pedido->ped_fechahora);            
@@ -55,15 +60,18 @@ class ProcessController extends SiteController{
 
                     $dirToNominatim = str_replace(' ', ',', $dirToResolve);
                     //Armo url para consultar a Nominatim
-
+                    
+                    
                     if($pedido->ped_dep !== '') $dirToNominatim .= '&state='.urlencode($pedido->ped_dep);    
 
                     $dirToNominatim .= '&countrycodes=UY';
+                    fwrite($logfile, "\nPedido - Direction to Nominatim> " . $dirToNominatim);
                     //return $dirToNominatim;
                     $results = UtilHelper::dirToLongLat($dirToNominatim);
                     $lat = $results["lat"];
                     $long = $results["long"];
-
+                    
+                    fwrite($logfile, "\nPedido - Result Nominatim> " . $dirToNominatim);
                     if($results["count"] > 1){
                         //Existe mas de un resultado para la direccion buscada
                         $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, true, EnumProcessError::manyDir);
@@ -76,6 +84,7 @@ class ProcessController extends SiteController{
                         //Seteo pedido como procesado
                         $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
+                        fwrite($logfile, "\nPedido - No fue posible resolver la direccion> " . $dirToNominatim);
                     }else{
                         //Direccion resuelta, guarda y crea entega
                         $dir_id = $this->actionSetDirectionLatLong($pedido->ped_direccion, $lat, $long, $pedido->cli_id);
@@ -93,17 +102,20 @@ class ProcessController extends SiteController{
                         //Crea relacion
                         $this->actionSetCliDir($pedido->cli_id, $dir_id);
                     }
+                    fwrite($logfile, "\nPedido - Existe dir y crea entrega.");
                     //Crear Entrega
                     $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, false, '');
 
                     //Seteo pedido como procesado
-                    $this->actionSetPedidoAsProcessed($pedido->ped_id);
+                    $result = $this->actionSetPedidoAsProcessed($pedido->ped_id);
+                    fwrite($logfile, "\nPedido - set processed> " . $pedido->ped_id . " - " . $result);
                 }
             }else {
                 $error += 1;
             }
        
         }
+        fclose($logfile);
         return json_encode(array(
             'pedidos' => $pedidos,
             'errores' => $error
@@ -145,6 +157,7 @@ class ProcessController extends SiteController{
     }
     
     public function actionSetPedidoAsProcessed($ped_id){
+        
         $Pedido = Pedido::findOne($ped_id);
         $Pedido->ped_ultproc = date("Y-m-d H:i:s");
         $Pedido->ped_proc = true;
