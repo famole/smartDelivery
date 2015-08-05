@@ -128,8 +128,8 @@ class ProcessController extends SiteController{
         
             $Direccion = new Direccion();
             $Direccion->dir_direccion = $address;
-            $Direccion->dir_latstr = $lat;
-            $Direccion->dir_longstr = $long;
+            $Direccion->dir_lat = $lat;
+            $Direccion->dir_lon = $long;
             $dir = $Direccion->save();
             if($dir > 0){
                 //Set Relacion Cliente Direccion
@@ -145,7 +145,7 @@ class ProcessController extends SiteController{
     
     public function actionDirectionExists($directionparm){ 
         $direccion = Direccion::find()->where(['dir_direccion'=>$directionparm])->one();
-        if($direccion->dir_latstr != ''){
+        if($direccion->dir_lat != ''){
             $dir_id = $direccion->dir_id;
         }
         return $dir_id;

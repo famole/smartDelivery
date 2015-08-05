@@ -84,10 +84,10 @@ class DiaController extends Controller{
         
          $entregasJson = json_encode($items);
         
-         $SorteableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
+         $SortableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
          
         // ProcessController::actionPointInZone();
-        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SorteableItems'=>$SorteableItems]);
+        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems]);
         
     }
     

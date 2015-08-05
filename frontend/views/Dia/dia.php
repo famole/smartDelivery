@@ -25,6 +25,8 @@
 <script type="text/javascript" src="js/OpenLayers.js"></script>
 <script src="js/mapHelper.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.js"></script>
+<script type="text/javascript" src="js/sortable/Sortable.js"></script>
+
 <style>
   .map {
     height: 400px;
@@ -74,15 +76,12 @@
         </div>
 
        <div id= "MenuContainer" class="form-group">
-          <?php
-            echo SortableInput::widget([
-                'name'=> 'pointsMenu',
-                'items' => $SorteableItems,
-                'hideInput' => true,
-                'options' => ['id' => 'pointsMenu'],
-            ]);
-          ?>
+            <ul id="entregaList" class="list-group sortable cursor-move">
+                
+            </ul>
         </div>
+        
+        
     </div>
     
     <div id="map" class="col-md-9 guide-content"><div id="popup" style ="with:100px"></div></div>
@@ -90,19 +89,19 @@
 </div>
 
 <button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Success</button>
-<?php
-
-Modal::begin([
-    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
-    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
-]);
-$items = array();
-echo $this->render('..\vehiculo\listavehiculos', ['items'=>$items]);
-//echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
-Modal::end();
-
-
-?>
+//<?php
+//
+//Modal::begin([
+//    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
+//    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
+//]);
+//$items = array();
+//echo $this->render('..\vehiculo\listavehiculos', ['items'=>$items]);
+////echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
+//Modal::end();
+//
+//
+//?>
 
 
 
@@ -116,6 +115,7 @@ Modal::end();
 <script type="text/javascript">
     
     // The transform funcion needs lat/long instead of long/lat
+        
     
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
@@ -124,7 +124,19 @@ Modal::end();
     var vectors = new Array();
     var zpoints;
     var entregasZona;
+    var el = document.getElementById('entregaList');
+    var sortable = Sortable.create(el);
+    var listItems = <?php echo json_encode($SortableItems); ?>;
     
+    console.log(listItems);
+    for (i=0; i<listItems.length; i++){
+        console.log("Entra al for");
+        var row = '<li data-key="'+ listItems[i].key +'" role="option" aria-grabbed="false" draggable="true">' + listItems[i].content + '</li>';
+        console.log(listItems[i].key);
+        //append row
+        console.log("sale del for");
+    }
+   
     for (indice = 0; indice < poligonos.length; ++indice) {
         
         var latlongfeature= createLayer(poligonos[indice]);
@@ -172,16 +184,14 @@ Modal::end();
                     $(this).closest('li').remove();                        
 //                }
             });
-            
-            $(this).find('ul').each(function(){
+         
+            $('#entregaList').clear();
+            $('#entregaList').each(function(){
                 for(var i=0;i<entregasZona.length;i++){
-                    console.log(entregasZona[i].ent_id);
-                    var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>'
-                    //var row = '<li id="' + entregasZona[i].ent_id + '">'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
-                
+                    var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
                     $(this).append(row);
-                }
-        });
+                }    
+            });
             
         });
         
@@ -195,6 +205,6 @@ Modal::end();
         
     }
     
-
+   
  </script>
 
