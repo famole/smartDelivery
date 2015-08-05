@@ -122,10 +122,10 @@ Modal::end();
     var entregas = eval(<?php echo $entregasJson; ?>) ;   
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     var vectors = new Array();
-    var zpoints;
-    var entregasZona;
+    var zpoints = new Array();
+    var entregasZona = new Array();
     
-    for (indice = 0; indice < poligonos.length; ++indice) {
+    for (indice = 0; indice < poligonos.length; indice++) {
         
         var latlongfeature= createLayer(poligonos[indice]);
         map.addLayer(latlongfeature.vector);
@@ -133,7 +133,7 @@ Modal::end();
     }
     
     //console.log(vectors[0].getSource().getFeatures()[0].getGeometry().getCoordinates());
-    for (indice = 0; indice < entregas.length; ++indice) {
+    for (indice = 0; indice < entregas.length; indice++) {
        
         var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
         var point2 = point;
@@ -151,7 +151,7 @@ Modal::end();
          if (feature) {
             zpoints = PointsInZone(entregas,vectors,map,feature);
             entregasZona = zpoints;
-            console.log(zpoints);
+            //console.log(zpoints);
             
             UpdateEntrega(zpoints)
         }
@@ -161,11 +161,15 @@ Modal::end();
     
 
     function UpdateEntrega(entregasZona){
-      var parms =JSON.stringify(entregasZona);  
+     var parms = JSON.stringify(entregasZona);  
+ 
+      console.log(entregasZona);
+      console.log(JSON.stringify(entregasZona));
       $.get('index.php?r=dia/create-dia-reparto', {parms : parms}, function(data){  
         console.log(data); 
         },"json ");
        console.log(entregasZona.length);  
+        
         $('#MenuContainer').each(function(){
             $(this).find('li').each(function(){
 //                if (this.id != 'Todos'){
@@ -173,17 +177,24 @@ Modal::end();
 //                }
             });
             
+            
             $(this).find('ul').each(function(){
+                var cont = 0;
+                $(this)
                 for(var i=0;i<entregasZona.length;i++){
                     console.log(entregasZona[i].ent_id);
-                    var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>'
+                    
+                    var row = '<li data-key="'+ cont +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>'
                     //var row = '<li id="' + entregasZona[i].ent_id + '">'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
-                
+                    cont++;
                     $(this).append(row);
+                
                 }
-        });
+       
+    });
             
         });
+    
         
 //        $(this).find('ul').each(function(){
 //        
