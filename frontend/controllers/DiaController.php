@@ -96,13 +96,13 @@ class DiaController extends Controller{
         $test = 'Anda el ajax';
         
         $zpoints = json_decode($parms);
-        //$ent = $zpoints[0]->z_id;
+        $ent = $zpoints[0]->z_id;
         
         $logfile = fopen('test.txt', 'w');
-        fwrite($logfile, "\nPedido - Direction> ");//.$ent);// . $zpoints[0]->ent_id);
+        fwrite($logfile, "\nPedido - Direction> ".$ent);//.$zpoints);// . $zpoints[0]->ent_id);
         fclose($logfile);
         
-     //   $Entrega->updateEntregaZona($zpoints);
+        $Entrega->updateEntregaZona($zpoints);
        // Yii::error($decode);
         echo Json::encode($test);
         
