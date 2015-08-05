@@ -319,13 +319,11 @@ function addLayer(map,layer){
 function PointsInZone(entregas,vectors,map,feature){
     
     var ret = new Array();
-    var zp = new Array();
-   
     if (feature){
-        for (index = 0; index < vectors.length; ++index){
+        for (index = 0; index < vectors.length; index++){
 
             if(vectors[index].getSource().getFeatures()[0].get("Id") == feature.get("Id")){
-                for (indice = 0; indice < entregas.length; ++indice) {
+                for (indice = 0; indice < entregas.length; indice++) {
                     var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
                     var point2 = point;
                     point2.transform('EPSG:4326','EPSG:3857');
@@ -333,9 +331,11 @@ function PointsInZone(entregas,vectors,map,feature){
                     var inside2 =vectors[index].getSource().getFeaturesAtCoordinate(pointLayer.getSource().getFeatures()[0].getGeometry().getCoordinates()); 
                     if (inside2.length >0){
                         console.log("Zona: "+vectors[index].getSource().getFeatures()[0].get("Nombre") + " - PointId:"+ pointLayer.getSource().getFeatures()[0].get('name') + " - Direccion:"+pointLayer.getSource().getFeatures()[0].get('direccion'));
-
+                        var zp = new Array();
                         zp.z_id =  vectors[index].getSource().getFeatures()[0].get("Id");
                         zp.ent_id = pointLayer.getSource().getFeatures()[0].get('name');
+                        zp.ent_dir = pointLayer.getSource().getFeatures()[0].get('direccion')
+                        
                         ret.push(zp);
 
                     }
@@ -343,7 +343,7 @@ function PointsInZone(entregas,vectors,map,feature){
             }  
         }
     }
-          
+    console.log(ret)      
     return ret;
 }      
       //});

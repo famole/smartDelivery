@@ -5,13 +5,15 @@
     use kartik\sortinput\SortableInput;
     use yii\helpers\Html; 
     use yii\widgets\ActiveForm;
-
+    use yii\helpers\Json;
+    use yii\bootstrap\Modal;
+    use yii\widgets\DetailView; 
+    use frontend\models\Direccion;
+    use frontend\views\vehiculo\listavehiculos;
 
 
     $fecha = date("Y-m-d");
-    
-    Yii::error($fecha);
-    Yii::error($entregasJson);
+   
 
 
    
@@ -71,12 +73,13 @@
           <input type="text" id="searchVehicle" placeholder="Filtrar" class="form-control">
         </div>
 
-       <div class="form-group">
+       <div id= "MenuContainer" class="form-group">
           <?php
             echo SortableInput::widget([
-                'name'=> 'sort_list_1',
+                'name'=> 'pointsMenu',
                 'items' => $SorteableItems,
-                'hideInput' => false,
+                'hideInput' => true,
+                'options' => ['id' => 'pointsMenu'],
             ]);
           ?>
         </div>
@@ -86,7 +89,21 @@
     
 </div>
 
-<button type="button" class="btn btn-success" onclick="Update()">Success</button>
+<button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Success</button>
+<?php
+
+Modal::begin([
+    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
+    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
+]);
+$items = array();
+echo $this->render('..\vehiculo\listavehiculos', ['items'=>$items]);
+//echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
+Modal::end();
+
+
+?>
+
 
 
 <!--<div class="container">
@@ -106,6 +123,7 @@
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     var vectors = new Array();
     var zpoints;
+    var entregasZona;
     
     for (indice = 0; indice < poligonos.length; ++indice) {
         
@@ -124,7 +142,7 @@
         map.addLayer(pointLayer);
     
     } 
-    
+    var entregasZona;
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel,
               function(feature, layer) {
@@ -132,19 +150,48 @@
               });
          if (feature) {
             zpoints = PointsInZone(entregas,vectors,map,feature);
+            entregasZona = zpoints;
             console.log(zpoints);
-            UpdateEntrega()
+            
+            UpdateEntrega(zpoints)
         }
     });
     
     popup(map);
     
 
-    function UpdateEntrega(){
-      var parms = 0;  
+    function UpdateEntrega(entregasZona){
+      var parms =JSON.stringify(entregasZona);  
       $.get('index.php?r=dia/create-dia-reparto', {parms : parms}, function(data){  
         console.log(data); 
-  });
+        },"json ");
+       console.log(entregasZona.length);  
+        $('#MenuContainer').each(function(){
+            $(this).find('li').each(function(){
+//                if (this.id != 'Todos'){
+                    $(this).closest('li').remove();                        
+//                }
+            });
+            
+            $(this).find('ul').each(function(){
+                for(var i=0;i<entregasZona.length;i++){
+                    console.log(entregasZona[i].ent_id);
+                    var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>'
+                    //var row = '<li id="' + entregasZona[i].ent_id + '">'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
+                
+                    $(this).append(row);
+                }
+        });
+            
+        });
+        
+//        $(this).find('ul').each(function(){
+//        
+//            for(var i=0;i<entregasZona.length;i++){
+//                var row = '<li id="' + entregasZona[i].ent_id + '>'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
+//                $(this).append(row);
+//            }
+//        });
         
     }
     

@@ -124,4 +124,16 @@ class Entrega extends \yii\db\ActiveRecord
             return $this->update($runValidation, $attributeNames) !== false;
         }
     }
+    
+    public function updateEntregaZona($zpoints){
+        
+        $connection = static::getDb();
+        foreach($zpoints as $item){
+            $sql="Update Entrega set z_id =".$item->z_id." where ent_id =".$item->ent_id ;
+            $command=$connection->createCommand($sql);
+            $rows = $command->execute();
+        }
+        
+        
+    }
 }
