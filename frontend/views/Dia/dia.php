@@ -11,15 +11,10 @@
     use frontend\models\Direccion;
     use frontend\views\vehiculo\listavehiculos;
 
-
     $fecha = date("Y-m-d");
-   
-
-
-   
 ?>
 
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>   
 <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
 <!--<script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>-->
 <script type="text/javascript" src="js/OpenLayers.js"></script>
@@ -111,11 +106,10 @@
     <div id="map" class="map"></div>
 
 </div>   -->
-    
+ 
 <script type="text/javascript">
     
-    // The transform funcion needs lat/long instead of long/lat
-        
+
     
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
@@ -128,13 +122,10 @@
     var sortable = Sortable.create(el);
     var listItems = <?php echo json_encode($SortableItems); ?>;
     
-    console.log(listItems);
-    for (i=0; i<listItems.length; i++){
-        console.log("Entra al for");
-        var row = '<li data-key="'+ listItems[i].key +'" role="option" aria-grabbed="false" draggable="true">' + listItems[i].content + '</li>';
-        console.log(listItems[i].key);
-        //append row
-        console.log("sale del for");
+    for (i=0; i<listItems.length; i++){        
+        var row = '<li data-key="'+ listItems[i].key +'"class="list-group-item " style="cursor: pointer;"> ☰ ' + listItems[i].content + '</li>';
+        $('#entregaList').append(row);
+        
     }
    
     for (indice = 0; indice < poligonos.length; ++indice) {
@@ -165,7 +156,7 @@
             entregasZona = zpoints;
             console.log(zpoints);
             
-            UpdateEntrega(zpoints)
+            UpdateEntrega(zpoints);
         }
     });
     
@@ -184,8 +175,7 @@
                     $(this).closest('li').remove();                        
 //                }
             });
-         
-            $('#entregaList').clear();
+        
             $('#entregaList').each(function(){
                 for(var i=0;i<entregasZona.length;i++){
                     var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
@@ -194,15 +184,6 @@
             });
             
         });
-        
-//        $(this).find('ul').each(function(){
-//        
-//            for(var i=0;i<entregasZona.length;i++){
-//                var row = '<li id="' + entregasZona[i].ent_id + '>'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
-//                $(this).append(row);
-//            }
-//        });
-        
     }
     
    
