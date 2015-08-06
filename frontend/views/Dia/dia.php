@@ -89,19 +89,19 @@
 </div>
 
 <button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Success</button>
-//<?php
-//
-//Modal::begin([
-//    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
-//    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
-//]);
-//$items = array();
-//echo $this->render('..\vehiculo\listavehiculos', ['items'=>$items]);
-////echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
-//Modal::end();
-//
-//
-//?>
+<?php
+
+Modal::begin([
+    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
+    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
+    ]);
+    $items = array();
+    echo $this->render('selectVehiculo', ['vehiculosJson'=>$vehiculosJson]);
+    //echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
+Modal::end();
+
+
+?>
 
 
 
@@ -128,12 +128,14 @@
     var sortable = Sortable.create(el);
     var listItems = <?php echo json_encode($SortableItems); ?>;
     
+    
     console.log(listItems);
     for (i=0; i<listItems.length; i++){
         console.log("Entra al for");
         var row = '<li data-key="'+ listItems[i].key +'" role="option" aria-grabbed="false" draggable="true">' + listItems[i].content + '</li>';
         console.log(listItems[i].key);
-        //append row
+        
+        //$('#entregaList').append(row);
         console.log("sale del for");
     }
    
@@ -165,7 +167,7 @@
             entregasZona = zpoints;
             console.log(zpoints);
             
-            UpdateEntrega(zpoints)
+            UpdateEntrega(zpoints);
         }
     });
     
@@ -204,6 +206,8 @@
 //        });
         
     }
+    
+    
     
    
  </script>

@@ -8,6 +8,7 @@ use frontend\models\zona;
 use frontend\models\Entrega;
 use frontend\models\Direccion;
 use frontend\models\Estados;
+use frontend\models\Vehiculo;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
 use frontend\controllers\ProcessController;
@@ -86,8 +87,17 @@ class DiaController extends Controller{
         
          $SortableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
          
+         //Vehiculos disponibles para el dia de hoy
+         $vehiculos = Vehiculo::find()
+        ->select('*')
+        ->where('ve_estado ='.Vehiculo::ACTIVE)
+        ->all();
+         
+         $vehiculosJson =  json_encode($vehiculos);
+         
+         
         // ProcessController::actionPointInZone();
-        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems]);
+        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson]);
         
     }
     
