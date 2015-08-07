@@ -7,14 +7,13 @@ use frontend\models\Direccion;
 use frontend\models\Clientedireccion;
 use frontend\models\Entrega;
 use frontend\models\EstadosSearch;
-use frontend\models\Zona;
+use frontend\models\TurnosEntrega;
 
 use frontend\enum\EnumReplacementType;
 use frontend\enum\EnumBaseStatus;
 use frontend\enum\EnumProcessError;
 
 use frontend\helper\UtilHelper;
-use Yii;
 
 class ProcessController extends SiteController{
     
@@ -76,13 +75,13 @@ class ProcessController extends SiteController{
                     fwrite($logfile, "\nPedido - Result Nominatim> " . $dirToNominatim);
                     if($results["count"] > 1){
                         //Existe mas de un resultado para la direccion buscada
-                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, EnumProcessError::manyDir);
+                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, $pedido->ped_fechahora, EnumProcessError::manyDir);
                         //Seteo pedido como procesado
                         $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
                     }elseif($results["count"] == 0){
                         //No se resuelve la direccion
-                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, EnumProcessError::noDir);
+                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, $pedido->ped_fechahora, EnumProcessError::noDir);
                         //Seteo pedido como procesado
                         $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
@@ -91,7 +90,7 @@ class ProcessController extends SiteController{
                         //Direccion resuelta, guarda y crea entega
                         $dir_id = $this->actionSetDirectionLatLong($pedido->ped_direccion, $lat, $long, $pedido->cli_id);
                         if($dir_id>0){    
-                            $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, 0, '');
+                            $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, 0, $pedido->ped_fechahora, '');
 
                             //Seteo pedido como procesado
                             $this->actionSetPedidoAsProcessed($pedido->ped_id);
@@ -106,7 +105,7 @@ class ProcessController extends SiteController{
                     }
                     fwrite($logfile, "\nPedido - Existe dir y crea entrega.");
                     //Crear Entrega
-                    $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, 0, '');
+                    $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, 0, $pedido->ped_fechahora, '');
 
                     //Seteo pedido como procesado
                     $result = $this->actionSetPedidoAsProcessed($pedido->ped_id);
@@ -170,7 +169,7 @@ class ProcessController extends SiteController{
         return Clientedireccion::findOne(['cli_id' => $cli, 'dir_id' => $dir]) !== null;
     }
     
-    public function actionCreateEntrega($ped_id, $dir_id, $fecha, $orden, $pdef, $errtype){
+    public function actionCreateEntrega($ped_id, $dir_id, $fecha, $orden, $pdef, $fechaHora, $errtype){
         
         $Entrega = new Entrega();
         $Entrega->ent_orden = $orden;
@@ -179,6 +178,7 @@ class ProcessController extends SiteController{
         $Entrega->ent_fecha = $fecha;
         $Entrega->ent_pendefinir = $pdef;
         $Entrega->est_id = $this->actionGetFirstEstado();
+        $Entrega->te_id = $this->getTurnoEntrega($fechaHora);
         $Entrega->ent_errorDesc = $errtype;
 
         return $Entrega->save();
@@ -207,6 +207,16 @@ class ProcessController extends SiteController{
             return false;
         }
         return true;
+    }
+    
+    private function getTurnoEntrega($fechaHora){
+        $turnosEntrega = TurnosEntrega::find()->all();
+        foreach ($turnosEntrega as $turno){
+            if($turno->te_horainicio <= $fechaHora && $turno->te_horafin >= $fechaHora){
+                return $turno->te_id;
+            }
+        }
+        return 0;
     }
     
     

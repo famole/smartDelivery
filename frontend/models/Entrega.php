@@ -16,7 +16,6 @@ use Yii;
  * @property integer $te_id
  * @property integer $est_id
  * @property string $ent_obs
- * @property integer $ent_orden
  * @property string $ent_fecha
  * @property integer $dir_id
  * @property string $ent_errorDesc
@@ -38,7 +37,7 @@ class Entrega extends \yii\db\ActiveRecord
     {
         return [
             [['ent_id', 'ped_id', 'est_id'], 'required'],
-            [['ent_id', 'ped_id', 'z_id', 'te_id', 'est_id', 'ent_orden', 'dir_id'], 'integer'],
+            [['ent_id', 'ped_id', 'z_id', 'te_id', 'est_id', 'dir_id'], 'integer'],
             [['ent_pendefinir'], 'boolean'],
             [['ent_fecha'], 'safe'],
             [['ent_obs'], 'string', 'max' => 1000],
@@ -59,7 +58,6 @@ class Entrega extends \yii\db\ActiveRecord
             'te_id' => Yii::t('app', 'Turno entrega'),
             'est_id' => Yii::t('app', 'Estado'),
             'ent_obs' => Yii::t('app', 'Observaciones'),
-            'ent_orden' => Yii::t('app', 'Orden'),
             'ent_fecha' => Yii::t('app', 'Fecha'),
             'dir_id' => Yii::t('app', 'Direccion'),
             'ent_errorDesc' => Yii::t('app', 'Error'),
@@ -99,10 +97,9 @@ class Entrega extends \yii\db\ActiveRecord
                     $values .= $this->te_id."','";
                 }
 
-                $sql .= "`est_id`, `ent_obs`, `ent_orden`, `ent_fecha`,"; 
+                $sql .= "`est_id`, `ent_obs`, `ent_fecha`,"; 
                 $values .= $this->est_id."','"
                         .$this->ent_obs."','"
-                        .$this->ent_orden."','"
                         .$this->ent_fecha."','";
                         
                 if($this->dir_id > 0){
