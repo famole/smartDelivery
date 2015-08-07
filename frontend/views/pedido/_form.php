@@ -34,22 +34,13 @@ use yii\widgets\ActiveForm;
 
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="js/func.js" type="text/javascript"></script>
 <script>
-    //$(document).ready(function(){
         var pedError = eval(<?php echo $model->ped_error; ?>) ;
         if(pedError){
-            $('#error').append('<div id="errorcontainer" class="alert alert-danger" role="alert"></div>');
-
             var pedFechaHora = eval(<?php echo $model->ped_fechahora; ?>);
             var pedDireccion = <?php echo json_encode($model->ped_direccion);?>;   
-            if (pedDireccion === undefined || pedDireccion === ''){
-                $('#errorcontainer').append('<p>La direccion de entrega no puede ser vacia.</p>');
-            }
-
-            if(pedFechaHora === undefined || pedFechaHora === ''){
-                $('#errorcontainer').append('<p>La fecha de entrega no puede ser vacia.</p>');
-            }
             
+            showPedError(pedFechaHora, pedDireccion);
         }
-    //});
 </script>

@@ -1,15 +1,15 @@
 
 $(document).ready(function() {
-	$('.slider').jcarousel( {
-		initCallback: slider_initCallback,
-		itemFirstInCallback: slider_firstInCallback,
-		scroll: 1,
-		auto: 5,
-		wrap: 'both',
-		// This tells jCarousel NOT to autobuild prev/next buttons
-		buttonNextHTML: null,
-		buttonPrevHTML: null
-	});
+//	$('.slider').jcarousel( {
+//		initCallback: slider_initCallback,
+//		itemFirstInCallback: slider_firstInCallback,
+//		scroll: 1,
+//		auto: 5,
+//		wrap: 'both',
+//		// This tells jCarousel NOT to autobuild prev/next buttons
+//		buttonNextHTML: null,
+//		buttonPrevHTML: null
+//	});
 });
 
 function slider_initCallback (carousel) {
@@ -23,4 +23,19 @@ function slider_initCallback (carousel) {
 function slider_firstInCallback(carousel, item, idx, state) {
 	$('.slider-nav a').removeClass('active');
 	$('.slider-nav a').eq(idx-1).addClass('active');
+}
+
+/// Pedidos ///
+
+function showPedError(pedFechaHora, pedDireccion){
+     
+    $('#error').append('<div id="errorcontainer" class="alert alert-danger" role="alert"></div>');
+
+    if (pedDireccion === undefined || pedDireccion === ''){
+        $('#errorcontainer').append('<p>La direccion de entrega no puede ser vacia.</p>');
+    }
+
+    if(pedFechaHora === undefined || pedFechaHora === ''){
+        $('#errorcontainer').append('<p>La fecha de entrega no puede ser vacia.</p>');
+    }
 }
