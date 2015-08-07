@@ -50,8 +50,8 @@ class Pedido extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'ped_id' => Yii::t('app', 'ID'),
-            'cli_id' => Yii::t('app', 'Cliente ID'),
+            'ped_id' => Yii::t('app', 'Codigo'),
+            'cli_id' => Yii::t('app', 'Cliente Id'),
             'ped_fechahora' => Yii::t('app', 'Fecha'),
             'ped_direccion' => Yii::t('app', 'Dirección'),
             'ped_observaciones' => Yii::t('app', 'Observaciones'),

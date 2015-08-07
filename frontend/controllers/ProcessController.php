@@ -76,13 +76,13 @@ class ProcessController extends SiteController{
                     fwrite($logfile, "\nPedido - Result Nominatim> " . $dirToNominatim);
                     if($results["count"] > 1){
                         //Existe mas de un resultado para la direccion buscada
-                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, true, EnumProcessError::manyDir);
+                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, EnumProcessError::manyDir);
                         //Seteo pedido como procesado
                         $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
                     }elseif($results["count"] == 0){
                         //No se resuelve la direccion
-                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, true, EnumProcessError::noDir);
+                        $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, EnumProcessError::noDir);
                         //Seteo pedido como procesado
                         $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
@@ -91,7 +91,7 @@ class ProcessController extends SiteController{
                         //Direccion resuelta, guarda y crea entega
                         $dir_id = $this->actionSetDirectionLatLong($pedido->ped_direccion, $lat, $long, $pedido->cli_id);
                         if($dir_id>0){    
-                            $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, false, '');
+                            $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, 0, '');
 
                             //Seteo pedido como procesado
                             $this->actionSetPedidoAsProcessed($pedido->ped_id);
@@ -106,7 +106,7 @@ class ProcessController extends SiteController{
                     }
                     fwrite($logfile, "\nPedido - Existe dir y crea entrega.");
                     //Crear Entrega
-                    $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, false, '');
+                    $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, 0, '');
 
                     //Seteo pedido como procesado
                     $result = $this->actionSetPedidoAsProcessed($pedido->ped_id);
@@ -177,7 +177,7 @@ class ProcessController extends SiteController{
         $Entrega->ped_id = $ped_id;
         $Entrega->dir_id = $dir_id;
         $Entrega->ent_fecha = $fecha;
-        $Entrega->ent_pendefinir = 1;
+        $Entrega->ent_pendefinir = $pdef;
         $Entrega->est_id = $this->actionGetFirstEstado();
         $Entrega->ent_errorDesc = $errtype;
 

@@ -32,6 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
+            'rowOptions'=>function($model){
+                    if($model->ped_error == 1){
+                        return ['class' => 'danger'];
+                    }
+            },
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
@@ -40,11 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'ped_fechahora',
                 'ped_direccion',
                 'ped_observaciones',
-                // 'ped_ultproc',
 
-                ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]); ?>
+                ['class' => 'yii\grid\ActionColumn',
+                 'template' => '{update}',
+                  'buttons' => [
+                    'update' => function ($url,$model) {
+                        if($model->ped_error == 1){
+                            return Html::a('<span class="glyphicon glyphicon-exclamation-sign"></span>', $url);
+                        }else{
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url);
+                        }
+                    }],
+            ],],
+        ]);?>
     <?php Pjax::end()?>
 </div>
 
@@ -69,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     default:
                         msg = 'Se procesaron ' + data.pedidos + ' pedidos.';
                 }
-                showMessage('success', msg);
+                showMessage('success', msg, true);
             
                 if(data.errores > 0){
                     switch(data.pedidos) {
@@ -77,9 +90,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             msg = 'Se encontro 1 error en los pedidos procesados.';
                         break;
                         default:
-                            msg = 'Se encontraron ' + data.errores + ' en los pedidos procesados.';
+                            msg = 'Se encontraron ' + data.errores + ' errores en los pedidos procesados.';
                     }
-                    showMessage('error', msg);
+                    showMessage('error', msg, false);
                 }
 
                 $.pjax.reload({container:'#pedidos-grid'});
