@@ -11,6 +11,7 @@ use frontend\controllers\NumeradoresController;
  *
  * @property integer $est_id
  * @property string $est_nom
+ * @property string $est_type
  *
  * @property Reparto[] $repartos
  */
@@ -32,7 +33,8 @@ class Estados extends \yii\db\ActiveRecord
         return [
             [['est_nom'], 'required'],
             [['est_id'], 'integer'],
-            [['est_nom'], 'string', 'max' => 100]
+            [['est_nom'], 'string', 'max' => 100],
+            [['est_type'], 'string', 'max' => 3]
         ];
     }
 
@@ -44,6 +46,7 @@ class Estados extends \yii\db\ActiveRecord
         return [
             'est_id' => Yii::t('app', 'Codigo'),
             'est_nom' => Yii::t('app', 'Nombre'),
+            'est_type' => Yii::t('app', 'Tipo'),
         ];
     }
 
@@ -61,7 +64,7 @@ class Estados extends \yii\db\ActiveRecord
             $numerador = new NumeradoresController('EST');
             $this->est_id = $numerador->getNumerador();
             $connection = static::getDb();
-            $sql="INSERT INTO `estados` (`est_id`, `est_nom`) VALUES ("."'".$this->est_id."',"."'".$this->est_nom."')";
+            $sql="INSERT INTO `estados` (`est_id`, `est_nom`, `est_type`) VALUES ("."'".$this->est_id."',"."'".$this->est_nom."',"."'".$this->est_type."')";
             $command=$connection->createCommand($sql);
             $command->execute();
            

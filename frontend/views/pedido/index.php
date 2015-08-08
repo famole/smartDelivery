@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'ped_fechahora',
                 'ped_direccion',
                 'ped_observaciones',
-
+                
                 ['class' => 'yii\grid\ActionColumn',
                  'template' => '{update}',
                   'buttons' => [

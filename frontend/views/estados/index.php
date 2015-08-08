@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use frontend\enum\EnumStatusType;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EstadosSearch */
@@ -26,6 +27,28 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'est_nom',
+            
+            [
+                'attribute' => 'est_type',
+                'value' => function($model) {
+                    switch($model->est_type){
+                        case EnumStatusType::Entrega:
+                            return 'Entrega';
+                            break;
+                        case EnumStatusType::Pedido:
+                            return 'Pedido';
+                            break;
+                        case EnumStatusType::Reparto:
+                            return 'Reparto';
+                            break;
+                        case EnumStatusType::System:
+                            return 'Sistema';
+                            break;
+                        
+                    }
+               
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
