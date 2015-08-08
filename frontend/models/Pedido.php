@@ -99,6 +99,10 @@ class Pedido extends \yii\db\ActiveRecord
             return $rows > 0;
            
         } else {
+            $this->ped_error = 0;
+            $this->ped_errordesc = '';
+            $auxDate = strtotime($this->ped_fechahora);
+            $this->ped_fechahora = date('Y-m-d', $auxDate);
             return $this->update($runValidation, $attributeNames) !== false;
         }
     }

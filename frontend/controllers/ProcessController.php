@@ -172,7 +172,6 @@ class ProcessController extends SiteController{
     public function actionCreateEntrega($ped_id, $dir_id, $fecha, $orden, $pdef, $fechaHora, $errtype){
         
         $Entrega = new Entrega();
-        $Entrega->ent_orden = $orden;
         $Entrega->ped_id = $ped_id;
         $Entrega->dir_id = $dir_id;
         $Entrega->ent_fecha = $fecha;
@@ -189,19 +188,19 @@ class ProcessController extends SiteController{
     }
     
     private function checknull($pedido){
-        if($pedido->ped_direccion == ''){
+        if($pedido->ped_direccion == NULL){
             //Set Pedido Error dir null
             $pedToSave = Pedido::findOne($pedido->ped_id);
-            $pedToSave->ped_error = true;
+            $pedToSave->ped_error = 1;
             $pedToSave->ped_errordesc = EnumProcessError::dirEmpty;
             $pedToSave->save();
             return false;
         }
         
-        if($pedido->ped_fechahora == ''){
+        if($pedido->ped_fechahora == NULL){
             //Set Pedido Error fecha hora null
             $pedToSave = Pedido::findOne($pedido->ped_id);
-            $pedToSave->ped_error = true;
+            $pedToSave->ped_error = 1;
             $pedToSave->ped_errordesc = EnumProcessError::dateEmpty;
             $pedToSave->save();
             return false;

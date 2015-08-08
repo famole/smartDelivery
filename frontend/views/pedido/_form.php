@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\pedido */
@@ -18,8 +19,20 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'cli_id')->textInput() ?>
 
-    <?= $form->field($model, 'ped_fechahora')->textInput() ?>
-
+    <?= $form->field($model, 'ped_fechahora')->widget(DatePicker::classname(),[
+                      'name' => 'fecha', 
+                      'value' => date('d-M-Y', time()),
+                      'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                      'options' => ['placeholder' => 'Seleccionar Fecha'],
+                      'pluginOptions' => [
+                      'format' => 'dd-mm-yyyy',
+                      'size' => 'xs',
+                      'todayHighlight' => true,
+                      'autoclose'=>true
+                    ]
+                  ]);
+    ?>
+    
     <?= $form->field($model, 'ped_direccion')->textInput(['maxlength' => 500]) ?>
     
     <?= $form->field($model, 'ped_dep')->textInput(['maxlength' => 50]) ?>

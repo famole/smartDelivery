@@ -84,7 +84,7 @@ class PedidoController extends Controller
         $model = $this->findModel($ped_id, $cli_id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'ped_id' => $model->ped_id, 'cli_id' => $model->cli_id]);
+            return $this->actionIndex();
         } else {
             return $this->render('update', [
                 'model' => $model,

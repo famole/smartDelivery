@@ -42,7 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'ped_id',
                 'cli_id',
-                'ped_fechahora',
+                [
+                    'attribute' => 'ped_fechahora',
+                    'format' => ['date','dd-MM-Y H:i:s'],
+                ],
                 'ped_direccion',
                 'ped_observaciones',
                 
