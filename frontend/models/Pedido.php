@@ -50,8 +50,8 @@ class Pedido extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'ped_id' => Yii::t('app', 'ID'),
-            'cli_id' => Yii::t('app', 'Cliente ID'),
+            'ped_id' => Yii::t('app', 'Codigo'),
+            'cli_id' => Yii::t('app', 'Cliente Id'),
             'ped_fechahora' => Yii::t('app', 'Fecha'),
             'ped_direccion' => Yii::t('app', 'Dirección'),
             'ped_observaciones' => Yii::t('app', 'Observaciones'),
@@ -99,6 +99,10 @@ class Pedido extends \yii\db\ActiveRecord
             return $rows > 0;
            
         } else {
+            $this->ped_error = 0;
+            $this->ped_errordesc = '';
+            $auxDate = strtotime($this->ped_fechahora);
+            $this->ped_fechahora = date('Y-m-d', $auxDate);
             return $this->update($runValidation, $attributeNames) !== false;
         }
     }

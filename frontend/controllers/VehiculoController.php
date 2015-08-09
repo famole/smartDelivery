@@ -135,9 +135,9 @@ class VehiculoController extends Controller
     }
     
     public function actionListavehiculos(){
-        $vehiculos = Vehiculo::find(/*[
+        $vehiculos = Vehiculo::find([
             've_estado' => Vehiculo::ACTIVE,
-        ]*/)->all();
+        ])->all();
         
         $items = UtilHelper::createItemsForSideNav($vehiculos, EnumSideNav::Vehiculo);
         return $this->render('listavehiculos', ['items'=>$items]);

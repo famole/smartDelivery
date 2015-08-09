@@ -20,6 +20,7 @@ class EstadosSearch extends Estados
         return [
             [['est_id'], 'integer'],
             [['est_nom'], 'safe'],
+            [['est_type'], 'safe'],
         ];
     }
 
@@ -60,6 +61,8 @@ class EstadosSearch extends Estados
         ]);
 
         $query->andFilterWhere(['like', 'est_nom', $this->est_nom]);
+        
+        $query->andFilterWhere(['est_type' => $this->est_type]);
 
         return $dataProvider;
     }
@@ -68,4 +71,6 @@ class EstadosSearch extends Estados
         $Estado = Estados::findOne(['est_nom'=>$name]);
         return $Estado->est_id;
     }
+    
+    
 }

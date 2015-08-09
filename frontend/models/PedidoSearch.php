@@ -64,7 +64,9 @@ class PedidoSearch extends pedido
 
         $query->andFilterWhere(['like', 'ped_direccion', $this->ped_direccion])
             ->andFilterWhere(['like', 'ped_observaciones', $this->ped_observaciones]);
-
+        
+        $dataProvider->pagination->pageSize = 10;
+        
         return $dataProvider;
     }
 }
