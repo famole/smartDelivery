@@ -9,6 +9,7 @@ use frontend\models\Entrega;
 use frontend\models\Direccion;
 use frontend\models\Estados;
 use frontend\models\Vehiculo;
+use frontend\models\Personal;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
 use frontend\controllers\ProcessController;
@@ -84,6 +85,9 @@ class DiaController extends Controller{
             array_push($items, $item);
         }
         
+        //Personal disponible para el dia de hoy
+        
+        
          $entregasJson = json_encode($items);
         
          $SortableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
@@ -96,8 +100,12 @@ class DiaController extends Controller{
          
          $vehiculosJson =  JSON::encode($vehiculos);
          
+         $personal = new Personal();
+         $listaPersonal = $personal->getAvailablePersonalByDate('2015-08-07');
+         $personalJson = JSON::encode($listaPersonal);
+         
         // ProcessController::actionPointInZone();
-        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson]);
+        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson,'personalJson'=>$personalJson]);
         
     }
     

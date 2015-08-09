@@ -103,9 +103,9 @@
     
     Modal::begin([
         'header' => '<h4 class="modal-title">Personal disponible</h4>',
-        'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary']
+        'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()']
         ]);
-        echo $this->render('selectPersonal', ['vehiculosJson'=>$vehiculosJson]);
+        echo $this->render('selectPersonal', ['personalJson'=>$personalJson]);
 
     Modal::end();
 
@@ -131,7 +131,7 @@
     var listItems = <?php echo json_encode($SortableItems); ?>;
     var vehiculoId;
     var entregasZona;
-    var personal = new Array();
+    var selectedPersonal = new Array();
     
     for (i=0; i<listItems.length; i++){        
         var row = '<li data-key="'+ listItems[i].key +'"class="list-group-item " style="cursor: pointer;"> ☰ ' + listItems[i].content + '</li>';
@@ -193,6 +193,11 @@
             });
             
         });
+    }
+    
+    function VaciarPersonal(){
+        selectedPersonal = [];
+        
     }
     
    

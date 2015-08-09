@@ -11,6 +11,7 @@
             <th>Id</th>
             <th>Nombre</th>
             <th>Apellido</th>
+            <th>Telefono</th>
             <th>Seleccionar</th>
             
           </tr>
@@ -21,46 +22,35 @@
         </tbody>
 </table>
 
-<input type="text" id="out">
-
-<button type="button" class="btn btn-success" onclick="getSelectedPersonal()">Guardar</button>
+<button type="button" class="btn btn-success" onclick="getSelectedPersonal()" data-dismiss="modal">Guardar</button>
 
 <script>
     
-var vehiculos = eval(<?php echo $vehiculosJson?>);
-var vehiculo;    
+var personal = eval(<?php echo $personalJson?>);
+selectedPersonal =[];
     for (i=0; i<vehiculos.length; i++){
         
-        $('#personalTable tr:last').after('<tr><td id= "personalID">'+vehiculos[i].ve_id+'</td><td>'+vehiculos[i].ve_matricula+
-          '</td><td>'+vehiculos[i].ve_entregaslimite+'</td><td><input type="checkbox" name = "check"></td></tr>');
+        $('#personalTable tr:last').after('<tr><td id= "personalID">'+personal[i].per_id+'</td><td>'+personal[i].per_nom+
+          '</td><td>'+personal[i].per_priape+'</td><td>'+personal[i].per_tel+'</td><td><input type="checkbox" name = "check"></td></tr>');
         
     }
     
     $('td:nth-child(1),th:nth-child(1)').hide();
-    
-$('#personalTable tr').filter(':has(:checkbox:checked)').each(function() {
- $('#out').append($(this).index());
-});
+
+
   
 
-function getVehiculoId(){
-    var val;
-    $('#vehiculosTable').find('tr').click( function(){
-       var row;
-       row = ($(this).index());
-       val = $('#vehiculosTable tr:eq('+row+') td:eq(0)').text();
-       vehiculoId = val;
-  
-    });
-}
+
 function getSelectedPersonal(){
     $('#personalTable tr').filter(':has(:checkbox:checked)').each(function() {
         var row = ($(this).index());
         console.log(row);
-        val = $('#vehiculosTable tr:eq('+row+') td:eq(0)').text();
-        personal.push(val);
+        val = $('#personalTable tr:eq('+row+') td:eq(0)').text();
+        selectedPersonal.push(val);
+        console.log(selectedPersonal);
     
     });
+    
 
 }
     
