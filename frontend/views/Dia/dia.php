@@ -11,15 +11,10 @@
     use frontend\models\Direccion;
     use frontend\views\vehiculo\listavehiculos;
 
-
     $fecha = date("Y-m-d");
-   
-
-
-   
 ?>
 
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>   
 <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
 <!--<script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>-->
 <script type="text/javascript" src="js/OpenLayers.js"></script>
@@ -84,38 +79,46 @@
         
     </div>
     
+
     <div id="map" class="col-md-9 guide-content"><div id="popup" style ="with:100px"></div></div>
     
 </div>
 
-<button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Success</button>
-<?php
 
-Modal::begin([
-    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
-    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
-    ]);
-    $items = array();
-    echo $this->render('selectVehiculo', ['vehiculosJson'=>$vehiculosJson]);
-    //echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
-Modal::end();
+  <div class = "form-group">
+        <button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Generar reparto</button>
+        <?php
+
+        Modal::begin([
+            'header' => '<h4 class="modal-title">Vehículos disponibles</h4>',
+            'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar vehículo', 'class' => 'btn btn-primary']
+            ]);
+            echo $this->render('selectVehiculo', ['vehiculosJson'=>$vehiculosJson]);
+
+        Modal::end();
+        ?>
+  </div>
+
+<?php
+    
+    Modal::begin([
+        'header' => '<h4 class="modal-title">Personal disponible</h4>',
+        'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary']
+        ]);
+        echo $this->render('selectPersonal', ['vehiculosJson'=>$vehiculosJson]);
+
+    Modal::end();
 
 
 ?>
 
 
 
-<!--<div class="container">
-      
-     
-    <div id="map" class="map"></div>
 
-</div>   -->
-    
+
+
+
 <script type="text/javascript">
-    
-    // The transform funcion needs lat/long instead of long/lat
-        
     
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
@@ -123,20 +126,17 @@ Modal::end();
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     var vectors = new Array();
     var zpoints;
-    var entregasZona;
     var el = document.getElementById('entregaList');
     var sortable = Sortable.create(el);
     var listItems = <?php echo json_encode($SortableItems); ?>;
+    var vehiculoId;
+    var entregasZona;
+    var personal = new Array();
     
-    
-    console.log(listItems);
-    for (i=0; i<listItems.length; i++){
-        console.log("Entra al for");
-        var row = '<li data-key="'+ listItems[i].key +'" role="option" aria-grabbed="false" draggable="true">' + listItems[i].content + '</li>';
-        console.log(listItems[i].key);
+    for (i=0; i<listItems.length; i++){        
+        var row = '<li data-key="'+ listItems[i].key +'"class="list-group-item " style="cursor: pointer;"> ☰ ' + listItems[i].content + '</li>';
+        $('#entregaList').append(row);
         
-        //$('#entregaList').append(row);
-        console.log("sale del for");
     }
    
     for (indice = 0; indice < poligonos.length; ++indice) {
@@ -156,7 +156,6 @@ Modal::end();
         map.addLayer(pointLayer);
     
     } 
-    var entregasZona;
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel,
               function(feature, layer) {
@@ -167,7 +166,7 @@ Modal::end();
             entregasZona = zpoints;
             console.log(zpoints);
             
-            UpdateEntrega(zpoints);
+           // UpdateEntrega(zpoints);
         }
     });
     
@@ -176,18 +175,16 @@ Modal::end();
 
     function UpdateEntrega(entregasZona){
       var parms =JSON.stringify(entregasZona);  
-      $.get('index.php?r=dia/create-dia-reparto', {parms : parms}, function(data){  
+      var veId = JSON.stringify(vehiculoId);
+      $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId}, function(data){  
         console.log(data); 
         },"json ");
        console.log(entregasZona.length);  
         $('#MenuContainer').each(function(){
             $(this).find('li').each(function(){
-//                if (this.id != 'Todos'){
-                    $(this).closest('li').remove();                        
-//                }
+                $(this).closest('li').remove();                        
             });
-         
-            $('#entregaList').clear();
+        
             $('#entregaList').each(function(){
                 for(var i=0;i<entregasZona.length;i++){
                     var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
@@ -196,18 +193,7 @@ Modal::end();
             });
             
         });
-        
-//        $(this).find('ul').each(function(){
-//        
-//            for(var i=0;i<entregasZona.length;i++){
-//                var row = '<li id="' + entregasZona[i].ent_id + '>'+ entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
-//                $(this).append(row);
-//            }
-//        });
-        
     }
-    
-    
     
    
  </script>

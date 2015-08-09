@@ -60,6 +60,7 @@ class DiaController extends Controller{
         
         Yii::error($date);
         Yii::error($entregas);
+        Yii::error(json_encode($entregas));
         $items = (array) null;
         foreach($entregas as $entrega){
             
@@ -90,28 +91,27 @@ class DiaController extends Controller{
          //Vehiculos disponibles para el dia de hoy
          $vehiculos = Vehiculo::find()
         ->select('*')
-        ->where('ve_estado ='.Vehiculo::ACTIVE)
+        //->where('ve_estado ='.Vehiculo::ACTIVE)
         ->all();
          
-         $vehiculosJson =  json_encode($vehiculos);
-         
+         $vehiculosJson =  JSON::encode($vehiculos);
          
         // ProcessController::actionPointInZone();
         return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson]);
         
     }
     
-    public function actionCreateDiaReparto($parms){
+    public function actionCreateDiaReparto($parms,$veId){
         $Entrega = new Entrega();
         $test = 'Anda el ajax';
-        
+        $vehiculoId = parseInt($veId);
         $zpoints = json_decode($parms);
         $ent = $zpoints[0]->z_id;
         
-        $logfile = fopen('test.txt', 'w');
-        fwrite($logfile, "\nPedido - Direction> ".$ent);//.$zpoints);// . $zpoints[0]->ent_id);
-        fclose($logfile);
-        
+//        $logfile = fopen('test.txt', 'w');
+//        fwrite($logfile, "\nPedido - Direction> ".$veId);//.$zpoints);// . $zpoints[0]->ent_id);
+//        fclose($logfile);
+////        
         $Entrega->updateEntregaZona($zpoints);
        // Yii::error($decode);
         echo Json::encode($test);

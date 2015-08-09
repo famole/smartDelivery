@@ -334,7 +334,7 @@ function PointsInZone(entregas,vectors,map,feature){
                         var zp = {};
                         zp.z_id =  vectors[index].getSource().getFeatures()[0].get("Id");
                         zp.ent_id = pointLayer.getSource().getFeatures()[0].get('name');
-                        zp.ent_dir = pointLayer.getSource().getFeatures()[0].get('direccion')
+                        zp.ent_dir = pointLayer.getSource().getFeatures()[0].get('direccion');
                         
                         ret.push(zp);
 
