@@ -12,7 +12,11 @@ use frontend\models\Vehiculo;
 use frontend\models\Personal;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
+use frontend\models\Reparto;
+use frontend\models\RepartoEntrega;
 use frontend\controllers\ProcessController;
+use frontend\enum\EnumBaseStatus;
+use frontend\enum\EnumStatusType;
 use yii\helpers\Json;
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -30,7 +34,6 @@ class DiaController extends Controller{
      public function actionDia()
     {
         $date = date("Y-m-d");
-         
         $zonas= array();
         
         $nullId = 0;
@@ -101,7 +104,7 @@ class DiaController extends Controller{
          $vehiculosJson =  JSON::encode($vehiculos);
          
          $personal = new Personal();
-         $listaPersonal = $personal->getAvailablePersonalByDate('2015-08-07');
+         $listaPersonal = $personal->getAvailablePersonalByDate($date);
          $personalJson = JSON::encode($listaPersonal);
          
         // ProcessController::actionPointInZone();
@@ -110,17 +113,16 @@ class DiaController extends Controller{
     }
     
     public function actionCreateDiaReparto($parms,$veId){
-        $Entrega = new Entrega();
-        $test = 'Anda el ajax';
-        $vehiculoId = parseInt($veId);
         $zpoints = json_decode($parms);
-        $ent = $zpoints[0]->z_id;
+        $this->createEntrega($zpoints);
+        $repartoId = $this->createReparto($veId);
+        $this->createRepartoEntrega($zpoints,$repartoId);
+
+        $test = 'Anda el ajax';
         
-//        $logfile = fopen('test.txt', 'w');
-//        fwrite($logfile, "\nPedido - Direction> ".$veId);//.$zpoints);// . $zpoints[0]->ent_id);
-//        fclose($logfile);
-////        
-        $Entrega->updateEntregaZona($zpoints);
+    
+        
+        
        // Yii::error($decode);
         echo Json::encode($test);
         
@@ -128,5 +130,37 @@ class DiaController extends Controller{
         
     }
     
+    private function createEntrega($zpoints){
+        $Entrega = new Entrega();
+        
+        $Entrega->updateEntregaZona($zpoints);
+        
+    }
+    
+    private function createReparto($veId){
+        $reparto = new Reparto();
+        $vehiculoId = JSON::decode($veId);
+        $reparto->ve_id = $vehiculoId;
+        $estado = Estados::find()->where(['est_nom' => EnumBaseStatus::Preparado,'est_type' => EnumStatusType::System])->one(); 
+        $logfile = fopen('test.txt', 'w');
+        fwrite($logfile, "\EstadoID> ".$veId);//.$zpoints);// . $zpoints[0]->ent_id);
+        fclose($logfile);
+        $reparto->est_id = $estado->est_id;
+        $repartoId = $reparto->save();
+        
+        return $repartoId;
+        
+    }
+    
+    private function createRepartoEntrega($zpoints,$repartoId){
+        foreach($zpoints as $puntos){
+            $repartoEntrega = new RepartoEntrega();
+            $repartoEntrega->ent_id = $puntos->ent_id;
+            $repartoEntrega->rep_id = $repartoId;
+            $repartoEntrega->save();
+            
+        }
+        
+    }
     
 }

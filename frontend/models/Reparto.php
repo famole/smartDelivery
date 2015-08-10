@@ -1,14 +1,13 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
-
+use frontend\controllers\NumeradoresController;
 /**
  * This is the model class for table "reparto".
  *
  * @property integer $rep_id
- * @property integer $rep_nrepid
  * @property integer $ve_id
  * @property string $rep_fhini
  * @property string $rep_fhfin
@@ -39,7 +38,7 @@ class Reparto extends \yii\db\ActiveRecord
     {
         return [
             [['rep_id', 've_id'], 'required'],
-            [['rep_id', 'rep_nrepid', 've_id', 'est_id'], 'integer'],
+            [['rep_id', 've_id', 'est_id'], 'integer'],
             [['rep_fhini', 'rep_fhfin'], 'safe'],
             [['est_observacion'], 'string', 'max' => 1000]
         ];
@@ -52,7 +51,6 @@ class Reparto extends \yii\db\ActiveRecord
     {
         return [
             'rep_id' => Yii::t('app', 'Rep ID'),
-            'rep_nrepid' => Yii::t('app', 'Rep Nrepid'),
             've_id' => Yii::t('app', 'Ve ID'),
             'rep_fhini' => Yii::t('app', 'Rep Fhini'),
             'rep_fhfin' => Yii::t('app', 'Rep Fhfin'),
@@ -108,4 +106,34 @@ class Reparto extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Personal::className(), ['per_id' => 'per_id'])->viaTable('repartopersonal', ['rep_id' => 'rep_id']);
     }
+    
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if ($this->getIsNewRecord()) {
+            try{
+                $numerador = new NumeradoresController('REP');
+                $this->rep_id = $numerador->getNumerador();
+                $this-> rep_fhini = 'NULL';
+                $this->rep_fhfin = 'NULL';
+                $connection = static::getDb();
+                $sql="INSERT INTO reparto (rep_id, ve_id,rep_fhini,rep_fhfin,est_id,est_observacion) "
+                        ."VALUES('".$this->rep_id."','".$this->ve_id."',".$this->rep_fhini.",".$this->rep_fhfin.",'".$this->est_id."','".$this->est_observacion."')";
+                $command=$connection->createCommand($sql);
+                $rows = $command->execute();
+                if ($rows > 0){
+                    return $this->rep_id;
+                    
+                }else{
+                    return -1;
+                }          
+                
+            }catch(Exception $e){
+                return -1;
+            }
+            
+        } else {
+            return $this->update($runValidation, $attributeNames) !== false;
+        }
+            
+}
 }
