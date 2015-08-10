@@ -103,5 +103,30 @@ class Personal extends \yii\db\ActiveRecord
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
         }
+        
+    }
+    
+    public function getAvailablePersonalByDate($date){
+        $connection = static::getDb();
+        $transaction = $connection->beginTransaction();
+        $sql= "SELECT rp.per_id, p.per_nom,p.per_priape,p.per_tel FROM repartopersonal rp, personal p WHERE 
+        rp.rep_id NOT IN (SELECT DISTINCT(re.rep_id) FROM repartoentrega re, entrega e WHERE e.ent_fecha = '".$date."' AND e.ent_id = re.ent_id) 
+        AND rp.per_id = p.per_id";
+        $command=$connection->createCommand($sql);
+        $dataReader = $command->query();
+        $items = (array) null;
+        foreach($dataReader as $item){
+            Yii::Error($item['per_nom']);
+            $item = array(
+                    "per_id" => $item['per_id'],
+                    "per_nom" => $item['per_nom'],
+                    "per_priape" => $item['per_priape'],
+                    "per_tel" => $item['per_tel'],
+                      
+            );
+            array_push($items, $item);
+        }
+        return $items;
+        
     }
 }

@@ -79,37 +79,46 @@
         
     </div>
     
+
     <div id="map" class="col-md-9 guide-content"><div id="popup" style ="with:100px"></div></div>
     
 </div>
 
-<button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Success</button>
-//<?php
-//
-//Modal::begin([
-//    'header' => '<h4 class="modal-title">Detail View Demo</h4>',
-//    'toggleButton' => ['label' => '<i class="glyphicon glyphicon-th-list"></i> Detail View in Modal', 'class' => 'btn btn-primary']
-//]);
-//$items = array();
-//echo $this->render('..\vehiculo\listavehiculos', ['items'=>$items]);
-////echo Html::a('','http://localhost/SmartDelivery/frontend/web/index.php?r=vehiculo/listavehiculos');
-//Modal::end();
-//
-//
-//?>
 
+  <div class = "form-group">
+        <button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Generar reparto</button>
+        <?php
 
+        Modal::begin([
+            'header' => '<h4 class="modal-title">Vehículos disponibles</h4>',
+            'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar vehículo', 'class' => 'btn btn-primary']
+            ]);
+            echo $this->render('selectVehiculo', ['vehiculosJson'=>$vehiculosJson]);
 
-<!--<div class="container">
-      
-     
-    <div id="map" class="map"></div>
+        Modal::end();
+        ?>
+  </div>
 
-</div>   -->
- 
-<script type="text/javascript">
+<?php
     
+    Modal::begin([
+        'header' => '<h4 class="modal-title">Personal disponible</h4>',
+        'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()']
+        ]);
+        echo $this->render('selectPersonal', ['personalJson'=>$personalJson]);
 
+    Modal::end();
+
+
+?>
+
+
+
+
+
+
+
+<script type="text/javascript">
     
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
@@ -117,10 +126,12 @@
     var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     var vectors = new Array();
     var zpoints;
-    var entregasZona;
     var el = document.getElementById('entregaList');
     var sortable = Sortable.create(el);
     var listItems = <?php echo json_encode($SortableItems); ?>;
+    var vehiculoId;
+    var entregasZona;
+    var selectedPersonal = new Array();
     
     for (i=0; i<listItems.length; i++){        
         var row = '<li data-key="'+ listItems[i].key +'"class="list-group-item " style="cursor: pointer;"> ☰ ' + listItems[i].content + '</li>';
@@ -145,7 +156,6 @@
         map.addLayer(pointLayer);
     
     } 
-    var entregasZona;
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel,
               function(feature, layer) {
@@ -156,7 +166,7 @@
             entregasZona = zpoints;
             console.log(zpoints);
             
-            UpdateEntrega(zpoints);
+           // UpdateEntrega(zpoints);
         }
     });
     
@@ -165,15 +175,14 @@
 
     function UpdateEntrega(entregasZona){
       var parms =JSON.stringify(entregasZona);  
-      $.get('index.php?r=dia/create-dia-reparto', {parms : parms}, function(data){  
+      var veId = JSON.stringify(vehiculoId);
+      $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId}, function(data){  
         console.log(data); 
         },"json ");
        console.log(entregasZona.length);  
         $('#MenuContainer').each(function(){
             $(this).find('li').each(function(){
-//                if (this.id != 'Todos'){
-                    $(this).closest('li').remove();                        
-//                }
+                $(this).closest('li').remove();                        
             });
         
             $('#entregaList').each(function(){
@@ -184,6 +193,11 @@
             });
             
         });
+    }
+    
+    function VaciarPersonal(){
+        selectedPersonal = [];
+        
     }
     
    

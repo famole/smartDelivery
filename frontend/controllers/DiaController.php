@@ -8,6 +8,8 @@ use frontend\models\zona;
 use frontend\models\Entrega;
 use frontend\models\Direccion;
 use frontend\models\Estados;
+use frontend\models\Vehiculo;
+use frontend\models\Personal;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
 use frontend\controllers\ProcessController;
@@ -59,6 +61,7 @@ class DiaController extends Controller{
         
         Yii::error($date);
         Yii::error($entregas);
+        Yii::error(json_encode($entregas));
         $items = (array) null;
         foreach($entregas as $entrega){
             
@@ -82,26 +85,41 @@ class DiaController extends Controller{
             array_push($items, $item);
         }
         
+        //Personal disponible para el dia de hoy
+        
+        
          $entregasJson = json_encode($items);
         
          $SortableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
          
+         //Vehiculos disponibles para el dia de hoy
+         $vehiculos = Vehiculo::find()
+        ->select('*')
+        //->where('ve_estado ='.Vehiculo::ACTIVE)
+        ->all();
+         
+         $vehiculosJson =  JSON::encode($vehiculos);
+         
+         $personal = new Personal();
+         $listaPersonal = $personal->getAvailablePersonalByDate('2015-08-07');
+         $personalJson = JSON::encode($listaPersonal);
+         
         // ProcessController::actionPointInZone();
-        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems]);
+        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson,'personalJson'=>$personalJson]);
         
     }
     
-    public function actionCreateDiaReparto($parms){
+    public function actionCreateDiaReparto($parms,$veId){
         $Entrega = new Entrega();
         $test = 'Anda el ajax';
-        
+        $vehiculoId = parseInt($veId);
         $zpoints = json_decode($parms);
         $ent = $zpoints[0]->z_id;
         
-        $logfile = fopen('test.txt', 'w');
-        fwrite($logfile, "\nPedido - Direction> ".$ent);//.$zpoints);// . $zpoints[0]->ent_id);
-        fclose($logfile);
-        
+//        $logfile = fopen('test.txt', 'w');
+//        fwrite($logfile, "\nPedido - Direction> ".$veId);//.$zpoints);// . $zpoints[0]->ent_id);
+//        fclose($logfile);
+////        
         $Entrega->updateEntregaZona($zpoints);
        // Yii::error($decode);
         echo Json::encode($test);
