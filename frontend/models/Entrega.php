@@ -141,4 +141,12 @@ class Entrega extends \yii\db\ActiveRecord
         
         
     }
+    
+    public function getZona(){
+        return $this->hasOne(Zona::className(), ['z_id' => 'z_id']);
+    }
+    
+    public function getEstados(){
+        return $this->hasOne(Estados::className(), ['est_id'=>'est_id']);
+    }
 }
