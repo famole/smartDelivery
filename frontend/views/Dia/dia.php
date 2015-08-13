@@ -113,11 +113,6 @@
 ?>
 
 
-
-
-
-
-
 <script type="text/javascript">
     
     var indice;
@@ -176,6 +171,7 @@
     function UpdateEntrega(entregasZona){
       var parms =JSON.stringify(entregasZona);  
       var veId = JSON.stringify(vehiculoId);
+      console.log("VehiculoId:" + veId);
       $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId}, function(data){  
         console.log(data); 
         },"json ");
