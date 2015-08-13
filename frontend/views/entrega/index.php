@@ -12,6 +12,9 @@ use dosamigos\datepicker\DatePicker;
 $this->title = 'Entregas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> 
+
+
 <div class="entrega-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -42,24 +45,30 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                   
                 ],
-                //'ent_pendefinir',
                 'te_id',
                 [
                     'attribute' => 'estado',
-                    'value' => 'estados.est_nom'
+                    'value' => function($model){
+                        if($model->ent_pendefinir == 1){
+                            return $model->ent_errorDesc;
+                        }else{
+                            return $model->estados->est_nom;
+                        }
+                    }
+                ],
+                [
+                    'attribute' => '',
+                    'format' => 'raw',
+                    'value' => function ($model) {  
+                        if($model->ent_pendefinir == 1){
+                            return Html::a('<span class="glyphicon glyphicon-exclamation-sign" style = "cursor: pointer;"></span>', 'index.php?r=entrega/set-address&id=' . $model->ent_id);
+                        }else{
+                            return Html::a('<span id="'. $model->ent_id .'" class="glyphicon glyphicon-eye-open" style = "cursor: pointer;"></span>', $url);                        
+                        }
+
+                    },
                 ],
 
-                ['class' => 'yii\grid\ActionColumn',
-                 'template' => '{view}{update}{delete}',
-                  'buttons' => [
-                    'update' => function ($url,$model) {
-                        if($model->ent_pendefinir == 1){
-                            return Html::a('<span class="glyphicon glyphicon-exclamation-sign"></span>', $url);
-                        }else{
-                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url);
-                        }
-                    }],
-                ],
             ],
         ]); ?>
     <?php Pjax::end()?>

@@ -59,7 +59,7 @@ class ProcessController extends SiteController{
                         }    
                     }
 
-                    $dirToNominatim = str_replace(' ', ',', $dirToResolve);
+                    $dirToNominatim = str_replace(' ', '+', $dirToResolve);
                     //Armo url para consultar a Nominatim
                     
                     
@@ -69,17 +69,18 @@ class ProcessController extends SiteController{
                     fwrite($logfile, "\nPedido - Direction to Nominatim> " . $dirToNominatim);
                     //return $dirToNominatim;
                     $results = UtilHelper::dirToLongLat($dirToNominatim);
-                    $lat = $results["lat"];
-                    $long = $results["long"];
-                    
+                    $lat = $results[0]["lat"];
+                    $long = $results[0]["long"];
+                    $count = count($results);
+                    fwrite($logfile, "\nPedido - Count Dir> " . $count);
                     fwrite($logfile, "\nPedido - Result Nominatim> " . $dirToNominatim);
-                    if($results["count"] > 1){
+                    if($count > 1){
                         //Existe mas de un resultado para la direccion buscada
                         $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, $pedido->ped_fechahora, EnumProcessError::manyDir);
                         //Seteo pedido como procesado
                         $this->actionSetPedidoAsProcessed($pedido->ped_id);
                         $error+=1;
-                    }elseif($results["count"] == 0){
+                    }elseif($count == 0){
                         //No se resuelve la direccion
                         $this->actionCreateEntrega($pedido->ped_id, 0, $fecha, $orden, 1, $pedido->ped_fechahora, EnumProcessError::noDir);
                         //Seteo pedido como procesado
@@ -99,10 +100,8 @@ class ProcessController extends SiteController{
                     }     
                 }else{
                     //Existe direccion resuelta, chequear relacion con cliente y crear Entrega
-                    if (!$this->actionExistCliDir($pedido->cli_id, $dir_id)){
-                        //Crea relacion
-                        $this->actionSetCliDir($pedido->cli_id, $dir_id);
-                    }
+                    $this->actionExistCliDir($pedido->cli_id, $dir_id);
+                    
                     fwrite($logfile, "\nPedido - Existe dir y crea entrega.");
                     //Crear Entrega
                     $this->actionCreateEntrega($pedido->ped_id, $dir_id, $fecha, $orden, 0, $pedido->ped_fechahora, '');
@@ -166,7 +165,14 @@ class ProcessController extends SiteController{
     }
     
     public function actionExistCliDir($cli, $dir){
-        return Clientedireccion::findOne(['cli_id' => $cli, 'dir_id' => $dir]) !== null;
+        $clienteDireccion = Clientedireccion::findOne($cli);
+        if ($clienteDireccion !== null){
+            $clienteDireccion->dir_id = $dir;
+            $clienteDireccion->save();
+        }else{
+            //Crea relacion
+            $this->actionSetCliDir($cli, $dir);
+        }
     }
     
     public function actionCreateEntrega($ped_id, $dir_id, $fecha, $orden, $pdef, $fechaHora, $errtype){

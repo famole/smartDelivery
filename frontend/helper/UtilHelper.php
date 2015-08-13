@@ -4,6 +4,9 @@ namespace frontend\helper;
 use frontend\controllers\ParametrosController;
 use frontend\enum\EnumSideNav;
 
+use frontend\models\Pedido;
+use frontend\models\DireccionReplacements;
+
 use Yii;
 /**
 * Clase UtilHelper, en esta clase se definiran metodos utiles a utilizar en todo el sistema.
@@ -29,14 +32,20 @@ class UtilHelper{
         
         $jsonDecoded = json_decode($json, true);
         $results = count($jsonDecoded);
-        $lat = $jsonDecoded[0]['lat'];
-        $long = $jsonDecoded[0]['lon'];
+        $result = array();
+        for($i=0;$i<$results;$i++){
+            $lat = $jsonDecoded[$i]['lat'];
+            $long = $jsonDecoded[$i]['lon'];
+            $displayName = $jsonDecoded[$i]['display_name'];
+            array_push($result, array(
+                "lat" => $lat,
+                "long" => $long,
+                "display_name" => $displayName
+            ));
+        }
         
-        return $result = array(
-            "lat" => $lat,
-            "long" => $long,
-            "count" => $results
-        );
+        return $result;
+
     }
     
     /**
@@ -83,7 +92,19 @@ class UtilHelper{
                     array_push($items, $item);
                 }
                 break;
-            
+            case EnumSideNav::Direccion:
+                $items = array();
+                $lenght = count($list);
+                for($i=0; $i<$lenght;$i++){
+                    $item = array(
+                           "url" => "#",
+                           "label" => $list[$i]['display_name'],
+                           "icon" => "map-marker",
+                           "options" => ["id" => $i],
+                        );
+                    array_push($items, $item);
+                }
+                break;
             case EnumSideNav::Vehiculo:
                  $items = array(array(
                    "url" => "#",
@@ -104,6 +125,35 @@ class UtilHelper{
         }
         
         return $items;
+    }
+    
+    public static function setDirToNominatim($dir, $state){
+        $replacements = DireccionReplacements::find()->all();
+        $dirToResolve = $dir;
+
+        //Recorro replacements y sustituyo.
+        foreach ($replacements as $replacement){
+            switch($replacement->dr_type){
+                case EnumReplacementType::replacement:
+                    $dirToResolve = str_replace($replacement->dr_str, $replacement->dr_value, $dirToResolve);                                                
+                case EnumReplacementType::ignore:
+                    $tmpDir = explode($replacement->dr_str, $dirToResolve);
+                    $dirToResolve = $tmpDir[0];
+                case EnumReplacementType::regEx:
+                    $dirToResolve = preg_replace($replacement->dr_str, $replacement->dr_value, $dirToResolve);
+            }    
+        }
+
+        $dirToNominatim = str_replace(' ', '+', $dirToResolve);
+        //Armo url para consultar a Nominatim
+
+
+        if($state !== '') $dirToNominatim .= '&state='.urlencode($state);    
+        $logfile = fopen('test.txt', 'w');
+        $dirToNominatim .= '&countrycodes=UY';
+        fwrite($logfile, "\nUTILHELPER - Direction to Nominatim> " . $dirToNominatim);
+        return $dirToNominatim;
+        
     }
     
     

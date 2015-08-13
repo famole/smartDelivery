@@ -5,4 +5,5 @@ abstract class EnumSideNav
 {
     const Vehiculo = 'VE';
     const Entrega = 'ENT';
+    const Direccion = 'DIR';
 }

@@ -5,9 +5,12 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Entrega;
 use frontend\models\EntregaSearch;
+use frontend\models\Pedido;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use frontend\helper\UtilHelper;
+use yii\helpers\Json;
 
 /**
  * EntregaController implements the CRUD actions for Entrega model.
@@ -118,4 +121,32 @@ class EntregaController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    public function actionGetErrors($id){
+        if (($entrega = Entrega::findOne($id)) !== null) {
+            if (($pedido = Pedido::findOne($entrega->ped_id)) !== null) {
+            
+                $ditToNominatim = UtilHelper::setDirToNominatim($pedido->ped_direccion, $pedido->ped_dep);
+                $results = UtilHelper::dirToLongLat($ditToNominatim);
+                return Json::encode($results);
+            }
+            
+        }
+        return null;
+    }
+    
+    public function actionSetAddress($id){
+        if (($entrega = Entrega::findOne($id)) !== null) {
+            if (($pedido = Pedido::findOne($entrega->ped_id)) !== null) {
+            
+                $ditToNominatim = UtilHelper::setDirToNominatim($pedido->ped_direccion, $pedido->ped_dep);
+                $results = UtilHelper::dirToLongLat($ditToNominatim);
+                $items = UtilHelper::createItemsForSideNav($results, 'DIR');
+
+            }
+            
+        }
+        return $this->render('selectaddress', ['address'=>$results, 'items'=>$items]);
+    }
+    
 }

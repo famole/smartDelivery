@@ -134,6 +134,8 @@ function createMap(lat, long, pzoom, ptarget){
     var map = new ol.Map({
         layers: [raster],
         target: ptarget,
+        maxResolution : 'auto',
+        minResolution : 'auto',
         projection: new OpenLayers.Projection("EPSG:900913"),//EPSG:900913
         view: new ol.View({
           center: [lat, long],
@@ -144,6 +146,24 @@ function createMap(lat, long, pzoom, ptarget){
     return map;
 }
 
+function createNiceMap(lat, lon, pzoom, ptarget){
+    var rasterLayer = new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) });
+    var source = new ol.source.Vector();
+    var vectorLayer = new ol.layer.Vector({	source:source });
+    var wkt = new ol.format.WKT();
+
+    var map = new ol.Map({
+    target: ptarget,
+    controls: ol.control.defaults().extend([ new ol.control.ScaleLine({ units:'metric' }) ]),
+    layers: [ rasterLayer, vectorLayer ],
+        view: new ol.View({
+            center: [lat,lon],
+            zoom: pzoom
+        })
+    });
+    
+    return map;
+}
 function createLayer(zona){
     var format = new ol.format.WKT();
     var feature = format.readFeature(zona.wkt);
@@ -173,6 +193,10 @@ function addLayer(map,layer){
     map.addLayer(layer);
     
   }
+  
+function displayMap(map){
+    return map.display();
+}
   
  function dibujarIcono(lat,long,entrega){
     
@@ -228,7 +252,7 @@ function addLayer(map,layer){
  
  function popup(map) {
      
-     //********Resaltar zona que se selecciona*****************************************
+     //******** Resaltar zona que se selecciona *****************************************
      
      var selectAltClick = new ol.interaction.Select({
         condition: function(mapBrowserEvent) {
