@@ -2,17 +2,11 @@
 <?php
 use kartik\sidenav\SideNav;
 $this->title = 'Seleccionar Direccion';
-$this->registerJSFile("https://code.jquery.com/jquery-1.11.2.min.js");
-$this->registerJSFile("http://openlayers.org/en/v3.0.0/build/ol.js");
-$this->registerJSFile("js/OpenLayers.js");
-$this->registerJSFile("js/mapHelper.js");
-use yii\helpers\Json;
-
-
 ?>
 <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/OpenLayers.js"></script>
 <script src="js/mapHelper.js" type="text/javascript"></script>
  
 <style>
@@ -44,15 +38,20 @@ use yii\helpers\Json;
 </div>
 
 <script>
-    var map=createNiceMap(-6252731.917154272,-4150822.2589118066,14,'map');
+    var map=createMap(-6252731.917154272,-4150822.2589118066,14,'map');
     $(document).ready(function(){
        var jsonList = <?php echo $address;?>;
        
        $("li").click(function(){
-           var listId=this.id;
-           for(i=0;i<2;i++){
-                alert(jsonList[i]);
-            }
+            var listId=this.id;
+            //alert(jsonList[listId]["display_name"]);
+            var point = new OpenLayers.LonLat(jsonList[listId]["long"],jsonList[listId]["lat"]); 
+            point.transform('EPSG:4326','EPSG:3857');
+            console.log(point.lat);
+            console.log(point.lon);
+            var pointLayer = dibujarIcono(point.lon,point.lat,'');
+            console.log(pointLayer);
+            map.addLayer(pointLayer);
        }) ;
     });
 </script>

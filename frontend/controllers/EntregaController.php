@@ -146,7 +146,8 @@ class EntregaController extends Controller
             }
             
         }
-        return $this->render('selectaddress', ['address'=>$results, 'items'=>$items]);
+        return $this->render('selectaddress', ['address'=>Json::encode($results), 'items'=>$items]);
     }
     
+ 
 }
