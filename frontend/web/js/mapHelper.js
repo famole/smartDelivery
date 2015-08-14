@@ -198,6 +198,41 @@ function displayMap(map){
     return map.display();
 }
   
+  function dibujarIconoSimple(lat,long){
+    var iconFeature = new ol.Feature({
+        geometry: new ol.geom.Point([lat,long]),
+//        geometry:new ol.geom.Point(ol.proj.transform([lat, long], 'EPSG:3857',     
+//        'EPSG:4326')),
+        name: 'test',
+        
+        population: 4000,
+        rainfall: 500
+      });
+      var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon( ({
+        anchor: [0.5, 10],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        opacity: 0.75,
+        src: 'images/icon2.png'
+      }))
+      });
+      
+    iconFeature.setStyle(iconStyle);
+    //iconFeature.getGeometry().transform('EPSG:4326','EPSG:900913')
+    var vectorSource = new ol.source.Vector({
+      features: [iconFeature]
+    });
+
+    var vectorLayer = new ol.layer.Vector({
+      source: vectorSource
+    });
+     
+    
+     
+     return vectorLayer;
+  } 
+  
  function dibujarIcono(lat,long,entrega){
     
      var iconFeature = new ol.Feature({

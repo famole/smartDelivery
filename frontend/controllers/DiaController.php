@@ -14,6 +14,7 @@ use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
 use frontend\models\Reparto;
 use frontend\models\RepartoEntrega;
+use frontend\models\RepartoPersonal;
 use frontend\controllers\ProcessController;
 use frontend\enum\EnumBaseStatus;
 use frontend\enum\EnumStatusType;
@@ -31,11 +32,36 @@ class DiaController extends Controller{
     //put your code here
     
     
-     public function actionDia()
+     public function actionDia($fromDia,$date)
     {
-        $date = date("Y-m-d");
-        $zonas= array();
         
+    
+            if($fromDia == 1){
+                $fecha = date("Y-m-d");
+
+            }
+            else{
+                 //$fromDia= 0;
+                  //$date= strtotime('2015-08-11');
+                  
+                $fecha = date_create($date);            
+               $fecha = date_format($fecha, 'Y-m-d');
+               
+                   Yii::error("Holaaaaaaaaaa");
+                  Yii::error($fecha);
+
+            }
+
+           return $this->actionReloadMap($fecha,$fromDia);
+         
+        
+    }
+    
+   
+    
+    public function actionReloadMap($date,$fromDia){
+        
+        $zonas= array();
         $nullId = 0;
         $rows = Zona::find()
         ->select('*')
@@ -108,18 +134,60 @@ class DiaController extends Controller{
          $personalJson = JSON::encode($listaPersonal);
          
         // ProcessController::actionPointInZone();
-        return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson,'personalJson'=>$personalJson]);
+        
+            return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson,'personalJson'=>$personalJson]);
+         
+         
+//         }else {
+//             return $this->redirect(['dia','fromDia'=>$fromDia,'redirected'=>1,'zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson,'personalJson'=>$personalJson]);
+//             
+//         }    
+        
         
     }
     
-    public function actionCreateDiaReparto($parms,$veId){
+    public function actionCreateDiaReparto($parms,$veId,$personalIds,$ordenEntregas){
         $zpoints = json_decode($parms);
-        $this->createEntrega($zpoints);
-        $repartoId = $this->createReparto($veId);
-        $this->createRepartoEntrega($zpoints,$repartoId);
-
-        $test = 'Anda el ajax';
-        
+        $result = array();        
+        $test = 'hola';
+        $ordenes = JSON::decode($ordenEntregas);
+        $connection = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        try{
+           $result = $this->updateEntrega($zpoints);
+           if ($result["error"] == 0){
+                $result = $this->createReparto($veId);
+                if ($result["error"] == 0){
+                    $repId = $result["rep_id"];
+                    $result = $this->createRepartoEntrega($zpoints,$repId,$ordenes);
+                    if ($result["error"] == 0){
+                       $result = $this->createRepartoPersonal($personalIds,$repId);
+                        if ($result["error"] == 0){
+                            $test = 'Anda el ajax';
+                            $transaction->commit(); 
+                         }
+                         else{
+                             $transaction->rollBack();
+                             
+                         }
+                    }
+                    else{
+                        $transaction->rollBack();
+                        
+                    }
+                }
+                else{
+                    $transaction->rollBack();
+                
+                }
+           }
+           else{
+               $transaction->rollBack();
+               
+           } 
+        }catch (Exception $e) {
+            $transaction->rollBack();
+        }
     
         
         
@@ -130,14 +198,15 @@ class DiaController extends Controller{
         
     }
     
-    private function createEntrega($zpoints){
+    private function updateEntrega($zpoints){
         $Entrega = new Entrega();
         
-        $Entrega->updateEntregaZona($zpoints);
+        return $Entrega->updateEntregaZona($zpoints);
         
     }
     
     private function createReparto($veId){
+        
         $reparto = new Reparto();
         $vehiculoId = JSON::decode($veId);
         $reparto->ve_id = $vehiculoId;
@@ -146,20 +215,61 @@ class DiaController extends Controller{
         fwrite($logfile, "\EstadoID> ".$veId);//.$zpoints);// . $zpoints[0]->ent_id);
         fclose($logfile);
         $reparto->est_id = $estado->est_id;
-        $repartoId = $reparto->save();
-        
-        return $repartoId;
+                
+        return $reparto->save();
         
     }
     
-    private function createRepartoEntrega($zpoints,$repartoId){
+    private function createRepartoEntrega($zpoints,$repartoId,$ordenes){
+        $ok = true;
+        $ret = array();
         foreach($zpoints as $puntos){
             $repartoEntrega = new RepartoEntrega();
             $repartoEntrega->ent_id = $puntos->ent_id;
+            $orden;
+            for($i = 0; i < count($ordenes); $i++){
+                if($ordenes[$i] == $repartoEntrega->ent_id ){
+                    $orden = $i; 
+                    break;
+                }                
+            }
+            $repartoEntrega->re_orden = $orden;
             $repartoEntrega->rep_id = $repartoId;
-            $repartoEntrega->save();
+            $ok = $repartoEntrega->save();
+            if ($ok == FALSE){
+                $ret['error'] = 1;
+                $ret["msg"] = 'Error guardando Reparto-Entrega';
+                break;                
+            }            
+        }
+        if ($ok == TRUE){
+            $ret['error'] = 0;
             
         }
+        return $ret;
+        
+    }
+    
+    private function createRepartoPersonal($personalIds,$repartoId){
+        $ok = TRUE;
+        $ret = array();
+        $selectedPersonal = JSON::decode($personalIds);
+        foreach($selectedPersonal as $personal){
+            $repartoPersonal = new RepartoPersonal();
+            $repartoPersonal->rep_id = $repartoId;
+            $repartoPersonal->per_id = $personal;
+            $ok = $repartoPersonal->save();
+            if ($ok == FALSE){
+                $ret['error'] = 1;
+                $ret["msg"] = 'Error guardando Reparto-Personal';
+                break;                
+            } 
+        }
+        if ($ok == TRUE){
+            $ret['error'] = 0;
+            
+        }
+        return $ret;
         
     }
     

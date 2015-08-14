@@ -123,7 +123,7 @@ class Entrega extends \yii\db\ActiveRecord
     }
     
     public function updateEntregaZona($zpoints){
-        
+        $ret  = array();
         $connection = static::getDb();
         $transaction = $connection->beginTransaction();
         try{
@@ -135,8 +135,13 @@ class Entrega extends \yii\db\ActiveRecord
                              
             }
             $transaction->commit();  
+            $ret["error"] = 0;                    
+            return $ret;
         }catch (Exception $e) {
             $transaction->rollBack();
+            $ret["error"] = 1;
+            $ret["msg"] = 'Error actualizando la zona de las entregas';
+            return $ret;
         }
         
         

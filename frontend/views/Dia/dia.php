@@ -10,8 +10,11 @@
     use yii\widgets\DetailView; 
     use frontend\models\Direccion;
     use frontend\views\vehiculo\listavehiculos;
+ 
 
     $fecha = date("Y-m-d");
+//    $url = Yii::$app->request->baseUrl();
+//    Yii::Error($url);
 ?>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>   
@@ -52,14 +55,14 @@
 
                   echo DatePicker::widget([
                       'name' => 'fecha', 
-                      'value' => date('d-M-Y', time()),
+                      'value' => date('d-m-Y'),
                       'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                      'pluginEvents' => ["changeDate" => "function(e) {  console.log(e.date); }",],
-                      'options' => ['placeholder' => 'Seleccionar Fecha'],
+                      'pluginEvents' => ["changeDate" => "function(e) {  UpdateDia(e.currentTarget.childNodes[0].value); }",],
+                      'options' => array('placeholder' => 'Seleccionar Fecha','dateFormat' => 'dd-m-yyyy',),
                       'pluginOptions' => [
-                      'format' => 'dd-M-yyyy',
+                      'format' => 'dd-mm-yyyy',
                       'size' => 'xs',
-                      'todayHighlight' => true,
+                      'todayHighlight' => false,
                       'autoclose'=>true
                     ]
                   ]);
@@ -86,7 +89,8 @@
 
 
   <div class = "form-group">
-        <button type="button" class="btn btn-success" onclick="UpdateEntrega(entregasZona)">Generar reparto</button>
+        <button type="button" class="btn btn-success" onclick="CreateReparto(entregasZona)">Generar reparto</button>
+        <button type="button" class="btn btn-success" onclick="test()">Test</button>
         <?php
 
         Modal::begin([
@@ -103,7 +107,7 @@
     
     Modal::begin([
         'header' => '<h4 class="modal-title">Personal disponible</h4>',
-        'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()']
+        'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()'],
         ]);
         echo $this->render('selectPersonal', ['personalJson'=>$personalJson]);
 
@@ -111,6 +115,8 @@
 
 
 ?>
+
+
 
 
 <script type="text/javascript">
@@ -127,6 +133,7 @@
     var vehiculoId;
     var entregasZona;
     var selectedPersonal = new Array();
+    var ordenEntregas;
     
     for (i=0; i<listItems.length; i++){        
         var row = '<li data-key="'+ listItems[i].key +'"class="list-group-item " style="cursor: pointer;"> ☰ ' + listItems[i].content + '</li>';
@@ -147,10 +154,13 @@
         var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
         var point2 = point;
         point2.transform('EPSG:4326','EPSG:3857');
+        console.log(point2.lon);
+        console.log(point2.lat);
         var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice]);
         map.addLayer(pointLayer);
     
     } 
+       
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel,
               function(feature, layer) {
@@ -160,19 +170,39 @@
             zpoints = PointsInZone(entregas,vectors,map,feature);
             entregasZona = zpoints;
             console.log(zpoints);
-            
-           // UpdateEntrega(zpoints);
         }
     });
     
     popup(map);
     
-
-    function UpdateEntrega(entregasZona){
+    function test(){
+        var ordenes = new Array();
+        $('#MenuContainer').each(function(){
+            $(this).find('li').each(function(e){
+                ordenes.push($(this).data("key"));
+                
+            });
+        });
+        console.log(ordenes);
+        
+    }
+    function CreateReparto(entregasZona){
       var parms =JSON.stringify(entregasZona);  
       var veId = JSON.stringify(vehiculoId);
+      var personalIds = JSON.stringify(selectedPersonal);
       console.log("VehiculoId:" + veId);
-      $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId}, function(data){  
+      
+      //Obtener los ordenes para las entregas.
+      var ordenes = new Array();
+        $('#MenuContainer').each(function(){
+            $(this).find('li').each(function(e){
+                ordenes.push($(this).data("key"));
+                
+            });
+        });
+       ordenEntregas = JSON.stringify(ordenes);
+        
+      $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId,personalIds,ordenEntregas}, function(data){  
         console.log(data); 
         },"json ");
        console.log(entregasZona.length);  
@@ -191,10 +221,27 @@
         });
     }
     
+    function UpdateDia(date){
+        //$('#map').empty();
+        
+        var hola = 0;
+        var fromDia = 0;
+        var redirected = 0;
+        var date2 = new Date(date);
+//        var dateString = date2.format("yyyy-md-dd");
+        console.log(date);
+        $(location).attr('href', 'http://localhost/SmartDelivery/frontend/web/index.php?r=dia/dia&fromDia=0&date='+date);
+//        $.get('index.php?r=dia/dia', {fromDia : fromDia} ,function(data){  
+//            console.log(data); 
+//        });
+    }
+    
     function VaciarPersonal(){
         selectedPersonal = [];
         
     }
+   $ ("#modal").removeData ('modal');
+
     
    
  </script>
