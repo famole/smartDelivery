@@ -109,6 +109,7 @@ class Reparto extends \yii\db\ActiveRecord
     
     public function save($runValidation = true, $attributeNames = null)
     {
+        $ret = array();
         if ($this->getIsNewRecord()) {
             try{
                 $numerador = new NumeradoresController('REP');
@@ -121,14 +122,27 @@ class Reparto extends \yii\db\ActiveRecord
                 $command=$connection->createCommand($sql);
                 $rows = $command->execute();
                 if ($rows > 0){
-                    return $this->rep_id;
+                    $ret["rep_id"] = $this->rep_id;
+                    $ret["rows"] = $rows;
+                    $ret["error"] = 0;
+                    $ret["msg"] = 'Ok';
+                    
+                    return $ret;
                     
                 }else{
-                    return -1;
+                    $ret["rows"] = $rows;
+                    $ret["rep_id"]   = -1;
+                    $ret["error"] = 1;
+                    $ret["msg"] = 'Error creando el reparto';
+                    return $ret;
                 }          
                 
             }catch(Exception $e){
-                return -1;
+                $ret["rows"] = -1;
+                $ret["rep_id"]   = -1;
+                $ret["error"] = 1;
+                $ret["msg"] = 'Error creando el reparto';
+                return $ret;
             }
             
         } else {

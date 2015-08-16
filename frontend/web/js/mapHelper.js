@@ -198,16 +198,29 @@ function displayMap(map){
     return map.display();
 }
   
+
  function dibujarIcono(lat,long,entrega,icontype){
 
     var iconFeature = new ol.Feature({
         geometry: new ol.geom.Point([lat,long]),
-        name: entrega.entrega,
+        name: entrega.entrega
 
-       //population: 4000,
-       //rainfall: 500
+        //population: 4000,
+        //rainfall: 500
     });
-
+    
+    var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon( ({
+            anchor: [0.5, 10],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            src: icontype
+        }))
+    });
+      
+    iconFeature.setStyle(iconStyle);
+    
     iconFeature.set("direccion",entrega.direccion);
     iconFeature.set("estado",entrega.estado);
     var estado;
@@ -223,18 +236,6 @@ function displayMap(map){
             +"<br>"+ "<b>Estado</b>"+": "+estado;
     iconFeature.set("content",content);
 
-    var iconStyle = new ol.style.Style({
-        image: new ol.style.Icon( ({
-            anchor: [0.5, 10],
-            anchorXUnits: 'fraction',
-            anchorYUnits: 'pixels',
-            opacity: 0.75,
-            src: icontype
-        }))
-    });
-      
-    iconFeature.setStyle(iconStyle);
-    //iconFeature.getGeometry().transform('EPSG:4326','EPSG:900913')
     var vectorSource = new ol.source.Vector({
       features: [iconFeature]
     });
@@ -242,9 +243,11 @@ function displayMap(map){
     var vectorLayer = new ol.layer.Vector({
       source: vectorSource
     });
-      
-    return vectorLayer;
- } 
+     
+    
+     
+     return vectorLayer;
+  } 
  
  function popup(map) {
      
