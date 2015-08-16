@@ -198,28 +198,44 @@ function displayMap(map){
     return map.display();
 }
   
-  function dibujarIconoSimple(lat,long){
+
+ function dibujarIcono(lat,long,entrega,icontype){
+
     var iconFeature = new ol.Feature({
         geometry: new ol.geom.Point([lat,long]),
-//        geometry:new ol.geom.Point(ol.proj.transform([lat, long], 'EPSG:3857',     
-//        'EPSG:4326')),
-        name: 'test',
-        
-        population: 4000,
-        rainfall: 500
-      });
-      var iconStyle = new ol.style.Style({
+        name: entrega.entrega
+
+        //population: 4000,
+        //rainfall: 500
+    });
+    
+    var iconStyle = new ol.style.Style({
         image: new ol.style.Icon( ({
-        anchor: [0.5, 10],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'pixels',
-        opacity: 0.75,
-        src: 'images/icon2.png'
-      }))
-      });
+            anchor: [0.5, 10],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            src: icontype
+        }))
+    });
       
     iconFeature.setStyle(iconStyle);
-    //iconFeature.getGeometry().transform('EPSG:4326','EPSG:900913')
+    
+    iconFeature.set("direccion",entrega.direccion);
+    iconFeature.set("estado",entrega.estado);
+    var estado;
+    switch (entrega.estado){
+      case "Pendiente":
+          estado = "<code><b>"+iconFeature.get('estado') + "</b></code>" ;
+          break;
+      case "Entregado":
+          estado = "<font color='green'>"+"<b>"+iconFeature.get('estado')+"</b></font>";
+          break;
+    }
+    var content = "<b>Cliente</b>"+": "+iconFeature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ iconFeature.get('direccion')
+            +"<br>"+ "<b>Estado</b>"+": "+estado;
+    iconFeature.set("content",content);
+
     var vectorSource = new ol.source.Vector({
       features: [iconFeature]
     });
@@ -232,58 +248,6 @@ function displayMap(map){
      
      return vectorLayer;
   } 
-  
- function dibujarIcono(lat,long,entrega){
-    
-     var iconFeature = new ol.Feature({
-        geometry: new ol.geom.Point([lat,long]),
-//        geometry:new ol.geom.Point(ol.proj.transform([lat, long], 'EPSG:3857',     
-//        'EPSG:4326')),
-        name: entrega.entrega,
-        
-        population: 4000,
-        rainfall: 500
-      });
-      
-      iconFeature.set("direccion",entrega.direccion);
-      iconFeature.set("estado",entrega.estado);
-      var estado;
-      switch (entrega.estado){
-        case "Pendiente":
-            estado = "<code><b>"+iconFeature.get('estado') + "</b></code>" ;
-            break;
-        case "Entregado":
-            estado = "<font color='green'>"+"<b>"+iconFeature.get('estado')+"</b></font>";
-            break;
-      }
-      var content = "<b>Cliente</b>"+": "+iconFeature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ iconFeature.get('direccion')
-              +"<br>"+ "<b>Estado</b>"+": "+estado;
-      iconFeature.set("content",content);
-      
-    var iconStyle = new ol.style.Style({
-        image: new ol.style.Icon( ({
-        anchor: [0.5, 10],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'pixels',
-        opacity: 0.75,
-        src: 'images/icon2.png'
-      }))
-      });
-      
-    iconFeature.setStyle(iconStyle);
-    //iconFeature.getGeometry().transform('EPSG:4326','EPSG:900913')
-    var vectorSource = new ol.source.Vector({
-      features: [iconFeature]
-    });
-
-    var vectorLayer = new ol.layer.Vector({
-      source: vectorSource
-    });
-     
-    
-     
-     return vectorLayer;
- } 
  
  function popup(map) {
      
@@ -420,6 +384,7 @@ function addInteraction() {
 	if(typeof modifyInteraction != 'undefined') map.removeInteraction(modifyInteraction);
         // get type:
 	var type = "Polygon";
+        //var type = "Point";
 	// Create a draw interaction and add it to the map:
 	drawInteraction = new ol.interaction.Draw({ source:source, type:type });
 	map.addInteraction(drawInteraction);
@@ -474,3 +439,52 @@ document.body.onmouseup = function() {
 		triggerUpdate=false;
 	}
 };
+
+
+// Set Direccion / AddInteraction
+
+function addInteractionPoint(map, source){
+    var type = "Point";
+    
+    // Create a draw interaction and add it to the map:
+    drawInteraction = new ol.interaction.Draw({ source:source, type:type });
+    map.addInteraction(drawInteraction);
+    // Update geometry and change mode to modify after drawing is finished:
+
+    return drawInteraction;
+}
+
+function getLatLonFromPoint(point){
+    var retorno = new Array();
+    var arrayStr = point.split("POINT");
+    if (arrayStr.length >1){
+        var arrayLatLonLeft = arrayStr[1].split("(");
+        
+        if(arrayLatLonLeft.length > 1){
+            var arrayLatLonRight = arrayLatLonLeft[1].split(")");
+            
+            if(arrayLatLonRight.length > 1){
+                var arrayLatLon = arrayLatLonRight[0].split(" ");
+                
+                if(arrayLatLon.length > 1){
+                    var lat = arrayLatLon[1];
+                    var lon = arrayLatLon[0];
+                    
+                    retorno.push(lat);
+                    retorno.push(lon);
+                }
+            }
+        }
+    }
+    return retorno;
+}
+
+function addLocation(map, lat, lon, iconType){
+    var point = new OpenLayers.LonLat(lon,lat);
+    var point2 = point;
+    point2.transform('EPSG:4326','EPSG:3857');
+    pointLayer = dibujarIcono(point2.lon,point2.lat,'', iconType);
+    map.addLayer(pointLayer);
+    return pointLayer;
+}
+

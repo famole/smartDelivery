@@ -59,11 +59,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => '',
                     'format' => 'raw',
-                    'value' => function ($model) {  
+                    'value' => function ($model, $url) {  
                         if($model->ent_pendefinir == 1){
                             return Html::a('<span class="glyphicon glyphicon-exclamation-sign" style = "cursor: pointer;"></span>', 'index.php?r=entrega/set-address&id=' . $model->ent_id);
                         }else{
-                            return Html::a('<span id="'. $model->ent_id .'" class="glyphicon glyphicon-eye-open" style = "cursor: pointer;"></span>', $url);                        
+                            return Html::a('<span class="glyphicon glyphicon-eye-open" style = "cursor: pointer;"></span>', $url);                        
                         }
 
                     },

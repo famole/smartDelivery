@@ -6,6 +6,7 @@ use Yii;
 use frontend\models\Entrega;
 use frontend\models\EntregaSearch;
 use frontend\models\Pedido;
+use frontend\controllers\ParametrosController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -146,7 +147,10 @@ class EntregaController extends Controller
             }
             
         }
-        return $this->render('selectaddress', ['address'=>Json::encode($results), 'items'=>$items]);
+        $lat = ParametrosController::getParamText('DEFLAT');
+        $lon = ParametrosController::getParamText('DEFLON');
+        
+        return $this->render('selectaddress', ['address'=>Json::encode($results), 'items'=>$items, 'deflat'=>$lat, 'deflon'=>$lon]);
     }
     
  
