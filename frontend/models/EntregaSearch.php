@@ -80,7 +80,9 @@ class EntregaSearch extends Entrega
         
         $query->andFilterWhere(['like', 'ent_obs', $this->ent_obs])
             ->andFilterWhere(['like', 'ent_errorDesc', $this->ent_errorDesc]);
-
+        
+        $dataProvider->pagination->pageSize = 15;
+        
         return $dataProvider;
     }
 }

@@ -4,7 +4,6 @@ namespace frontend\helper;
 use frontend\controllers\ParametrosController;
 use frontend\enum\EnumSideNav;
 
-use frontend\models\Pedido;
 use frontend\models\DireccionReplacements;
 
 use Yii;

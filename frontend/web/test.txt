@@ -1,1 +1,2 @@
-\EstadoID> "3"
+
+UTILHELPER - Direction to Nominatim> 8+de+octubre+4444&state=&countrycodes=UY
