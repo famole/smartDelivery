@@ -170,6 +170,20 @@
             zpoints = PointsInZone(entregas,vectors,map,feature);
             entregasZona = zpoints;
             console.log(zpoints);
+            $('#MenuContainer').each(function(){
+            $(this).find('li').each(function(){
+                $(this).closest('li').remove();                        
+            });
+        
+            $('#entregaList').each(function(){
+                for(var i=0;i<entregasZona.length;i++){
+                    var row = '<li data-key="'+ entregasZona[i].ent_id +'"class="list-group-item " style="cursor: pointer;"> ☰ ' + entregasZona[i].ent_dir + '</li>';
+                    $(this).append(row);
+                }    
+            });
+            
+        });
+            
         }
     });
     

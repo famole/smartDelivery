@@ -227,9 +227,9 @@ class DiaController extends Controller{
             $repartoEntrega = new RepartoEntrega();
             $repartoEntrega->ent_id = $puntos->ent_id;
             $orden;
-            for($i = 0; i < count($ordenes); $i++){
+            for($i=0 ; $i < count($ordenes); $i++){
                 if($ordenes[$i] == $repartoEntrega->ent_id ){
-                    $orden = $i; 
+                    $orden = $i +1; 
                     break;
                 }                
             }
