@@ -6,12 +6,15 @@ use Yii;
 use frontend\models\Entrega;
 use frontend\models\EntregaSearch;
 use frontend\models\Pedido;
+use frontend\models\Direccion;
+use frontend\models\Clientedireccion;
 use frontend\controllers\ParametrosController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\helper\UtilHelper;
 use yii\helpers\Json;
+
 
 /**
  * EntregaController implements the CRUD actions for Entrega model.
@@ -150,7 +153,38 @@ class EntregaController extends Controller
         $lat = ParametrosController::getParamText('DEFLAT');
         $lon = ParametrosController::getParamText('DEFLON');
         
-        return $this->render('selectaddress', ['address'=>Json::encode($results), 'items'=>$items, 'deflat'=>$lat, 'deflon'=>$lon]);
+        
+        return $this->render('selectaddress', ['address'=>Json::encode($results), 'items'=>$items, 'deflat'=>$lat, 'deflon'=>$lon, 'id'=>$id]);
+    }
+    
+    public function actionSaveLatLon($id, $lat, $lon){
+        if (($entrega = Entrega::findOne($id)) !== null) {
+            if (($pedido = Pedido::findOne($entrega->ped_id)) !== null) {
+                $direccion = new Direccion();
+                $direccion->dir_direccion = $pedido->ped_direccion;
+                $direccion->dir_lat = $lat;
+                $direccion->dir_lon = $lon;
+                $dirId = $direccion->save();
+                if($dirId > 0){
+                    $clidir = new Clientedireccion();
+                    $clidir->cli_id = $pedido->cli_id;
+                    $clidir->dir_id = $dirId;
+                    $rows = $clidir->save();
+                    
+                    $entrega->ent_errorDesc = '';
+                    $entrega->ent_pendefinir = 0;
+                    if ($entrega->save()){
+                        //render
+                        return $this->redirect(['index']);
+                    }else{
+                        return 'Error al actualizar los datos de la entrega.';
+                    }
+                    
+                }else{
+                    return 'Error al guardar la direccion.';
+                }
+            }
+        }
     }
     
  
