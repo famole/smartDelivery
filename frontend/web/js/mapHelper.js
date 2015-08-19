@@ -350,7 +350,7 @@ function PointsInZone(entregas,vectors,map,feature){
                     var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
                     var point2 = point;
                     point2.transform('EPSG:4326','EPSG:3857');
-                    var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice]);
+                    var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice],'images/pinYellow.png');
                     var inside2 =vectors[index].getSource().getFeaturesAtCoordinate(pointLayer.getSource().getFeatures()[0].getGeometry().getCoordinates()); 
                     if (inside2.length >0){
                         console.log("Zona: "+vectors[index].getSource().getFeatures()[0].get("Nombre") + " - PointId:"+ pointLayer.getSource().getFeatures()[0].get('name') + " - Direccion:"+pointLayer.getSource().getFeatures()[0].get('direccion'));

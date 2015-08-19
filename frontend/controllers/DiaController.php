@@ -41,15 +41,10 @@ class DiaController extends Controller{
 
             }
             else{
-                 //$fromDia= 0;
-                  //$date= strtotime('2015-08-11');
-                  
+                
                 $fecha = date_create($date);            
-               $fecha = date_format($fecha, 'Y-m-d');
+                $fecha = date_format($fecha, 'Y-m-d');
                
-                   Yii::error("Holaaaaaaaaaa");
-                  Yii::error($fecha);
-
             }
 
            return $this->actionReloadMap($fecha,$fromDia);
@@ -119,7 +114,7 @@ class DiaController extends Controller{
         
          $entregasJson = json_encode($items);
         
-         $SortableItems = UtilHelper::createItemsForSideNav($items, EnumSideNav::Entrega);
+         $SortableItems = UtilHelper::createItemsForSortable($items, EnumSideNav::Entrega);
          
          //Vehiculos disponibles para el dia de hoy
          $vehiculos = Vehiculo::find()
@@ -133,9 +128,10 @@ class DiaController extends Controller{
          $listaPersonal = $personal->getAvailablePersonalByDate($date);
          $personalJson = JSON::encode($listaPersonal);
          
+         
         // ProcessController::actionPointInZone();
         
-            return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson,'personalJson'=>$personalJson]);
+            return $this->render('dia',['zonasJson'=>$zonasJson,'entregasJson'=>$entregasJson,'SortableItems'=>$SortableItems,'vehiculosJson'=>$vehiculosJson,'personalJson'=>$personalJson,'date'=>$date]);
          
          
 //         }else {
@@ -146,7 +142,7 @@ class DiaController extends Controller{
         
     }
     
-    public function actionCreateDiaReparto($parms,$veId,$personalIds,$ordenEntregas){
+    public function actionCreateDiaReparto($parms,$veId,$personalIds,$ordenEntregas,$fecha){
         $zpoints = json_decode($parms);
         $result = array();        
         $test = 'hola';
@@ -156,7 +152,7 @@ class DiaController extends Controller{
         try{
            $result = $this->updateEntrega($zpoints);
            if ($result["error"] == 0){
-                $result = $this->createReparto($veId);
+                $result = $this->createReparto($veId,$fecha);
                 if ($result["error"] == 0){
                     $repId = $result["rep_id"];
                     $result = $this->createRepartoEntrega($zpoints,$repId,$ordenes);
@@ -205,11 +201,13 @@ class DiaController extends Controller{
         
     }
     
-    private function createReparto($veId){
-        
+    private function createReparto($veId,$fecha){
+        $date = date_create($fecha);            
+        $date = date_format($date, 'Y-m-d');
         $reparto = new Reparto();
         $vehiculoId = JSON::decode($veId);
         $reparto->ve_id = $vehiculoId;
+        $reparto->rep_fecha = $date;
         $estado = Estados::find()->where(['est_nom' => EnumBaseStatus::Preparado,'est_type' => EnumStatusType::System])->one(); 
         $logfile = fopen('test.txt', 'w');
         fwrite($logfile, "\EstadoID> ".$veId);//.$zpoints);// . $zpoints[0]->ent_id);

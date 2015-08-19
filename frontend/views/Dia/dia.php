@@ -10,7 +10,8 @@
     use yii\widgets\DetailView; 
     use frontend\models\Direccion;
     use frontend\views\vehiculo\listavehiculos;
- 
+    use frontend\enum\EnumPinType;
+
 
     $fecha = date("Y-m-d");
 //    $url = Yii::$app->request->baseUrl();
@@ -51,11 +52,15 @@
     <div class="col-sm-3">
 
         <div class="form-group">
-            <?php
-
+            <?php 
+                $fecha = date_create($date); 
+                $fecha = date_format($fecha, 'd-m-Y');
+                $stringDate = "'".$fecha."'";
+                 Yii::error('La fecha es '.$stringDate);
                   echo DatePicker::widget([
                       'name' => 'fecha', 
-                      'value' => date('d-m-Y'),
+                      'value' => $date,
+                      //'value' => date('d-m-Y'),
                       'type' => DatePicker::TYPE_COMPONENT_APPEND,
                       'pluginEvents' => ["changeDate" => "function(e) {  UpdateDia(e.currentTarget.childNodes[0].value); }",],
                       'options' => array('placeholder' => 'Seleccionar Fecha','dateFormat' => 'dd-m-yyyy',),
@@ -134,6 +139,9 @@
     var entregasZona;
     var selectedPersonal = new Array();
     var ordenEntregas;
+    var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
+    var fecha;
+    
     
     for (i=0; i<listItems.length; i++){        
         var row = '<li data-key="'+ listItems[i].key +'"class="list-group-item " style="cursor: pointer;"> ☰ ' + listItems[i].content + '</li>';
@@ -156,7 +164,7 @@
         point2.transform('EPSG:4326','EPSG:3857');
         console.log(point2.lon);
         console.log(point2.lat);
-        var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice]);
+        var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice],pinType);
         map.addLayer(pointLayer);
     
     } 
@@ -204,7 +212,9 @@
       var parms =JSON.stringify(entregasZona);  
       var veId = JSON.stringify(vehiculoId);
       var personalIds = JSON.stringify(selectedPersonal);
+      fecha = <?php echo $stringDate; ?> ;
       console.log("VehiculoId:" + veId);
+      console.log(fecha);
       
       //Obtener los ordenes para las entregas.
       var ordenes = new Array();
@@ -216,23 +226,11 @@
         });
        ordenEntregas = JSON.stringify(ordenes);
         
-      $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId,personalIds,ordenEntregas}, function(data){  
+      $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId,personalIds,ordenEntregas,fecha}, function(data){  
         console.log(data); 
         },"json ");
        console.log(entregasZona.length);  
-        $('#MenuContainer').each(function(){
-            $(this).find('li').each(function(){
-                $(this).closest('li').remove();                        
-            });
-        
-            $('#entregaList').each(function(){
-                for(var i=0;i<entregasZona.length;i++){
-                    var row = '<li data-key="'+ entregasZona[i].ent_id +'" role="option" aria-grabbed="false" draggable="true">' + entregasZona[i].ent_id + '-' + entregasZona[i].ent_dir + '</li>';
-                    $(this).append(row);
-                }    
-            });
-            
-        });
+
     }
     
     function UpdateDia(date){
@@ -242,6 +240,9 @@
         var fromDia = 0;
         var redirected = 0;
         var date2 = new Date(date);
+        fecha = date;
+        console.log('Holaaaaa');
+        console.log(fecha);
 //        var dateString = date2.format("yyyy-md-dd");
         console.log(date);
         $(location).attr('href', 'http://localhost/SmartDelivery/frontend/web/index.php?r=dia/dia&fromDia=0&date='+date);

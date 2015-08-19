@@ -73,20 +73,39 @@ class UtilHelper{
         
         return $result;
     }
-    
+    public static function createItemsForSortable($list, $type){
+        switch ($type) {
+            case EnumSideNav::Entrega:
+                $items = array();
+                
+                foreach($list as $entrega){
+                    
+                    $item = array(
+                           "key" => $entrega['entrega'],
+                           "content" => $entrega['direccion'],
+//                           "icon" => "map-marker",
+//                           "options" => ["id" => $vehiculo->ve_id],
+                        );
+                    array_push($items, $item);
+                }
+                break;
+        }
+        return $items;
+        
+    }
     public static function createItemsForSideNav($list, $type){
        
         switch ($type) {
             case EnumSideNav::Entrega:
                 $items = array();
-                $counter = 0;
+                
                 foreach($list as $entrega){
-                    $counter++;
+                    
                     $item = array(
-                           "key" => $counter,
-                           "content" => $entrega['direccion'],
-//                           "icon" => "map-marker",
-//                           "options" => ["id" => $vehiculo->ve_id],
+                           "url" => "#",
+                           "label" => $entrega['direccion'],
+                           "icon" => "map-marker",
+                           "options" => ["id" => $entrega['entrega']],
                         );
                     array_push($items, $item);
                 }
