@@ -5,6 +5,8 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
+use frontend\enum\EnumUserType;
+use common\models\User;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -32,45 +34,56 @@ AppAsset::register($this);
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
-            $menuItems = [
-                ['label' => 'Inicio', 'url' => ['/site/login']],
-                ['label' => 'Mapa', 'url' => ['/site/mapa']],
-                ['label' => 'Mapa2', 'url' => ['/site/mapa2']],
-            ];
+            
+            
             if (!Yii::$app->user->isGuest) {
+                $user = User::findIdentity(Yii::$app->user->getId());
+                //Generico
+                $menuItems = [
+                    ['label' => 'Entregas', 'url' => ['/entrega/index']],
+                    ['label' => 'Pedidos', 'url' => ['/pedido/index']],
+                ];
                 
-                //Personal
-                $menuItems[] = ['label' => 'Personal',
-                            'items' => [
-                                ['label' => 'Categorias', 'url' => ['/personalcat/index']],
-                                ['label' => 'Trabajar con Personal', 'url' => ['/personal/index']],
-                                
-                            ]];
+                if($user->usertype == EnumUserType::Oficina
+                        || $user->usertype == EnumUserType::Admin){
+                    
+                    //Personal
+                    $menuItems[] = ['label' => 'Personal',
+                                'items' => [
+                                    ['label' => 'Categorias', 'url' => ['/personalcat/index']],
+                                    ['label' => 'Trabajar con Personal', 'url' => ['/personal/index']],
+
+                                ]];
+
+                    //Configuracion
+                    $menuItems[] = ['label' => 'Configuracion',
+                                'items' => [
+                                    ['label' => 'Direcciones', 'url' => ['/direccion/index']],
+                                    ['label' => 'Estados', 'url' => ['/estados/index']],
+                                    ['label' => 'Tipo de Vehiculos', 'url' => ['/tipovehiculo/index']],
+                                    ['label' => 'Turnos de Entrega', 'url' => ['/turnosentrega/index']],
+                                    ['label' => 'Vehiculos', 'url' => ['/vehiculo/index']],
+                                    ['label' => 'Zona', 'url' => ['/zona/index']],
+                                ]];
+                }
                 
-                //Configuracion
-                $menuItems[] = ['label' => 'Configuracion',
-                            'items' => [
-                                ['label' => 'Direcciones', 'url' => ['/direccion/index']],
-                                ['label' => 'Estados', 'url' => ['/estados/index']],
-                                ['label' => 'Pedidos', 'url' => ['/pedido/index']],
-                                ['label' => 'Tipo de Vehiculos', 'url' => ['/tipovehiculo/index']],
-                                ['label' => 'Turnos de Entrega', 'url' => ['/turnosentrega/index']],
-                                ['label' => 'Vehiculos', 'url' => ['/vehiculo/index']],
-                                ['label' => 'Zona', 'url' => ['/zona/index']],
-                            ]];
-                
-                //Sistema
-                $menuItems[]= [ 'label' => 'Sistema',
-                            'items' => [
-                                ['label' => 'Parametros', 'url' => ['/parametros/index']],
-                            ]];
+                if($user->usertype == EnumUserType::Admin){
+                    //Sistema
+                    $menuItems[]= [ 'label' => 'Sistema',
+                                'items' => [
+                                    ['label' => 'Parametros', 'url' => ['/parametros/index']],
+                                ]];
+                }
                 
                 $menuItems[] = [
                     'label' => 'Salir (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ];
+            }else{
+                $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
             }
+            
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => $menuItems,

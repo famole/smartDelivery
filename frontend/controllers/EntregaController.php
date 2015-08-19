@@ -158,16 +158,26 @@ class EntregaController extends Controller
     }
     
     public function actionSaveLatLon($id, $lat, $lon){
+        
         if (($entrega = Entrega::findOne($id)) !== null) {
             if (($pedido = Pedido::findOne($entrega->ped_id)) !== null) {
-                $direccion = new Direccion();
-                $direccion->dir_direccion = $pedido->ped_direccion;
+                $direccion = Direccion::find()->where(['dir_direccion'=>$pedido->ped_direccion])->one();
+                
+                if($direccion->dir_lat == ''){
+                    $direccion = new Direccion();
+                    $direccion->dir_direccion = $pedido->ped_direccion;
+                }
                 $direccion->dir_lat = $lat;
                 $direccion->dir_lon = $lon;
                 $dirId = $direccion->save();
+                
                 if($dirId > 0){
-                    $clidir = new Clientedireccion();
-                    $clidir->cli_id = $pedido->cli_id;
+                    $clidir = Clientedireccion::findOne($pedido->cli_id);
+                    if ($clidir == null){
+                        $clidir = new Clientedireccion();
+                        $clidir->cli_id = $pedido->cli_id;
+                    }
+                    
                     $clidir->dir_id = $dirId;
                     $rows = $clidir->save();
                     

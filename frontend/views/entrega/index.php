@@ -11,6 +11,7 @@ use dosamigos\datepicker\DatePicker;
 
 $this->title = 'Entregas';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> 
 
@@ -63,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         if($model->ent_pendefinir == 1){
                             return Html::a('<span class="glyphicon glyphicon-exclamation-sign" style = "cursor: pointer;"></span>', 'index.php?r=entrega/set-address&id=' . $model->ent_id);
                         }else{
-                            return Html::a('<span class="glyphicon glyphicon-eye-open" style = "cursor: pointer;"></span>', $url);                        
+                            return Html::a('<span class="glyphicon glyphicon-eye-open" style = "cursor: pointer;"></span>','index.php?r=entrega%2Fview&id=' . $model->ent_id);                        
                         }
 
                     },
@@ -74,3 +75,4 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end()?>
 
 </div>
+
