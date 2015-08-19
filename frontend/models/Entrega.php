@@ -154,4 +154,12 @@ class Entrega extends \yii\db\ActiveRecord
     public function getEstados(){
         return $this->hasOne(Estados::className(), ['est_id'=>'est_id']);
     }
+    
+    public function getDireccion(){
+        return $this->hasOne(Direccion::className(),['dir_id'=> 'dir_id']);
+    }
+    
+    public function getTurnoEntrega(){
+        return $this->hasOne(TurnosEntrega::className(), ['te_id'=> 'te_id']);
+    }
 }

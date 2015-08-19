@@ -78,7 +78,10 @@ class Direccion extends \yii\db\ActiveRecord
                 return -1;
             }
         } else {
-            return $this->update($runValidation, $attributeNames) !== false;
+            if ($this->update($runValidation, $attributeNames) !== false){
+                return $this->dir_id;
+            }
+            return false;
         }
     }
 }

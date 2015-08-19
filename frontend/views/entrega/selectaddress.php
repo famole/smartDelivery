@@ -2,7 +2,10 @@
 <?php
 use kartik\sidenav\SideNav;
 use frontend\enum\EnumPinType;
+
+$this->registerJsFile(Yii::$app->request->BaseUrl . '/js/alert.js', ['depends' => [yii\web\JqueryAsset::className()]]);
 $this->title = 'Seleccionar Direccion';
+$this->params['breadcrumbs'][] = ['label' => 'Entregas', 'url' => ['index']];
 ?>
 <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -15,10 +18,13 @@ $this->title = 'Seleccionar Direccion';
     height: 80%;
     width: 90%;
   }
+  
+  .inline-button{
+    margin-top:20px;
+  }
 </style>
 
-
-
+<div id="alert" class="msg-top"></div>
 <div id="main" class="row">
     <?php
         if(count($items>0)){
@@ -33,21 +39,30 @@ $this->title = 'Seleccionar Direccion';
                 'items' => $items,
             ]);
             echo '</div>';
+            
         }else{
             echo '<h4>No  fue posible resolver la direcci&oacute;n<small><br>Seleccione la ubicaci&oacute;n exacta en el mapa</small></h4>';
             echo '<div class="map" id="map"></div>';
         }
     ?>
 </div>
-<div id="buttons" class="row">
-    <div id="resetSelection" class="pull-left"><button id="removeLocation" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-screenshot"></span> Corregir Selecci&oacute;n</button></div>
-    <div class="pull-right"><a href="#" class="btn btn-success btn-sm"><span></span>Confirmar</a></div>
+
+<div id="buttons" clas="row">
+    <div class="form-inline" >
+        <div class="form-group">
+            <a id="confirm" tabindex="0" class="btn btn-success btn-sm inline-button" role="button" placement="top" data-toggle="popover" data-trigger="focus" title="Confirmar" data-content="Para confirmar los cambios es necesario seleccionar una direcci&oacute;n o la ubicaci&oacute;n en el mapa.">Confirmar</a>       
+        </div>
+        <div class="form-group">
+            <div id="resetSelection" class="inline-button"><button id="removeLocation" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-screenshot"></span> Corregir Selecci&oacute;n</button></div>
+        </div>
+    </div>
 </div>
 
 <script>
     $('#resetSelection').hide(); 
     
     $(document).ready(function(){
+        var idEntrega = eval(<?php echo $id;?>);
         var defLat = eval(<?php echo $deflat;?>);
         var defLon = eval(<?php echo $deflon;?>);
         var pinType = <?php echo '"' .EnumPinType::Blue . '"';?>;
@@ -57,6 +72,8 @@ $this->title = 'Seleccionar Direccion';
         var drawInteraction = addInteractionPoint(map, source);
         var pointLayer;
         var drawend;
+        var globalLat;
+        var globalLon;
         
         //Draw point based on list of address.
         $("li").click(function(){
@@ -67,6 +84,8 @@ $this->title = 'Seleccionar Direccion';
                 map.removeInteraction(drawInteraction);
                 $('#resetSelection').show();
                 drawend = true;
+                globalLat=jsonList[listId]["lat"];
+                globalLon=jsonList[listId]["long"];
             }
         });
         
@@ -100,7 +119,25 @@ $this->title = 'Seleccionar Direccion';
             //draw point on map.
             pointLayer = addLocation(map, latlon[0], latlon[1],pinType);
             drawend = true;
+            globalLat = latlon[0];
+            globalLon = latlon[1];
+                
         });
-       
+        
+        $("#confirm").click(function(){
+            
+            if(drawend){
+                //send address
+                $('#confirm').popover('hide');
+                
+                $.get('index.php?r=entrega/save-lat-lon', {id : idEntrega,lat: globalLat, lon: globalLon}, function(data){
+                    
+                    showMessage('error', data, true);
+                    
+                });
+            }else{
+                $('#confirm').popover('show');
+            }
+        });
     });
 </script>
