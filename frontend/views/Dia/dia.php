@@ -12,7 +12,8 @@
     use frontend\views\vehiculo\listavehiculos;
     use frontend\enum\EnumPinType;
 
-
+    $this->params['breadcrumbs'][] = ['label' => 'Repartos', 'url' => ['reparto/index']];
+    $this->params['breadcrumbs'][] = 'Nuevo';
     $fecha = date("Y-m-d");
 //    $url = Yii::$app->request->baseUrl();
 //    Yii::Error($url);

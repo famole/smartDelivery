@@ -39,6 +39,7 @@ class EntregaController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkLogin();
         $searchModel = new EntregaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -55,6 +56,7 @@ class EntregaController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkLogin();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -67,6 +69,7 @@ class EntregaController extends Controller
      */
     public function actionCreate()
     {
+        $this->checkLogin();
         $model = new Entrega();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -86,6 +89,7 @@ class EntregaController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->checkLogin();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -105,6 +109,7 @@ class EntregaController extends Controller
      */
     public function actionDelete($id)
     {
+        $this->checkLogin();
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -140,6 +145,7 @@ class EntregaController extends Controller
     }
     
     public function actionSetAddress($id){
+        $this->checkLogin();
         if (($entrega = Entrega::findOne($id)) !== null) {
             if (($pedido = Pedido::findOne($entrega->ped_id)) !== null) {
             
@@ -158,7 +164,7 @@ class EntregaController extends Controller
     }
     
     public function actionSaveLatLon($id, $lat, $lon){
-        
+        $this->checkLogin();
         if (($entrega = Entrega::findOne($id)) !== null) {
             if (($pedido = Pedido::findOne($entrega->ped_id)) !== null) {
                 $direccion = Direccion::find()->where(['dir_direccion'=>$pedido->ped_direccion])->one();
@@ -194,6 +200,12 @@ class EntregaController extends Controller
                     return 'Error al guardar la direccion.';
                 }
             }
+        }
+    }
+    
+    private function checkLogin(){
+        if(Yii::$app->user->isGuest){
+            $this->goHome();
         }
     }
     

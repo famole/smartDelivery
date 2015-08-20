@@ -74,24 +74,6 @@ class SiteController extends Controller
         
     }
     
-//    public function actionDia()
-//    {
-//        return $this->render('dia');
-//        
-//    }
-    
-    public function actionMapa()
-    {
-        return $this->render('mapa');
-        
-    }
-    
-     public function actionMapa2()
-    {
-        return $this->render('mapa2');
-        
-    }
-    
     public function actionHojaRuta(){
         $vehiculos = Vehiculo::find(/*[
             've_estado' => Vehiculo::ACTIVE,
@@ -106,7 +88,7 @@ class SiteController extends Controller
     {
         if (!\Yii::$app->user->isGuest) {
             //return $this->goHome();
-            return $this->render('indexSecure');
+            return $this->redirect('index.php?r=reparto/index');
         }
 
         $model = new LoginForm();
@@ -122,47 +104,14 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
-            }
-
-            return $this->refresh();
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
         } else {
-            return $this->render('contact', [
+            return $this->render('login', [
                 'model' => $model,
             ]);
-        }
-    }
-
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
-    public function actionSignup()
-    {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
+        }     
     }
 
     public function actionRequestPasswordReset()
