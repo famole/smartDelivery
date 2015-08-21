@@ -20,7 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'dir_id',
             'dir_direccion',
-            'dir_latlong',
+            'dir_lat',
+            'dir_lon',
         ],
     ]) ?>
     

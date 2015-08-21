@@ -19,7 +19,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'dir_direccion') ?>
 
-    <?= $form->field($model, 'dir_latlong') ?>
+    <?= $form->field($model, 'dir_lat') ?>
+    
+    <?= $form->field($model, 'dir_lon') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
