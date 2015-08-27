@@ -52,13 +52,13 @@ class Reparto extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'rep_id' => Yii::t('app', 'Rep ID'),
-            've_id' => Yii::t('app', 'Ve ID'),
-            'rep_fhini' => Yii::t('app', 'Rep Fhini'),
-            'rep_fhfin' => Yii::t('app', 'Rep Fhfin'),
-            'est_id' => Yii::t('app', 'Est ID'),
-            'est_observacion' => Yii::t('app', 'Est Observacion'),
-            'rep_fecha' => Yii::t('app', 'Rep Fecha'),
+            'rep_id' => Yii::t('app', 'Codigo'),
+            've_id' => Yii::t('app', 'Vehiculo'),
+            'rep_fhini' => Yii::t('app', 'Comienzo'),
+            'rep_fhfin' => Yii::t('app', 'Fin'),
+            'est_id' => Yii::t('app', 'Estado'),
+            'est_observacion' => Yii::t('app', 'Observacion'),
+            'rep_fecha' => Yii::t('app', 'Fecha'),
         ];
     }
 

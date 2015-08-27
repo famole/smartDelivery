@@ -5,9 +5,8 @@ use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
 use frontend\models\Vehiculo;
+use common\models\User;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -15,6 +14,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\helper\UtilHelper;
 use yii\helpers\Json;
+use frontend\enum\EnumUserType;
 
 /**
  * Site controller
@@ -70,7 +70,11 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        if (!\Yii::$app->user->isGuest) {   
+            return $this->redirect('index.php?r=reparto/index');
+        }else{
+            $this->goHome();
+        }
         
     }
     
@@ -87,8 +91,14 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            //return $this->goHome();
-            return $this->redirect('index.php?r=reparto/index');
+            $user = User::findOne(Yii::$app->user->getId());
+            if ($user->usertype == EnumUserType::Chofer){
+                //Ubicar vehiculo id para el usuario en el dia si es que existe reparto.
+                
+                //Sino mostrar pantalla de que no tiene repartos para realizar
+            }else{
+                return $this->redirect('index.php?r=reparto/index');
+            }
         }
 
         $model = new LoginForm();

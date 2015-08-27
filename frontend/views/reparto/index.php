@@ -38,12 +38,18 @@ use yii\grid\GridView;
                     ['class' => 'yii\grid\SerialColumn'],
 
                     'rep_id',
-                    've_id',
+                    [
+                        'label' => 'Vehiculo',
+                        'value' => 've.ve_nombre',
+                    ],
+                    
                     'rep_fhini',
                     'rep_fhfin',
-                    'est_id',
-                    // 'est_observacion',
-
+                    [
+                        'label' => 'Estado',
+                        'value' => 'est.est_nom',
+                    ],
+                    
                     ['class' => 'yii\grid\ActionColumn'],
                 ],
             ]); ?>

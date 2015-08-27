@@ -36,7 +36,7 @@ class RepartoController extends Controller
         $this->checkLogin();
         $searchModel = new RepartoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
