@@ -147,6 +147,14 @@ class Entrega extends \yii\db\ActiveRecord
         
     }
     
+    public function UpdateEntregaEstado($entregaId,$estado){
+        $connection = static::getDb();
+        $sql="Update Entrega set est_id =".$estado." where ent_id =".$entregaId ;
+        $command=$connection->createCommand($sql);
+        $rows = $command->execute();
+        return $rows;
+    }
+    
     public function getZona(){
         return $this->hasOne(Zona::className(), ['z_id' => 'z_id']);
     }

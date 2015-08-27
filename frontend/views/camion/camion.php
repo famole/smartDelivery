@@ -46,6 +46,7 @@ use yii\bootstrap\Modal;
                 'heading' => "Entregas",
                 'containerOptions' => ['id'=>'vhmenu'],
                 'items' => $SideNavItems,
+                'id'=> 'Sorteable',
             ]);
      }
      ?>
@@ -74,7 +75,7 @@ var entregas = eval(<?php echo $entregasJson; ?>) ;
 var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
 var listId;
 
-var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
+var map = createNiceMap(-6252731.917154272,-4150822.2589118066,14,'map');
 for (indice = 0; indice < entregas.length; ++indice) {
        
     var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);

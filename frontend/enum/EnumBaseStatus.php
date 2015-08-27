@@ -3,8 +3,11 @@
 namespace frontend\enum;
 
 class EnumBaseStatus {
-    const PendArmar = 'Pendiente Armar';
+    const Pendiente = 'Pendiente';
+    const PendArmar = 'Pendiente - Armar';
     const Entregado = 'Entregado';
+    const PendienteReparto = 'Pendiente - Reparto';
+    
     //**********Reparto****************
     const Preparado = 'Preparado';
     const EnCurso = 'En curso';

@@ -11,6 +11,8 @@ use frontend\models\Estados;
 use yii\helpers\Json;
 use frontend\helper\UtilHelper;
 use frontend\enum\EnumSideNav;
+use frontend\enum\EnumBaseStatus;
+use frontend\enum\EnumStatusType;
 
 
 class CamionController extends Controller{
@@ -91,6 +93,28 @@ class CamionController extends Controller{
         
         
         echo Json::encode($item);
+    }
+    
+    
+    public function actionSetEstadoEntrega($entregaId,$estado){
+        
+        switch($estado){
+            case 'Entregado':
+                $estado = Estados::find()
+                ->where(['est_type' => EnumStatusType::System, 'est_nom' => EnumBaseStatus::Entregado])           
+                ->one();
+                break;
+            case 'Cancelado':
+                $estado = Estados::find()
+                ->where(['est_type' => EnumStatusType::System, 'est_nom' => EnumBaseStatus::Cancelado])           
+                ->one();
+                
+        }
+        
+        $entrega = new Entrega();
+       echo  $entrega->UpdateEntregaEstado($entregaId,$estado->est_id);
+        
+        
     }
     
     

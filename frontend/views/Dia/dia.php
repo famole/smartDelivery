@@ -60,7 +60,7 @@
                  Yii::error('La fecha es '.$stringDate);
                   echo DatePicker::widget([
                       'name' => 'fecha', 
-                      'value' => $date,
+                      'value' => $fecha,
                       //'value' => date('d-m-Y'),
                       'type' => DatePicker::TYPE_COMPONENT_APPEND,
                       'pluginEvents' => ["changeDate" => "function(e) {  UpdateDia(e.currentTarget.childNodes[0].value); }",],
@@ -93,10 +93,12 @@
     
 </div>
 
-
-  <div class = "form-group">
-        <button type="button" class="btn btn-success" onclick="CreateReparto(entregasZona)">Generar reparto</button>
-        <button type="button" class="btn btn-success" onclick="test()">Test</button>
+<div class="row"">
+  <br><br>  
+</div>
+  <div class="row"">
+     
+    <div class ="col-md-2">   
         <?php
 
         Modal::begin([
@@ -107,20 +109,26 @@
 
         Modal::end();
         ?>
+    </div>
+    <div class ="col-md-2">    
+        <?php
+    
+            Modal::begin([
+                'header' => '<h4 class="modal-title">Personal disponible</h4>',
+                'toggleButton' => ['label' => '<i class="glyphicon glyphicon-user"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()'],
+                ]);
+                echo $this->render('selectPersonal', ['personalJson'=>$personalJson]);
+
+            Modal::end();
+        ?>
+     </div>
+      
+      <div class ="col-md-2">
+        <button type="button" class="btn btn-success" onclick="CreateReparto(entregasZona)">Generar reparto</button>
+    </div>
   </div>
 
-<?php
-    
-    Modal::begin([
-        'header' => '<h4 class="modal-title">Personal disponible</h4>',
-        'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()'],
-        ]);
-        echo $this->render('selectPersonal', ['personalJson'=>$personalJson]);
 
-    Modal::end();
-
-
-?>
 
 
 
@@ -130,7 +138,7 @@
     var indice;
     var poligonos = eval(<?php echo $zonasJson; ?>) ;
     var entregas = eval(<?php echo $entregasJson; ?>) ;   
-    var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
+    var map = createNiceMap(-6252731.917154272,-4150822.2589118066,14,'map');
     var vectors = new Array();
     var zpoints;
     var el = document.getElementById('entregaList');

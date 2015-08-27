@@ -17,12 +17,12 @@
               </tr>
               <tr>
                   <th>Dirección</th>
-
+                  <td id="entregaDireccion"></td>
               </tr>
 
               <tr>
                   <th>Estado</th>
-
+                  <td id="entregaEstado"></td>
               </tr>
 
             </thead>
@@ -34,8 +34,8 @@
 </div>    
 <textarea id="idEntrega" style="display:none;"> test </textarea>
 
-<button type="button" class="btn btn-success" onclick="getSelectedPersonal()" data-dismiss="modal">Entregado</button>
-<button type="button" class="btn btn-danger" onclick="getSelectedPersonal()" data-dismiss="modal">Cancelado</button>
+<button type="button" class="btn btn-success" onclick="updateEntregaEstado('Entregado')" data-dismiss="modal">Entregado</button>
+<button type="button" class="btn btn-danger" onclick="updateEntregaEstado('Cancelado')" data-dismiss="modal">Cancelado</button>
 <script>
     
     
@@ -54,13 +54,24 @@
         $.get('index.php?r=camion/get-entrega', {idEntrega : id }, function(data){  
         console.log(data);
         console.log(data['direccion']);
-        $('#entregaTable #entregaID').val(id);
-//        $('#entregaTable').find('th').eq(1).after('<td>'+data['direccion']+'</td>');
-//        $('#entregaTable').find('th').eq(2).after('<td>'+data['estado']+'</td>');
+        $('#entregaTable #entregaID').html(id);
+        $('#entregaTable #entregaDireccion').html(data['direccion']);
+        $('#entregaTable #entregaEstado').html(data['estado']);
+
         
         
         },"json ");
         //$('#entregaTable').find('th').eq(0).after('<th>'+id+'</th>');
 
     };
+    
+    function updateEntregaEstado(estado){
+        var entregaId = $('#idEntrega').val();  
+        $.get('index.php?r=camion/set-estado-entrega', {entregaId : entregaId,estado:estado }, function(data){  
+               console.log(data);
+        },"json ");
+        
+        $('ul').find('#'+entregaId).remove();
+        
+    }
 </script>
