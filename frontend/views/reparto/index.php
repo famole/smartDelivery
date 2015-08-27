@@ -61,9 +61,7 @@ use yii\grid\GridView;
 
 <script type="text/javascript">
     
-    var indice;
-    var poligonos = eval(<?php echo $zonasJson; ?>) ;
-    var entregas = eval(<?php echo $entregasJson; ?>) ;   
+      
     var map = createNiceMap(-6252731.917154272,-4150822.2589118066,14,'sectionA');
     
 </script>

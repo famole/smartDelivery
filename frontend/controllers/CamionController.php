@@ -17,6 +17,8 @@ class CamionController extends Controller{
     
     public function actionCamion($vehiculoId,$fecha){
         $SideNavItems = null;
+        $entregasJson = null;
+        
         $reparto = Reparto::find()
         ->select('*')
         ->where(['ve_id'=>$vehiculoId,'rep_fecha'=>$fecha])
@@ -27,7 +29,9 @@ class CamionController extends Controller{
             $repartoEntrega= RepartoEntrega::find()
             ->select('*')
             ->where(['rep_id'=>$reparto->rep_id])
+            ->orderBy('re_orden')
             ->all();
+            
             $entregas = (array) null;
 
             foreach($repartoEntrega as $re){
@@ -63,6 +67,30 @@ class CamionController extends Controller{
         return $this->render('camion',['SideNavItems'=>$SideNavItems,'entregasJson'=>$entregasJson]);
         
         
+    }
+    
+    public function actionGetEntrega($idEntrega){
+        $entrega = Entrega::find()           
+        ->where(['ent_id' => $idEntrega])           
+        ->one();
+        
+        $estado = Estados::find()
+        ->where('est_id = :est',[':est' => $entrega->est_id])           
+        ->one(); 
+        
+        $direccion = Direccion::find()           
+        ->where('dir_id = :dir',[':dir' => $entrega->dir_id])           
+        ->one();
+        
+         $item = array(
+                "entrega" => $entrega->ent_id,
+                "direccion" => $direccion->dir_direccion,
+                "estado" => $estado->est_nom,
+             );
+        
+        
+        
+        echo Json::encode($item);
     }
     
     

@@ -2,6 +2,7 @@
 
 use kartik\sidenav\SideNav;
 use frontend\enum\EnumPinType;
+use yii\bootstrap\Modal;
 
 ?>
 
@@ -35,9 +36,9 @@ use frontend\enum\EnumPinType;
     }
 </style>
 <div class="row">
-    <div class ="col-md-2">
+    <div class ="col-md-4">
      <?php   
-     $items = array();
+     if($SideNavItems != null){
      Yii::error($SideNavItems);
      echo SideNav::widget([
                 'type' => SideNav::TYPE_DEFAULT,
@@ -46,20 +47,32 @@ use frontend\enum\EnumPinType;
                 'containerOptions' => ['id'=>'vhmenu'],
                 'items' => $SideNavItems,
             ]);
+     }
      ?>
     </div>
-    <div class ="col-md-10">
+    <div class ="col-md-8">
         <div id="map">
             
                 
         </div>
     </div>
+    
+    <?php Modal::begin([
+        'header' => '<h4 class="modal-title">Entrega</h4>',
+        //'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()'],
+        'id' => 'modal',
+        ]);
+        echo $this->render('EntregaCamion');
+
+    Modal::end();?>;
+    
 </div>
 
 <script type="text/javascript">
 
 var entregas = eval(<?php echo $entregasJson; ?>) ; 
 var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
+var listId;
 
 var map = createMap(-6252731.917154272,-4150822.2589118066,14,'map');
 for (indice = 0; indice < entregas.length; ++indice) {
@@ -73,6 +86,22 @@ for (indice = 0; indice < entregas.length; ++indice) {
     map.addLayer(pointLayer);
 
 } 
+$("li").click(function(){
+   
+    listId=this.id;
+    //console.log(listId);
+    
+    $("#idEntrega").val(listId);
+    updateEntregaId();
+    //$('#camionContainer').empty();
+    $('#modal').modal('show');
+    
+    
+    //pointLayer = addLocation(map, jsonList[listId]["lat"],jsonList[listId]["long"], pinType);
+    
+    
+});
+console.log(entregas);  
 
 
 

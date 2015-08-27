@@ -22,7 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'dir_direccion',
-            'dir_latlong',
+            'dir_lat',
+            'dir_lon',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -19,7 +19,7 @@ class DireccionSearch extends Direccion
     {
         return [
             [['dir_id'], 'integer'],
-            [['dir_direccion', 'dir_latlong'], 'safe'],
+            [['dir_direccion', 'dir_lat', 'dir_lon'], 'safe'],
         ];
     }
 
@@ -60,7 +60,9 @@ class DireccionSearch extends Direccion
         ]);
 
         $query->andFilterWhere(['like', 'dir_direccion', $this->dir_direccion])
-            ->andFilterWhere(['like', 'dir_latlong', $this->dir_latlong]);
+            ->andFilterWhere(['like', 'dir_lat', $this->dir_lat])
+            ->andFilterWhere(['like', 'dir_lon', $this->dir_lon]);
+                
 
         return $dataProvider;
     }

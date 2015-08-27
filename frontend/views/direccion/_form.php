@@ -16,7 +16,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'dir_direccion')->textInput(['maxlength' => 500]) ?>
 
-    <?= $form->field($model, 'dir_latlong')->textInput() ?>
+    <?= $form->field($model, 'dir_lat')->textInput() ?>
+    
+    <?= $form->field($model, 'dir_lon')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Guardar') : Yii::t('app', 'Actualizar'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
