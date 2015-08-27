@@ -19,7 +19,7 @@ class RepartoSearch extends Reparto
     {
         return [
             [['rep_id', 've_id', 'est_id'], 'integer'],
-            [['rep_fhini', 'rep_fhfin', 'est_observacion'], 'safe'],
+            [['rep_fhini', 'rep_fhfin', 'est_observacion', 'rep_fecha'], 'safe'],
         ];
     }
 
@@ -61,6 +61,7 @@ class RepartoSearch extends Reparto
             'rep_fhini' => $this->rep_fhini,
             'rep_fhfin' => $this->rep_fhfin,
             'est_id' => $this->est_id,
+            'rep_fecha' => $this->rep_fecha,
         ]);
 
         $query->andFilterWhere(['like', 'est_observacion', $this->est_observacion]);
