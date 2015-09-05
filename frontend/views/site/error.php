@@ -13,10 +13,10 @@ $this->title = 'Error!';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-<!--    <div class="alert alert-danger">
-        // nl2br(Html::encode($message)) 
+    <div class="alert alert-danger">
+        <?= nl2br(Html::encode($message)) ?>
        
-    </div>-->
+    </div>
 
     <p>
         Se encontro un error al procesar su consulta, por favor vuelva a intentarlo.
