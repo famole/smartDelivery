@@ -11,12 +11,17 @@
     use frontend\models\Direccion;
     use frontend\views\vehiculo\listavehiculos;
     use frontend\enum\EnumPinType;
+    use yii\helpers\BaseUrl;
+    
+    
 
     $this->params['breadcrumbs'][] = ['label' => 'Repartos', 'url' => ['reparto/index']];
     $this->params['breadcrumbs'][] = 'Nuevo';
     $fecha = date("Y-m-d");
+    $url = Yii::$app->request->baseUrl;
+   // $url2 = Yii::$app->request->basePath;
 //    $url = Yii::$app->request->baseUrl();
-//    Yii::Error($url);
+    Yii::Error($url);
 ?>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>   
@@ -238,7 +243,8 @@
       $.get('index.php?r=dia/create-dia-reparto', {parms : parms,veId,personalIds,ordenEntregas,fecha}, function(data){  
         console.log(data); 
         },"json ");
-       console.log(entregasZona.length);  
+       //console.log(entregasZona.length);  
+       
 
     }
     
@@ -250,7 +256,6 @@
         var redirected = 0;
         var date2 = new Date(date);
         fecha = date;
-        console.log('Holaaaaa');
         console.log(fecha);
 //        var dateString = date2.format("yyyy-md-dd");
         console.log(date);

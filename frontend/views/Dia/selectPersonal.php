@@ -28,7 +28,7 @@
     
 var personal = eval(<?php echo $personalJson?>);
 selectedPersonal =[];
-    for (i=0; i<vehiculos.length; i++){
+    for (i=0; i<personal.length; i++){
         
         $('#personalTable tr:last').after('<tr><td id= "personalID">'+personal[i].per_id+'</td><td>'+personal[i].per_nom+
           '</td><td>'+personal[i].per_priape+'</td><td>'+personal[i].per_tel+'</td><td><input type="checkbox" name = "check"></td></tr>');

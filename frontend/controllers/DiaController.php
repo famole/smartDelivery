@@ -76,10 +76,12 @@ class DiaController extends Controller{
             array_push($zonas, $item);
         }
         $zonasJson = json_encode($zonas); 
+        $estadoPendArmar = Estados::find()->where(['est_nom' => EnumBaseStatus::PendArmar,'est_type' => EnumStatusType::System])->one();
+        Yii::error($estadoPendArmar);
         
         $entregas = Entrega::find()
         ->select('*')
-        ->where('ent_fecha = :date',[':date' => $date])
+        ->where(['ent_fecha' =>$date,'est_id'=>$estadoPendArmar->est_id])
         ->orderBy('ent_id')
         ->all();
         
@@ -127,6 +129,7 @@ class DiaController extends Controller{
          $personal = new Personal();
          $listaPersonal = $personal->getAvailablePersonalByDate($date);
          $personalJson = JSON::encode($listaPersonal);
+         Yii::Error($personalJson);
          
          
         // ProcessController::actionPointInZone();
@@ -145,7 +148,6 @@ class DiaController extends Controller{
     public function actionCreateDiaReparto($parms,$veId,$personalIds,$ordenEntregas,$fecha){
         $zpoints = json_decode($parms);
         $result = array();        
-        $test = 'hola';
         $ordenes = JSON::decode($ordenEntregas);
         $connection = Yii::$app->db;
         $transaction = $connection->beginTransaction();
@@ -188,7 +190,8 @@ class DiaController extends Controller{
         
         
        // Yii::error($decode);
-        echo Json::encode($test);
+        $this->redirect('http://localhost/SmartDelivery/frontend/web/index.php?r=reparto%2Findex');
+        //echo Json::encode($test);
         
         
         

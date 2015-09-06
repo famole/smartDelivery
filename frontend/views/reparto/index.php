@@ -40,7 +40,7 @@ use yii\grid\GridView;
                     'rep_id',
                     [
                         'label' => 'Vehiculo',
-                        'value' => 've.ve_nombre',
+                        'value' => 've.ve_matricula',
                     ],
                     
                     'rep_fhini',

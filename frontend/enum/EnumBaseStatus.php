@@ -4,9 +4,9 @@ namespace frontend\enum;
 
 class EnumBaseStatus {
     const Pendiente = 'Pendiente';
-    const PendArmar = 'Pendiente - Armar';
+    const PendArmar = 'Pendiente-Armar';
     const Entregado = 'Entregado';
-    const PendienteReparto = 'Pendiente - Reparto';
+    const PendienteReparto = 'Pendiente-Reparto';
     
     //**********Reparto****************
     const Preparado = 'Preparado';
