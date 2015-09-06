@@ -43,12 +43,12 @@ class SiteController extends Controller
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            //'verbs' => [
+            //    'class' => VerbFilter::className(),
+            //    'actions' => [
+            //       'logout' => ['post'],
+            //    ],
+            //],
         ];
     }
 
@@ -118,9 +118,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+            return $this->redirect('index.php?r=site/login');
         }     
     }
 
