@@ -3,7 +3,8 @@
 namespace frontend\models;
 use frontend\controllers\NumeradoresController;
 use yii\console\Exception;
-
+use frontend\enum\EnumBaseStatus;
+use frontend\enum\EnumStatusType;
 use Yii;
 
 /**
@@ -127,9 +128,10 @@ class Entrega extends \yii\db\ActiveRecord
         $connection = static::getDb();
         $transaction = $connection->beginTransaction();
         try{
+            $estado = Estados::find()->where(['est_nom' => EnumBaseStatus::PendienteReparto,'est_type' => EnumStatusType::System])->one(); 
             foreach($zpoints as $item){
 
-                    $sql="Update Entrega set z_id =".$item->z_id." where ent_id =".$item->ent_id ;
+                    $sql="Update Entrega set z_id =".$item->z_id.", est_id =".$estado->est_id ." where ent_id =".$item->ent_id ;
                     $command=$connection->createCommand($sql);
                     $rows = $command->execute();
                              
