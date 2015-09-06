@@ -26,4 +26,19 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    
+    <?= GridView::widget([
+            'dataProvider' => $dataEntregaProvider,
+            'columns' => [
+                'ent_id',
+                'ped_id',
+                [
+                    'attribute' => 'ent_fecha',
+                    'format' => ['date','dd-MM-Y'],
+                    
+                  
+                ],
+                'te_id',
+            ],
+        ]); ?>
 </div>

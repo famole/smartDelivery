@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Reparto;
 use frontend\models\RepartoSearch;
+use frontend\models\RepartoEntrega;
+use frontend\models\Entrega;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,8 +54,24 @@ class RepartoController extends Controller
     public function actionView($id)
     {
         $this->checkLogin();
+        $repartoEntrega = RepartoEntrega::find()->where(['rep_id' => $id])->all();
+        $listaEntregas = Array();
+        foreach($repartoEntrega as $entrega){
+            array_push($listaEntregas, $entrega->ent_id);
+        }
+        
+        $query = Entrega::find()->where([
+            'ent_id' => $listaEntregas 
+        ]);
+        
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+              
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'entregaDataProvider' => $dataProvider,
         ]);
     }
 
