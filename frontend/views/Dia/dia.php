@@ -29,6 +29,7 @@
 <!--<script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>-->
 <script type="text/javascript" src="js/OpenLayers.js"></script>
 <script src="js/mapHelper.js" type="text/javascript"></script>
+<script src="js/alert.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.js"></script>
 <script type="text/javascript" src="js/sortable/Sortable.js"></script>
 
@@ -53,7 +54,8 @@
     white-space: nowrap
     }
 </style>
-            
+
+>
 <div class="row">
     <div class="col-sm-3">
 
@@ -129,8 +131,9 @@
      </div>
       
       <div class ="col-md-2">
-        <button type="button" class="btn btn-success" onclick="CreateReparto(entregasZona)">Generar reparto</button>
-    </div>
+        <!--<button id="confirm" type="button" class="btn btn-success" onclick="CreateReparto(entregasZona)">Generar reparto</button>-->
+         <a id="confirm" tabindex="0" class="btn btn-success" role="button" placement="top" data-toggle="popover" data-trigger="focus" title="Genarar reparto" >Generar reparto</a> 
+      </div>
   </div>
 
 
@@ -150,7 +153,7 @@
     var sortable = Sortable.create(el);
     var listItems = <?php echo json_encode($SortableItems); ?>;
     var vehiculoId;
-    var entregasZona;
+    var entregasZona = new Array();
     var selectedPersonal = new Array();
     var ordenEntregas;
     var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
@@ -191,7 +194,7 @@
          if (feature) {
             zpoints = PointsInZone(entregas,vectors,map,feature);
             entregasZona = zpoints;
-            console.log(zpoints);
+            console.log(entregasZona);
             $('#MenuContainer').each(function(){
             $(this).find('li').each(function(){
                 $(this).closest('li').remove();                        
@@ -249,20 +252,15 @@
     }
     
     function UpdateDia(date){
-        //$('#map').empty();
-        
         var hola = 0;
         var fromDia = 0;
         var redirected = 0;
         var date2 = new Date(date);
         fecha = date;
         console.log(fecha);
-//        var dateString = date2.format("yyyy-md-dd");
         console.log(date);
         $(location).attr('href', 'http://localhost/SmartDelivery/frontend/web/index.php?r=dia/dia&fromDia=0&date='+date);
-//        $.get('index.php?r=dia/dia', {fromDia : fromDia} ,function(data){  
-//            console.log(data); 
-//        });
+
     }
     
     function VaciarPersonal(){
@@ -270,6 +268,42 @@
         
     }
    $ ("#modal").removeData ('modal');
+   
+   $("#confirm").click(function(){
+       var data;
+       var error = 0;
+       if (vehiculoId == null){
+         data = 'Debe seleccionar un vehiculo para generar el reparto';   
+         error = 1;
+       }
+       else if (selectedPersonal.length == 0){
+            data = 'Debe seleccionar el personal para realizar el reparto'; 
+            error = 1;
+             
+       }
+       else if (entregasZona.length == 0){
+           data = 'Debe seleccionar la zona en la que se va a realizar el reparto'; 
+           error = 1;
+        }
+        
+        if (error == 1){
+            $('#confirm').attr('data-content', data)    
+            $('#confirm').popover('show');
+            
+        }
+        else{
+           console.log('todo okkkkkk'); 
+           $('#confirm').popover('hide');
+           CreateReparto(entregasZona) 
+        }
+       
+                    
+        //showMessage('error', data, true);
+                    
+           
+        
+           
+        });
 
     
    
