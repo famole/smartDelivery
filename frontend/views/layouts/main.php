@@ -50,7 +50,7 @@ AppAsset::register($this);
                     //Personal
                     $menuItems[] = ['label' => 'Personal',
                                 'items' => [
-                                    ['label' => 'Categorias', 'url' => ['/personalcat/index']],
+                                    ['label' => 'Categorias', 'url' => ['/pcategoria/index']],
                                     ['label' => 'Trabajar con Personal', 'url' => ['/personal/index']],
 
                                 ]];

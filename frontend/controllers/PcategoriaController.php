@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * PersonalCatController implements the CRUD actions for Personalcat model.
  */
-class PersonalCatController extends Controller
+class PcategoriaController extends Controller
 {
     public function behaviors()
     {

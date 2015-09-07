@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel frontend\models\PersonalcatSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Categorias Personal');
+$this->title = Yii::t('app', 'Categorias');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="personalcat-index">
