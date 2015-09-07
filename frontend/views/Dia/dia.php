@@ -18,7 +18,9 @@
     $this->params['breadcrumbs'][] = ['label' => 'Repartos', 'url' => ['reparto/index']];
     $this->params['breadcrumbs'][] = 'Nuevo';
     $fecha = date("Y-m-d");
-    $url = Yii::$app->request->baseUrl;
+    
+    $url = "'".Yii::$app->getUrlManager()->hostInfo . Yii::$app->getUrlManager()->baseUrl."'";
+    //$url = Yii::$app->request->baseUrl;
    // $url2 = Yii::$app->request->basePath;
 //    $url = Yii::$app->request->baseUrl();
     Yii::Error($url);
@@ -157,6 +159,7 @@
     var ordenEntregas;
     var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
     var fecha;
+    var url = <?php echo $url ?>;
     
     
     for (i=0; i<listItems.length; i++){        
@@ -258,7 +261,7 @@
         fecha = date;
         console.log(fecha);
         console.log(date);
-        $(location).attr('href', 'http://localhost/SmartDelivery/frontend/web/index.php?r=dia/dia&fromDia=0&date='+date);
+        $(location).attr('href', url +'/index.php?r=dia/dia&fromDia=0&date='+date);
 
     }
     

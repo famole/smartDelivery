@@ -23,6 +23,7 @@ use yii\helpers\Json;
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 error_reporting(E_ALL); 
 ini_set("display_errors",1);
+
 /**
  * Description of DiaController
  *
@@ -55,7 +56,7 @@ class DiaController extends Controller{
    
     
     public function actionReloadMap($date,$fromDia){
-        
+                
         $zonas= array();
         $nullId = 0;
         $rows = Zona::find()
@@ -146,6 +147,7 @@ class DiaController extends Controller{
     }
     
     public function actionCreateDiaReparto($parms,$veId,$personalIds,$ordenEntregas,$fecha){
+        $url = Yii::$app->getUrlManager()->hostInfo . Yii::$app->getUrlManager()->baseUrl;
         $zpoints = json_decode($parms);
         $result = array();        
         $ordenes = JSON::decode($ordenEntregas);
@@ -190,7 +192,7 @@ class DiaController extends Controller{
         
         
        // Yii::error($decode);
-        $this->redirect('http://localhost/SmartDelivery/frontend/web/index.php?r=reparto%2Findex');
+        $this->redirect($url.'/index.php?r=reparto%2Findex');
         //echo Json::encode($test);
         
         
