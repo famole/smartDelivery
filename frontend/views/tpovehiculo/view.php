@@ -23,9 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
     
     <p>
-        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->tv_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->tv_id], ['class' => 'btn btn-primary btn-sm']) ?>
         <?= Html::a(Yii::t('app', 'Eliminar'), ['delete', 'id' => $model->tv_id], [
-            'class' => 'btn btn-danger',
+            'class' => 'btn btn-danger btn-sm',
             'data' => [
                 'confirm' => Yii::t('app', 'Esta seguro que desea eliminar el Tipo de Vehiculo?'),
                 'method' => 'post',

@@ -5,12 +5,12 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\models\TipoVehiculo;
+use frontend\models\Personalcat;
 
 /**
- * TipoVehiculoSearch represents the model behind the search form about `frontend\models\TipoVehiculo`.
+ * PersonalcatSearch2 represents the model behind the search form about `frontend\models\Personalcat`.
  */
-class TipoVehiculoSearch extends TipoVehiculo
+class PersonalcatSearch2 extends Personalcat
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class TipoVehiculoSearch extends TipoVehiculo
     public function rules()
     {
         return [
-            [['tv_id'], 'integer'],
-            [['tv_nombre'], 'safe'],
+            [['pc_id'], 'integer'],
+            [['pc_desc'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class TipoVehiculoSearch extends TipoVehiculo
      */
     public function search($params)
     {
-        $query = TipoVehiculo::find();
+        $query = Personalcat::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,10 +56,10 @@ class TipoVehiculoSearch extends TipoVehiculo
         }
 
         $query->andFilterWhere([
-            'tv_id' => $this->tv_id,
+            'pc_id' => $this->pc_id,
         ]);
 
-        $query->andFilterWhere(['like', 'tv_nombre', $this->tv_nombre]);
+        $query->andFilterWhere(['like', 'pc_desc', $this->pc_desc]);
 
         return $dataProvider;
     }

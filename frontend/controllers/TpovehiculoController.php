@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * TipoVehiculoController implements the CRUD actions for TipoVehiculo model.
  */
-class TipoVehiculoController extends Controller
+class TpovehiculoController extends Controller
 {
     public function behaviors()
     {
