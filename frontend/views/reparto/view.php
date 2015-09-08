@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use frontend\enum\EnumBaseStatus;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Reparto */
@@ -10,6 +11,7 @@ use yii\grid\GridView;
 $this->title = 'Reparto: ' . $model->rep_id;
 $this->params['breadcrumbs'][] = ['label' => 'Repartos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="reparto-view">
 
@@ -38,14 +40,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="form-group">
         <h4>Entregas</h4>
         <hr>
-        <?= GridView::widget([
+        <?= 
+            GridView::widget([
             'dataProvider' => $entregaDataProvider,
+            'rowOptions'=>function($model){
+                    if($model->estados->est_nom == EnumBaseStatus::Cancelado){
+                        return ['class' => 'danger'];
+                    }
+            },
             'columns' => [
                 [
                     'attribute' => '',
                     'format' => 'raw',
-                    'value' => function ($model, $url) {  
-                        return Html::a('<span class="glyphicon glyphicon-remove-sign" style = "cursor: pointer;"></span>', 'index.php?r=entrega/set-address&id=');
+                    'value' => function ($model2, $url) {
+                        if ($model2->estados->est_nom !== EnumBaseStatus::Cancelado && $model2->estados->est_nom !== EnumBaseStatus::Finalizado ){
+                            return Html::a('<span class="glyphicon glyphicon-remove-sign" style = "cursor: pointer;"></span>', 'index.php?r=entrega/cancel&id=' . $model2->ent_id . '&repId=' . Yii::$app->getRequest()->getQueryParam('id'));
+                            
+                        }else{
+                            return '';
+                        }
                     },
                 ],
                 'ent_id',
