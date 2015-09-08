@@ -7,12 +7,17 @@ use frontend\models\Reparto;
 use frontend\models\RepartoSearch;
 use frontend\models\RepartoEntrega;
 use frontend\models\Entrega;
+use frontend\models\Direccion;
+use frontend\models\Estados;
+use frontend\models\Vehiculo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
 
+
+date_default_timezone_set('America/Argentina/Buenos_Aires');
 /**
  * RepartoController implements the CRUD actions for Reparto model.
  */
@@ -36,13 +41,74 @@ class RepartoController extends Controller
      */
     public function actionIndex()
     {   
+        $vehiMat = null;
         $this->checkLogin();
         $searchModel = new RepartoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
+        $date = date("Y-m-d");
+        $entregas = Entrega::find()
+        ->select('*')
+        ->where(['ent_fecha' =>$date])
+        ->all();
+        
+        $items = (array) null;
+        foreach($entregas as $entrega){
+            
+            $direccion = Direccion::find()           
+            ->where('dir_id = :dir',[':dir' => $entrega->dir_id])           
+            ->one();
+            
+            $estado = Estados::find()
+            ->where('est_id = :est',[':est' => $entrega->est_id])           
+            ->one(); 
+            if($estado->est_nom == 'Pendiente-Reparto'){
+                $repEntrega = RepartoEntrega::find()
+                ->select('*')
+                ->where(['ent_id' =>$entrega->ent_id])
+                ->one();
+                
+                if($repEntrega != null){
+                    $repId = $repEntrega->rep_id;
+                    $rep = Reparto::find()
+                    ->select('*')
+                    ->where(['rep_id' =>$repId])
+                    ->one();
+                   
+                    $vehId = $rep->ve_id;
+                    $vehiculo = Vehiculo::find()
+                    ->select('*')
+                    ->where(['ve_id' =>$vehId])
+                    ->one();
+                    
+                    $vehMat = $vehiculo->ve_matricula;                   
+                    
+                }
+                
+            }
+            Yii::error($estado);    
+            $item = array(
+                    "entrega" => $entrega->ent_id,
+                    "direccion" => $direccion->dir_direccion,
+                    "estado" => $estado->est_nom,
+                    "lat" => $direccion->dir_lat,
+                    "lon" => $direccion->dir_lon,
+                    "vehiculo"=> $vehMat,
+                
+            );
+            
+            array_push($items, $item);
+        }
+        
+        //Personal disponible para el dia de hoy
+        
+        
+         $entregasJson = json_encode($items);
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'entregasJson' => $entregasJson,
         ]);
 
     }

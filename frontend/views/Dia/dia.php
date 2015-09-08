@@ -157,7 +157,7 @@
     var entregasZona = new Array();
     var selectedPersonal = new Array();
     var ordenEntregas;
-    var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
+    var pinType = <?php echo '"' .EnumPinType::Blue. '"';?>;
     var fecha;
     var url = <?php echo $url ?>;
     
@@ -294,7 +294,6 @@
             
         }
         else{
-           console.log('todo okkkkkk'); 
            $('#confirm').popover('hide');
            CreateReparto(entregasZona) 
         }
