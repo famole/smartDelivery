@@ -26,6 +26,7 @@ class CamionController extends Controller{
         ->where(['ve_id'=>$vehiculoId,'rep_fecha'=>$fecha])
         ->one();
         
+        
         if($reparto != null){
         
             $repartoEntrega= RepartoEntrega::find()
@@ -35,11 +36,13 @@ class CamionController extends Controller{
             ->all();
             
             $entregas = (array) null;
-
+            $estadoPendRep = Estados::find()->where(['est_nom' => EnumBaseStatus::PendienteReparto,'est_type' => EnumStatusType::System])->one();
             foreach($repartoEntrega as $re){
                 $entrega = Entrega::find()           
-               ->where(['ent_id' => $re->ent_id])           
+               ->where(['ent_id' => $re->ent_id,'est_id' => $estadoPendRep->est_id])           
                ->one();
+                
+                if ($entrega != null){
                 
                 $direccion = Direccion::find()           
                 ->where('dir_id = :dir',[':dir' => $entrega->dir_id])           
@@ -61,12 +64,14 @@ class CamionController extends Controller{
                
                array_push($entregas,$item);
             }
+            }
             $SideNavItems = UtilHelper::createItemsForSideNav($entregas, EnumSideNav::Entrega);
         $entregasJson = JSON::encode($entregas);
+            
         }
         
         
-        return $this->render('camion',['SideNavItems'=>$SideNavItems,'entregasJson'=>$entregasJson]);
+        return $this->render('camion',['SideNavItems'=>$SideNavItems,'entregasJson'=>$entregasJson,'vehiculoId'=>$vehiculoId,'fecha'=>$fecha]);
         
         
     }
@@ -108,6 +113,7 @@ class CamionController extends Controller{
                 $estado = Estados::find()
                 ->where(['est_type' => EnumStatusType::System, 'est_nom' => EnumBaseStatus::Cancelado])           
                 ->one();
+                break;
                 
         }
         

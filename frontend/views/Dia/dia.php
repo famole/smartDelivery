@@ -257,6 +257,7 @@
         var hola = 0;
         var fromDia = 0;
         var redirected = 0;
+        console.log(date);
         var date2 = new Date(date);
         fecha = date;
         console.log(fecha);

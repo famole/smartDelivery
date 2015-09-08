@@ -63,7 +63,7 @@ use yii\bootstrap\Modal;
         //'toggleButton' => ['label' => '<i class="glyphicon glyphicon-road"></i> Seleccionar personal', 'class' => 'btn btn-primary','onclick' => 'VaciarPersonal()'],
         'id' => 'modal',
         ]);
-        echo $this->render('EntregaCamion');
+        echo $this->render('EntregaCamion',['vehiculoId'=>$vehiculoId,'fecha'=>$fecha]);
 
     Modal::end();?>;
     
@@ -74,6 +74,7 @@ use yii\bootstrap\Modal;
 var entregas = eval(<?php echo $entregasJson; ?>) ; 
 var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
 var listId;
+ 
 
 var map = createNiceMap(-6252731.917154272,-4150822.2589118066,14,'map');
 for (indice = 0; indice < entregas.length; ++indice) {

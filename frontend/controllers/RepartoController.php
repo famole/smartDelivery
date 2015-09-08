@@ -41,7 +41,7 @@ class RepartoController extends Controller
      */
     public function actionIndex()
     {   
-        $vehiMat = null;
+        $vehMat = null;
         $this->checkLogin();
         $searchModel = new RepartoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

@@ -1,6 +1,11 @@
 <?php
 
-
+$url = "'".Yii::$app->getUrlManager()->hostInfo . Yii::$app->getUrlManager()->baseUrl."'";
+//$date = date_create($fecha); 
+//$date = date_format($date, 'd-m-Y');
+//Yii::error('date camion: '.$date);
+$stringDate = "'".$fecha."'";
+//Yii::error('fecha camion: '.$stringDate);
 ?>
 
 
@@ -37,9 +42,9 @@
 <button type="button" class="btn btn-success" onclick="updateEntregaEstado('Entregado')" data-dismiss="modal">Entregado</button>
 <button type="button" class="btn btn-danger" onclick="updateEntregaEstado('Cancelado')" data-dismiss="modal">Cancelado</button>
 <script>
-    
-    
-    
+    var url = <?php echo $url ?>;
+    var vehiculoId = eval(<?php echo $vehiculoId; ?>) ; 
+   
     $(document).ready(function(){
        
     
@@ -66,12 +71,15 @@
     };
     
     function updateEntregaEstado(estado){
+        
+         
         var entregaId = $('#idEntrega').val();  
         $.get('index.php?r=camion/set-estado-entrega', {entregaId : entregaId,estado:estado }, function(data){  
-               console.log(data);
+               $(location).attr('href', url +'/index.php?r=camion/camion&vehiculoId='+vehiculoId+'&fecha='+<?php echo $stringDate;?>);
         },"json ");
         
         $('ul').find('#'+entregaId).remove();
+         
         
     }
 </script>

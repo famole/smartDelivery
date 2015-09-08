@@ -223,7 +223,7 @@ function displayMap(map){
     iconFeature.set("estado",entrega.estado);
     var estado;
     switch (entrega.estado){
-      case "Pendiente":
+      case "Cancelado":
           estado = "<code><b>"+iconFeature.get('estado') + "</b></code>" ;
           break;
       case "Entregado":
