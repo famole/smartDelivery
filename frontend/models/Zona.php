@@ -69,7 +69,11 @@ class Zona extends \yii\db\ActiveRecord
            $command->execute();
            
         } else {
-            return $this->update($runValidation, $attributeNames) !== false;
+            $connection = static::getDb();
+            $sql="UPDATE `zona` Set z_id =".$this->z_id.", z_nombre ='".$this->z_nombre."', z_zona= GeomFromText('".  $this->z_zona."') ,z_wkt = '".$this->z_zona."' WHERE z_id = ".$this->z_id;
+            $command=$connection->createCommand($sql);
+            $command->execute();
+           // return $this->update($runValidation, $attributeNames) !== false;
         }
     }
   

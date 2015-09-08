@@ -13,6 +13,8 @@ use yii\widgets\ActiveForm;
        <link rel="stylesheet" href="http://openlayers.org/en/v3.0.0/css/ol.css" type="text/css">
        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
+       <script type="text/javascript" src="js/OpenLayers.js"></script>
+       <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.js"></script>-->
         <script src="js/mapHelper.js" type="text/javascript"></script>
         <!--<script src="js/OpenLayers_features.js" type="text/javascript"></script>-->
        <meta charset="utf-8">
@@ -53,23 +55,12 @@ use yii\widgets\ActiveForm;
 
 <script type="text/javascript">
 
-    var rasterLayer = new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) });
+
     var source = new ol.source.Vector();
     var vectorLayer = new ol.layer.Vector({	source:source });
-    var wkt = new ol.format.WKT();
 
-    var map = new ol.Map({
-      target: 'map',
-      controls: ol.control.defaults().extend([ new ol.control.ScaleLine({ units:'metric' }) ]),
-      layers: [ rasterLayer, vectorLayer ],
-      view: new ol.View({
-        center: ol.proj.transform([-56.16341,-34.90721], 'EPSG:4326', 'EPSG:3857'),
-        zoom: 15
-      })
-      
-       
-    });
-    
+    var map = createNiceMap(-6252731.917154272,-4150822.2589118066,14,'map');
+    map.addLayer(vectorLayer);
     
 
 

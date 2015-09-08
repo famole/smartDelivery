@@ -369,19 +369,14 @@ function PointsInZone(entregas,vectors,map,feature){
     console.log(ret)      
     return ret;
 }      
-      //});
-       
-     
-    
-    
-    
+      //});    
 
 
 function addInteraction() {
         // reset interaction:
-        if(typeof drawInteraction != 'undefined') map.removeInteraction(drawInteraction);
-	if(typeof selectInteraction != 'undefined') map.removeInteraction(selectInteraction);
-	if(typeof modifyInteraction != 'undefined') map.removeInteraction(modifyInteraction);
+//        if(typeof drawInteraction != 'undefined') map.removeInteraction(drawInteraction);
+//	if(typeof selectInteraction != 'undefined') map.removeInteraction(selectInteraction);
+//	if(typeof modifyInteraction != 'undefined') map.removeInteraction(modifyInteraction);
         // get type:
 	var type = "Polygon";
         //var type = "Point";
@@ -394,10 +389,10 @@ function addInteraction() {
 		// remove draw interaction:
 		map.removeInteraction(drawInteraction);
 		// Create a select interaction and add it to the map:
-		selectInteraction = new ol.interaction.Select();
-		map.addInteraction(selectInteraction);
-		// select feature:
-		selectInteraction.getFeatures().push(feature);
+//		selectInteraction = new ol.interaction.Select();
+//		map.addInteraction(selectInteraction);
+//		// select feature:
+//		selectInteraction.getFeatures().push(feature);
 		// clone feature:
 		var featureClone = feature.clone();
 		// transform cloned feature to WGS84:
@@ -412,21 +407,21 @@ function addInteraction() {
                 $('#zona-z_wkt').val(wkt3);
                 
 		// Create a modify interaction and add to the map:
-		modifyInteraction = new ol.interaction.Modify({
-			features: selectInteraction.getFeatures()
-		});
-		map.addInteraction(modifyInteraction);  
-		// set listener to update geometry when feature is changed:
-		feature.on('change', function() {
-			// clone feature: 
-		        var featureClone = feature.clone();
-		        // transform cloned feature to WGS84:
-		        featureClone.getGeometry().transform('EPSG:3857', 'EPSG:4326');			
-			// set modified WKT string:
-			modifiedWKT = wkt.writeFeature(featureClone);
-			// set update trigger flag:
-			triggerUpdate=true; 
-		}); 
+//		modifyInteraction = new ol.interaction.Modify({
+//			features: selectInteraction.getFeatures()
+//		});
+//		map.addInteraction(modifyInteraction);  
+//		// set listener to update geometry when feature is changed:
+//		feature.on('change', function() {
+//			// clone feature: 
+//		        var featureClone = feature.clone();
+//		        // transform cloned feature to WGS84:
+//		        featureClone.getGeometry().transform('EPSG:3857', 'EPSG:4326');			
+//			// set modified WKT string:
+//			modifiedWKT = wkt.writeFeature(featureClone);
+//			// set update trigger flag:
+//			triggerUpdate=true; 
+//		}); 
 	});
 }
 
