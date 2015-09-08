@@ -200,13 +200,11 @@ function displayMap(map){
   
 
  function dibujarIcono(lat,long,entrega,icontype){
-
+    var content;
+    var vehiculo;
     var iconFeature = new ol.Feature({
         geometry: new ol.geom.Point([lat,long]),
         name: entrega.entrega
-
-        //population: 4000,
-        //rainfall: 500
     });
     
     var iconStyle = new ol.style.Style({
@@ -214,7 +212,7 @@ function displayMap(map){
             anchor: [0.5, 10],
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
-            opacity: 0.75,
+            opacity: 0.9,
             src: icontype
         }))
     });
@@ -231,9 +229,25 @@ function displayMap(map){
       case "Entregado":
           estado = "<font color='green'>"+"<b>"+iconFeature.get('estado')+"</b></font>";
           break;
+      case "Pendiente-Armar":
+          estado = "<font color='red'>"+"<b>"+iconFeature.get('estado')+"</b></font>";
+          break;  
+      case "Pendiente-Reparto":
+          estado = "<font color='brown'>"+"<b>"+iconFeature.get('estado')+"</b></font>";
+          vehiculo = entrega.vehiculo;
+          break; 
     }
-    var content = "<b>Cliente</b>"+": "+iconFeature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ iconFeature.get('direccion')
+    if(entrega.estado == "Pendiente-Reparto"){
+        content = "<b>Cliente</b>"+": "+iconFeature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ iconFeature.get('direccion')
+            +"<br>"+ "<b>Estado</b>"+": "+estado +"<br>"+ "<b>Vehículo</b>"+": "+vehiculo;
+        
+    }
+    else{
+        content = "<b>Cliente</b>"+": "+iconFeature.get('name') +"<br>" +"<b>Dirección</b>"+": "+ iconFeature.get('direccion')
             +"<br>"+ "<b>Estado</b>"+": "+estado;
+        
+    }
+    
     iconFeature.set("content",content);
 
     var vectorSource = new ol.source.Vector({

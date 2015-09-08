@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use frontend\enum\EnumPinType;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\RepartoSearch */
@@ -15,6 +16,16 @@ use yii\grid\GridView;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.js"></script>
 <script type="text/javascript" src="js/sortable/Sortable.js"></script>
 
+<style>
+    #popup {
+    padding-bottom: 45px;
+    
+  }
+  .popover-content {
+    min-width: 230px;
+  }
+</style>
+
 <div class="bs-example">
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#sectionA">Mapa</a></li>
@@ -23,12 +34,12 @@ use yii\grid\GridView;
     </ul>
     <div class="tab-content">
         <div id="sectionA" class="tab-pane fade in active">
-            
+            <div id="popup" style ="with:100px"></div>   
         </div>
         <div id="sectionB" class="tab-pane fade ">
             <h1><?= Html::encode($this->title) ?></h1>
             <p>
-                <?= Html::a('Crear Reparto', 'index.php?r=dia/dia&fromDia=0&date=', ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Crear Reparto', 'index.php?r=dia/dia&fromDia=1&date=', ['class' => 'btn btn-success']) ?>
             </p>
 
             <?= GridView::widget([
@@ -61,8 +72,37 @@ use yii\grid\GridView;
 
 
 <script type="text/javascript">
+    var entregas = eval(<?php echo $entregasJson; ?>) ;  
+    var pinType; 
     
-      
     var map = createNiceMap(-6252731.917154272,-4150822.2589118066,14,'sectionA');
+    
+    for (indice = 0; indice < entregas.length; ++indice) {
+       
+        var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
+        var point2 = point;
+        point2.transform('EPSG:4326','EPSG:3857');
+        console.log(point2.lon);
+        console.log(point2.lat);
+        switch (entregas[indice].estado){
+            case "Cancelado":
+                pinType = <?php echo '"' .EnumPinType::Orange. '"';?>;
+                break;
+            case "Entregado":
+                pinType = <?php echo '"' .EnumPinType::Green. '"';?>;
+                break;
+            case "Pendiente-Armar":
+                pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
+                break;
+            case "Pendiente-Reparto":
+                pinType = <?php echo '"' .EnumPinType::Blue. '"';?>;
+                break;
+            
+        }
+        var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice],pinType);
+        map.addLayer(pointLayer);
+    
+    } 
+    popup(map);
     
 </script>
