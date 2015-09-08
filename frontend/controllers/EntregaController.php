@@ -14,7 +14,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\helper\UtilHelper;
 use yii\helpers\Json;
-
+use frontend\enum\EnumBaseStatus;
+use frontend\models\EstadosSearch;
 
 /**
  * EntregaController implements the CRUD actions for Entrega model.
@@ -115,6 +116,16 @@ class EntregaController extends Controller
         return $this->redirect(['index']);
     }
 
+    
+    public function actionCancel($id, $repId)
+    {
+        $this->checkLogin();
+        $model = $this->findModel($id);
+        $model->est_id = EstadosSearch::getIdByName(EnumBaseStatus::Cancelado);
+        $model->save();
+
+        return $this->redirect('index.php?r=reparto%2Fview&id=' . $repId);
+    }
     /**
      * Finds the Entrega model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
