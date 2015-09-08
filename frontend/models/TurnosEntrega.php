@@ -43,10 +43,10 @@ class TurnosEntrega extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'te_id' => Yii::t('app', 'Te ID'),
-            'te_nombre' => Yii::t('app', 'Te Nombre'),
-            'te_horainicio' => Yii::t('app', 'Te Horainicio'),
-            'te_horafin' => Yii::t('app', 'Te Horafin'),
+            'te_id' => Yii::t('app', 'Codigo'),
+            'te_nombre' => Yii::t('app', 'Nombre'),
+            'te_horainicio' => Yii::t('app', 'Hora Inicio'),
+            'te_horafin' => Yii::t('app', 'Hora Fin'),
         ];
     }
 

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Reparto */
@@ -12,33 +13,61 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="reparto-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'rep_id',
-            've_id',
+            [
+                'attribute' => 'Vehiculo',
+                'value' => $model->ve->ve_matricula,
+                   
+            ],
             'rep_fhini',
             'rep_fhfin',
-            'est_id',
+            [
+                'attribute' => 'Estado',
+                'value' => $model->est->est_nom,
+                   
+            ],
             'est_observacion',
         ],
     ]) ?>
-
     
-    <?= GridView::widget([
-            'dataProvider' => $dataEntregaProvider,
+    <div class="form-group">
+        <h4>Entregas</h4>
+        <hr>
+        <?= GridView::widget([
+            'dataProvider' => $entregaDataProvider,
             'columns' => [
+                [
+                    'attribute' => '',
+                    'format' => 'raw',
+                    'value' => function ($model, $url) {  
+                        return Html::a('<span class="glyphicon glyphicon-remove-sign" style = "cursor: pointer;"></span>', 'index.php?r=entrega/set-address&id=');
+                    },
+                ],
                 'ent_id',
                 'ped_id',
                 [
                     'attribute' => 'ent_fecha',
                     'format' => ['date','dd-MM-Y'],
-                    
-                  
+
+
                 ],
-                'te_id',
+                [
+                    'attribute' => 'estado',
+                    'value' => function($model){
+                        if($model->ent_pendefinir == 1){
+                            return $model->ent_errorDesc;
+                        }else{
+                            return $model->estados->est_nom;
+                        }
+                    }
+                ],
+                
             ],
         ]); ?>
+    </div>
 </div>

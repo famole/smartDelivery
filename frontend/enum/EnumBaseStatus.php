@@ -8,7 +8,7 @@ class EnumBaseStatus {
     const Entregado = 'Entregado';
     const PendienteReparto = 'Pendiente-Reparto';
     
-    //**********Reparto****************
+    //**********Reparto/Entrega********
     const Preparado = 'Preparado';
     const EnCurso = 'En curso';
     const Finalizado = 'Finalizado';

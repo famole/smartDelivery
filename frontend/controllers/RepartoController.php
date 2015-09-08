@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
+use yii\data\ActiveDataProvider;
 
 /**
  * RepartoController implements the CRUD actions for Reparto model.
@@ -55,9 +56,11 @@ class RepartoController extends Controller
     {
         $this->checkLogin();
         $repartoEntrega = RepartoEntrega::find()->where(['rep_id' => $id])->all();
-        $listaEntregas = Array();
+        
+        $i = 0;
         foreach($repartoEntrega as $entrega){
-            array_push($listaEntregas, $entrega->ent_id);
+            $listaEntregas[$i] = $entrega->ent_id;
+            $i = $i + 1;
         }
         
         $query = Entrega::find()->where([
@@ -66,6 +69,9 @@ class RepartoController extends Controller
         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 4,
+            ],
         ]);
               
         

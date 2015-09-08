@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * TurnosEntregaController implements the CRUD actions for TurnosEntrega model.
  */
-class TurnosEntregaController extends Controller
+class TentregaController extends Controller
 {
     public function behaviors()
     {
