@@ -24,7 +24,7 @@ use kartik\widgets\Select2;
     <?= $form->field($model, 'per_tel')->textInput() ?>
 
     <?= $form->field($model, 'pc_id')->widget(Select2::className(),[
-        'data' => yii\helpers\ArrayHelper::map(app\models\Personalcat::find()->all(), 'pc_id', 'pc_desc'),
+        'data' => yii\helpers\ArrayHelper::map(frontend\models\Personalcat::find()->all(), 'pc_id', 'pc_desc'),
         'language' => 'es',
         'options' => ['placeholder' => 'Seleccionar una categoria'],
         'pluginOptions' =>[

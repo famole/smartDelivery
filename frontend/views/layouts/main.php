@@ -61,7 +61,7 @@ AppAsset::register($this);
                                     ['label' => 'Direcciones', 'url' => ['/direccion/index']],
                                     ['label' => 'Estados', 'url' => ['/estados/index']],
                                     ['label' => 'Tipo de Vehiculos', 'url' => ['/tpovehiculo/index']],
-                                    ['label' => 'Turnos de Entrega', 'url' => ['/turnosentrega/index']],
+                                    ['label' => 'Turnos de Entrega', 'url' => ['/tentrega/index']],
                                     ['label' => 'Vehiculos', 'url' => ['/vehiculo/index']],
                                     ['label' => 'Zona', 'url' => ['/zona/index']],
                                 ]];
