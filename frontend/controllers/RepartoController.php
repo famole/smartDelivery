@@ -210,6 +210,8 @@ class RepartoController extends Controller
                 $entrega->est_id = EstadosSearch::getIdByName(EnumBaseStatus::PendArmar);
                 $entrega->save();
             }
+            
+            RepartoEntrega::deleteAll(['rep_id' => $id]);
         }
         
         $reparto->delete();

@@ -38,14 +38,14 @@ AppAsset::register($this);
             
             if (!Yii::$app->user->isGuest) {
                 $user = User::findIdentity(Yii::$app->user->getId());
-                //Generico
-                $menuItems = [
-                    ['label' => 'Entregas', 'url' => ['/entrega/index']],
-                    ['label' => 'Pedidos', 'url' => ['/pedido/index']],
-                ];
-                
+                               
                 if($user->usertype == EnumUserType::Oficina
                         || $user->usertype == EnumUserType::Admin){
+                    
+                    $menuItems = [
+                        ['label' => 'Entregas', 'url' => ['/entrega/index']],
+                        ['label' => 'Pedidos', 'url' => ['/pedido/index']],
+                    ];
                     
                     //Personal
                     $menuItems[] = ['label' => 'Personal',

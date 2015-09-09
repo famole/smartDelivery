@@ -89,6 +89,7 @@ class Personal extends \yii\db\ActiveRecord
             $user = new User();
             $user->username = $this->per_nom;
             $user->setPassword($this->per_priape);
+            $user->usertype = $this->pc->pc_desc;
             $user->generateAuthKey();
             if ($user->save()) {
                 $numerador = new NumeradoresController('PER');
