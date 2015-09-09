@@ -99,13 +99,21 @@ class DiaController extends Controller{
             $estado = Estados::find()
             ->where('est_id = :est',[':est' => $entrega->est_id])           
             ->one(); 
-            Yii::error($estado);    
+            Yii::error($estado);
+            $dir =NULL;
+            $lat = NULL;
+            $lon = NULL;
+            if($direccion != null){
+                $dir = $direccion->dir_direccion;
+                $lat = $direccion->dir_lat;
+               $lon=  $direccion->dir_lon;
+            }
             $item = array(
                     "entrega" => $entrega->ent_id,
-                    "direccion" => $direccion->dir_direccion,
+                    "direccion" => $dir,
                     "estado" => $estado->est_nom,
-                    "lat" => $direccion->dir_lat,
-                    "lon" => $direccion->dir_lon,
+                    "lat" => $lat,
+                    "lon" => $lon,
                 
             );
             

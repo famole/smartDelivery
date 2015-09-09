@@ -180,7 +180,7 @@ class EntregaController extends Controller
             if (($pedido = Pedido::findOne($entrega->ped_id)) !== null) {
                 $direccion = Direccion::find()->where(['dir_direccion'=>$pedido->ped_direccion])->one();
                 
-                if($direccion->dir_lat == ''){
+                if($direccion === NULL){
                     $direccion = new Direccion();
                     $direccion->dir_direccion = $pedido->ped_direccion;
                 }

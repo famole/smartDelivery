@@ -72,6 +72,7 @@ use yii\bootstrap\Modal;
 <script type="text/javascript">
 
 var entregas = eval(<?php echo $entregasJson; ?>) ; 
+var repartoId = eval(<?php echo $repartoId; ?>);
 var pinType;
 var listId;
  

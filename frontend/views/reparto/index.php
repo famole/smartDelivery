@@ -82,8 +82,6 @@ use frontend\enum\EnumPinType;
         var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
         var point2 = point;
         point2.transform('EPSG:4326','EPSG:3857');
-        console.log(point2.lon);
-        console.log(point2.lat);
         switch (entregas[indice].estado){
             case "Cancelado":
                 pinType = <?php echo '"' .EnumPinType::Orange. '"';?>;

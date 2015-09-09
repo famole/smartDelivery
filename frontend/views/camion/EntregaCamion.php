@@ -44,6 +44,7 @@ $stringDate = "'".$fecha."'";
 <script>
     var url = <?php echo $url ?>;
     var vehiculoId = eval(<?php echo $vehiculoId; ?>) ; 
+    
    
     $(document).ready(function(){
        
@@ -79,7 +80,15 @@ $stringDate = "'".$fecha."'";
         },"json ");
         
         $('ul').find('#'+entregaId).remove();
+         entregas.splice(0, 1);
+         console.log(repartoId);
+         if (entregas.length == 0){
+             $.get('index.php?r=camion/update-estado-reparto', {repartoId : repartoId}, function(data){
+                 
+             
+         });
          
         
+        }
     }
 </script>

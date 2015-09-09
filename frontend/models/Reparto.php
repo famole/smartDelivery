@@ -4,6 +4,8 @@ namespace frontend\models;
 
 use Yii;
 use frontend\controllers\NumeradoresController;
+use frontend\enum\EnumBaseStatus;
+use frontend\models\EstadosSearch;
 
 /**
  * This is the model class for table "reparto".
@@ -153,6 +155,16 @@ class Reparto extends \yii\db\ActiveRecord
         }
             
 }
-    
+    public function SetEstadoReparto($repartoId){
+        
+       
+       //$estadoFinalizado = Estados::find()->where(['est_nom' => EnumBaseStatus::Finalizado,'est_type' => EnumStatusType::System])->one();
+      $estadoId =  EstadosSearch::getIdByName(EnumBaseStatus::Finalizado);
+        $connection = static::getDb();
+        $sql="Update Reparto set est_id =".$estadoId." where rep_id =".$repartoId ;
+        $command=$connection->createCommand($sql);
+        $rows = $command->execute();
+        
+    }
     
 }
