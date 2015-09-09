@@ -72,18 +72,25 @@ use yii\bootstrap\Modal;
 <script type="text/javascript">
 
 var entregas = eval(<?php echo $entregasJson; ?>) ; 
-var pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
+var pinType;
 var listId;
  
 
 var map = createNiceMap(-6252731.917154272,-4150822.2589118066,14,'map');
-for (indice = 0; indice < entregas.length; ++indice) {
+for (indice = 0; indice < entregas.length; indice++) {
        
     var point = new OpenLayers.LonLat(entregas[indice].lon,entregas[indice].lat);
     var point2 = point;
     point2.transform('EPSG:4326','EPSG:3857');
-    console.log(point2.lon);
-    console.log(point2.lat);
+    pinType = <?php echo '"' .EnumPinType::Yellow. '"';?>;
+    switch (indice){
+        case 0:
+            console.log(indice)
+            pinType = <?php echo '"' .EnumPinType::Blue. '"';?>;
+            break;
+            
+    }
+    console.log(pinType)
     var pointLayer = dibujarIcono(point2.lon,point2.lat,entregas[indice],pinType);
     map.addLayer(pointLayer);
 
