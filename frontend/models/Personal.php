@@ -1,6 +1,8 @@
 <?php
 
 namespace frontend\models;
+use frontend\controllers\NumeradoresController;
+use common\models\User;
 
 use Yii;
 
@@ -84,22 +86,25 @@ class Personal extends \yii\db\ActiveRecord
     public function save($runValidation = true, $attributeNames = null)
     {
         if ($this->getIsNewRecord()) {
-            //TODO
-            //si es nuevo primero crear usuario en el sistema **Ver esto**
-            $numerador = new NumeradoresController('PER');
-            $this->per_id = $numerador->getNumerador();
-            $connection = static::getDb();
-            $sql="INSERT INTO `personal` (`per_id`, `user_id`, `per_nom`, `per_priape`, `per_segape`, `per_tel`, `pc_id`) "
-                    . "VALUES ("."'".$this->per_id."',"
-                    ."'".$this->user_id."',"
-                    ."'".$this->per_nom."',"
-                    ."'".$this->per_priape."',"
-                    ."'".$this->per_segape."',"
-                    ."'".$this->per_tel."',"
-                    ."'".$this->pc_id."')";
-            $command=$connection->createCommand($sql);
-            $command->execute();
-           
+            $user = new User();
+            $user->username = $this->per_nom;
+            $user->setPassword($this->per_priape);
+            $user->generateAuthKey();
+            if ($user->save()) {
+                $numerador = new NumeradoresController('PER');
+                $this->per_id = $numerador->getNumerador();
+                $connection = static::getDb();
+                $sql="INSERT INTO `personal` (`per_id`, `user_id`, `per_nom`, `per_priape`, `per_segape`, `per_tel`, `pc_id`) "
+                        . "VALUES ("."'".$this->per_id."',"
+                        ."'".$user->id."',"
+                        ."'".$this->per_nom."',"
+                        ."'".$this->per_priape."',"
+                        ."'".$this->per_segape."',"
+                        ."'".$this->per_tel."',"
+                        ."'".$this->pc_id."')";
+                $command=$connection->createCommand($sql);
+                $command->execute();
+            }
         } else {
             return $this->update($runValidation, $attributeNames) !== false;
         }
