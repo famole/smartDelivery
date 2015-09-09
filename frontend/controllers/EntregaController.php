@@ -200,6 +200,7 @@ class EntregaController extends Controller
                     
                     $entrega->ent_errorDesc = '';
                     $entrega->ent_pendefinir = 0;
+                    $entrega->dir_id = $dirId;
                     if ($entrega->save()){
                         //render
                         return $this->redirect(['index']);
