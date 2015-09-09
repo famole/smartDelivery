@@ -71,7 +71,7 @@ class CamionController extends Controller{
         }
         
         
-        return $this->render('camion',['SideNavItems'=>$SideNavItems,'entregasJson'=>$entregasJson,'vehiculoId'=>$vehiculoId,'fecha'=>$fecha]);
+        return $this->render('camion',['SideNavItems'=>$SideNavItems,'entregasJson'=>$entregasJson,'vehiculoId'=>$vehiculoId,'fecha'=>$fecha,'repartoId'=>$reparto->rep_id]);
         
         
     }
@@ -121,6 +121,12 @@ class CamionController extends Controller{
        echo  $entrega->UpdateEntregaEstado($entregaId,$estado->est_id);
         
         
+    }
+    
+    public function actionUpdateEstadoReparto($repartoId){
+        
+        $reparto = new Reparto();
+        echo $reparto->SetEstadoReparto($repartoId);
     }
     
     

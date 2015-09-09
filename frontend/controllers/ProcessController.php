@@ -142,8 +142,9 @@ class ProcessController extends SiteController{
     }
     
     public function actionDirectionExists($directionparm){ 
+        $dir_id = NULL;
         $direccion = Direccion::find()->where(['dir_direccion'=>$directionparm])->one();
-        if($direccion->dir_lat != ''){
+        if($direccion != NULL){
             $dir_id = $direccion->dir_id;
         }
         return $dir_id;
