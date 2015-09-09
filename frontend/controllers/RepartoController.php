@@ -10,11 +10,14 @@ use frontend\models\Entrega;
 use frontend\models\Direccion;
 use frontend\models\Estados;
 use frontend\models\Vehiculo;
+use frontend\models\RepartoPersonal;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
+use frontend\enum\EnumBaseStatus;
+use frontend\models\EstadosSearch;
 
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -195,8 +198,21 @@ class RepartoController extends Controller
     public function actionDelete($id)
     {
         $this->checkLogin();
-        $this->findModel($id)->delete();
-
+        
+        
+        $reparto = $this->findModel($id);
+        $repartoEntrega = RepartoEntrega::find()->where(['rep_id' => $id])->all();
+        
+        if(RepartoPersonal::deleteAll('rep_id='.$id) > 0){
+        
+            foreach($repartoEntrega as $repEntrega){
+                $entrega = Entrega::findOne($repEntrega->ent_id);
+                $entrega->est_id = EstadosSearch::getIdByName(EnumBaseStatus::PendArmar);
+                $entrega->save();
+            }
+        }
+        
+        $reparto->delete();
         return $this->redirect(['index']);
     }
 
