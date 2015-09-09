@@ -10,17 +10,19 @@ use common\models\User;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\helper\UtilHelper;
 use yii\helpers\Json;
 use frontend\enum\EnumUserType;
-
+use frontend\models\Reparto;
+use frontend\models\RepartoPersonal;
+use frontend\models\Personal;
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+    
     /**
      * @inheritdoc
      */
@@ -90,17 +92,7 @@ class SiteController extends Controller
     
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
-            $user = User::findOne(Yii::$app->user->getId());
-            if ($user->usertype == EnumUserType::Chofer){
-                //Ubicar vehiculo id para el usuario en el dia si es que existe reparto.
-                
-                //Sino mostrar pantalla de que no tiene repartos para realizar
-            }else{
-                return $this->redirect('index.php?r=reparto/index');
-            }
-        }
-
+        
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
