@@ -5,12 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\zona */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Zona',
-]) . ' ' . $model->z_id;
+$this->title = $model->z_nombre;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Zonas'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->z_id, 'url' => ['view', 'id' => $model->z_id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = ['label' => $model->z_nombre, 'url' => ['view', 'id' => $model->z_id]];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Actualizar');
 ?>
 <div class="zona-update">
 

@@ -88,8 +88,8 @@ class Vehiculo extends \yii\db\ActiveRecord
                     $this->ve_seguro."','".
                     $this->ve_movil."','".
                     $this->tv_id."','".
-                    $this->ve_entregaslimite.
-                    $this->ve_estado . "')";
+                    $this->ve_entregaslimite."','1".
+                    "')";
             $command=$connection->createCommand($sql);
             $command->execute();
            
